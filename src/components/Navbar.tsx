@@ -6,7 +6,6 @@ import { MainDivBg, SecondaryBoldColor, SecondaryLinkColor, SecondaryLinkColor2}
 export default function Navbar(){
     const { theme, toggleTheme } = useContext(ThemeContext);
     const [user, setUser] = useState(null);
-
     useEffect(() => {
         const userData = localStorage.getItem('user');
         if (userData) {
@@ -76,7 +75,7 @@ export default function Navbar(){
             </div>
             <div className="account-container">
                 {user ? (
-                    <Link href="/signout">
+                    <Link href="/profile">
                         <LogoSecondary className="uil uil-user" ></LogoSecondary>
                     </Link>
                 ) : (
@@ -88,7 +87,7 @@ export default function Navbar(){
                 <div className="address-temp">
                 
                         {user ? (
-                            <Link href="/signout">
+                            <Link href="/profile">
                             <div className="address-welcome">
                             Welcome,
                             </div>
