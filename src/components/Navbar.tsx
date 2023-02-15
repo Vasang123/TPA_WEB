@@ -1,6 +1,6 @@
 import Link from "next/link"
 import React, { useState,useContext, useEffect } from "react";
-import {ThemeContext } from "./ThemeContext";
+import {THEME, ThemeContext } from "./ThemeContext";
 import { LogoSecondary, MainLogoEffect } from "./LogoComponent";
 import { MainDivBg, SecondaryBoldColor, SecondaryLinkColor, SecondaryLinkColor2} from "./GlobalComponent";
 export default function Navbar(){
@@ -67,10 +67,10 @@ export default function Navbar(){
             </div>
             <div className="theme-container">
                 <label className="switch">
-                    <input type="checkbox" onChange={toggleTheme} 
-                    />
-                    <span className="slider round"  style={{
-                        backgroundColor : theme.toggleSwitch
+                    <input type="checkbox" onChange={toggleTheme} checked={theme === THEME.dark} />
+                    <span className="slider round" style={{
+                    backgroundColor: theme.toggleSwitch,
+                    left: theme === THEME.light ? '0' : '0px',
                     }}></span>
                 </label>
             </div>
