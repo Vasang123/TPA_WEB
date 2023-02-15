@@ -1,0 +1,63 @@
+import Link from "next/link"
+import React, { useState,useContext } from "react";
+import {ThemeContext } from "./ThemeContext";
+
+export function MainDivBg({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <div style={{
+        backgroundColor : theme.primaryColor
+    }} {...attr}>{children}</div>
+}
+
+export function SecondaryDivBg({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <div style={{
+        backgroundColor : theme.secondaryColor
+    }} {...attr}>{children}</div>
+}
+export function SecondaryLandingMenu({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <div style={{
+        backgroundColor : theme.landingMenu
+    }} {...attr}>{children}</div>
+}
+
+export function SecondaryBoldColor({children, ...attr}:any){
+    const { theme } = useContext(ThemeContext);
+    return <b style={{
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</b>
+}
+export function SecondarySpanColor({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <span style={{
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</span>
+}
+export function SecondaryLinkColor({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <Link style={{
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</Link>
+}
+export function SecondaryH1Color({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <h1 style={{
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</h1>
+}
+
+export function ButtonInputBg({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <button style={{
+        backgroundColor : theme.inputColor
+    }} {...attr}>{children}</button>
+}
+export function SecondaryLinkColor2({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <Link style={{
+        backgroundColor : theme.thirdColor,
+        'color' : theme.primaryColor
+    }} {...attr}>{children}</Link>
+}
+
