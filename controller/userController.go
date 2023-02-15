@@ -54,12 +54,11 @@ func GenerateToken(username string) (string, error) {
 func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	// Get Connect
 	db := connect.Connect()
 	defer db.Close()
 
 	user := &model.User{}
-	// Get Form Values
+
 	err := json.NewDecoder(r.Body).Decode(user)
 	// fmt.Println("Payload:", r.Body)
 
@@ -70,7 +69,6 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Check if Email Already Exists
 	checkEmail := &model.User{}
 	err = db.Model(checkEmail).Where("email = ?", user.Email).Select()
 	if err == nil {
@@ -79,10 +77,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create Hashed Password
 	user.Password = string(HashPassword([]byte(user.Password)))
 
-	// Insert User
 	err = db.Insert(user)
 	if err != nil {
 		log.Println("Error inserting user into database:", err)
