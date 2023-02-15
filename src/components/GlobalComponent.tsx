@@ -8,6 +8,12 @@ export function MainDivBg({children, ...attr}:any) {
         backgroundColor : theme.primaryColor
     }} {...attr}>{children}</div>
 }
+export function BaseBackgroundColor({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <div style={{
+        backgroundColor : theme.fourthColor
+    }} {...attr}>{children}</div>
+}
 
 export function SecondaryDivBg({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
@@ -60,4 +66,12 @@ export function SecondaryLinkColor2({children, ...attr}:any) {
         'color' : theme.primaryColor
     }} {...attr}>{children}</Link>
 }
+export function SecondaryLinkColor3({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <Link style={{
+        backgroundColor : theme.landingMenu,
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</Link>
+}
+
 

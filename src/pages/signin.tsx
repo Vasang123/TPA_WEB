@@ -4,7 +4,7 @@ import React, { useContext, useState } from "react";
 import { ThemeContext } from "@/components/ThemeContext";
 import { MainLogoEffect2 } from '@/components/LogoComponent'
 import { Input }from '@/components/InputComponent'
-import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg }from '@/components/GlobalComponent'
+import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg, BaseBackgroundColor }from '@/components/GlobalComponent'
 import { User } from '@/types/models';
 import { useRouter } from 'next/router';
 import { login } from '@/components/RequestComponent';
@@ -30,9 +30,7 @@ export default function SignIn(){
         login(user, router);
     };
     return (
-        <div className={style.background} style={{
-            backgroundColor : theme.fourthColor
-        }} > 
+        <BaseBackgroundColor className={style.background} > 
         <div className={style.container} >
             <div className={style.form_container}>
                 <div className="logo-container">
@@ -88,7 +86,7 @@ export default function SignIn(){
                </div>
             </footer>
         </div>
-        </div>
+        </BaseBackgroundColor>
 
     );
 
