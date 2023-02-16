@@ -11,6 +11,7 @@ type Product struct {
 	Price       int      `json:"price"`
 	Image       string   `json:"image"`
 	Description string   `json:"description"`
+	Rating      float64  `json:"rating"`
 	CategoryID  int64    `json:"category_id"`
 	StoreID     int64    `json:"store_id"`
 	Store       Store    `json:"store"`
@@ -32,7 +33,13 @@ type User struct {
 	Email       string `json:"email" pg:"unique"`
 	Password    string `json:"password"`
 	PhoneNumber string `json:"phoneNumber"`
-	Role        string `json:"role"`
+	RoleID      int64  `json:"role_id"`
+	IsBanned    string `json:"isBanned"`
+	Role        Store  `json:"role"`
+}
+type Role struct {
+	ID       int64  `json:"id" pg:"id:bigserial pk"`
+	RoleName string `json:"roleName"`
 }
 type Claim struct {
 	Username string `json:"username"`
