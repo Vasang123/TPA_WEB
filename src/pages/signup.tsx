@@ -16,13 +16,15 @@ export default function SignUp(){
     const { theme } = useContext(ThemeContext);
     const [user, setUser] = useState<User>({
         id: 0,
-        firstName : '',
-        lastName : '',
-        email : '',
-        phoneNumber : '',
-        role : 'member',
-        password: ''
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        role_id: 1,
+        password: '',
+        isBanned : 'no'
       });
+      
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });

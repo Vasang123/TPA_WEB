@@ -17,8 +17,9 @@ export default function SignIn(){
         lastName : '',
         email : '',
         phoneNumber : '',
-        role : '',
-        password: ''
+        role_id : 0,
+        password: '',
+        isBanned : '',
       });
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

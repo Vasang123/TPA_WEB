@@ -4,8 +4,13 @@ export interface User {
     lastName : string;
     email : string;
     phoneNumber : string;
-    role : string;
     password : string;
+    role_id : number;
+    isBanned : string;
+    role?: {
+      id?: number;
+      name?: string;
+    }
 }
 
 export interface Product {
@@ -14,6 +19,7 @@ export interface Product {
     quantity: number;
     price: number;
     image: string;
+    rating : number;
     description: string;
     category_id: number;
     store_id: number;
