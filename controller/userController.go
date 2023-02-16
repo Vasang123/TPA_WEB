@@ -118,7 +118,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
-
+	fmt.Print(data)
 	err := json.NewDecoder(r.Body).Decode(&data)
 	if err != nil {
 		http.Error(w, "Failed to parse request body", http.StatusBadRequest)
@@ -160,7 +160,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		Email:       user.Email,
 		Password:    user.Password,
 		PhoneNumber: user.PhoneNumber,
-		Role:        user.Role,
+		RoleID:      user.RoleID,
 	}
 
 	userDataJSON, err := json.Marshal(userData)
@@ -187,8 +187,8 @@ func getUserDataFromDB(email string) (*model.User, error) {
 	db := connect.Connect()
 	defer db.Close()
 	user := &model.User{}
-	_, err := db.Query(pg.Scan(&user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.Role),
-		"SELECT first_name, last_name, email, password, phone_number, role FROM users WHERE email=? ", email)
+	_, err := db.Query(pg.Scan(&user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID),
+		"SELECT first_name, last_name, email, password, phone_number, role_id FROM users WHERE email=? ", email)
 	if err != nil {
 		return nil, err
 	}
