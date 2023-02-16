@@ -22,7 +22,8 @@ export default function SignUp(){
         phoneNumber: '',
         role_id: 1,
         password: '',
-        isBanned : 'no'
+        isBanned : 'no',
+        isSubscribed : 'no'
       });
       
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +56,13 @@ export default function SignUp(){
       
         return hasLowerCase && hasUpperCase && hasNumber && hasSpecial;
       }
-      
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.checked ? 'yes' : 'no';
+        setUser((prevUser) => ({
+        ...prevUser,
+        isSubscribed: value
+        }));
+    };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(user.firstName === ""){
@@ -98,7 +105,7 @@ export default function SignUp(){
                     <Input name="password" onChange = {handleChange} type="password" placeholder='Password'/>
                     <button type='submit' name='sign_in' className={style.sign_up} ><b>SIGN UP</b></button> 
                     <div className={style.subscribe}>
-                        <input type="checkbox" />
+                        <input type="checkbox" onChange={handleCheckboxChange} />
                         <SecondarySpanColor>Subscribe for exclusive e-mail offers and discounts</SecondarySpanColor>
                     </div>
                 </form>

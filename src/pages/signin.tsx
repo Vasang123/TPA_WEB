@@ -20,6 +20,7 @@ export default function SignIn(){
         role_id : 0,
         password: '',
         isBanned : '',
+        isSubscribed : ''
       });
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -28,6 +29,7 @@ export default function SignIn(){
     };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        
         login(user, router);
     };
     return (

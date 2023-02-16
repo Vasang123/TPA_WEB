@@ -32,6 +32,7 @@ export const login = async (user:any, router:any) => {
       user.lastName = response.data.lastName
       user.password = response.data.password
       user.role = response.data.role
+      user.role_id = response.data.role_id
       localStorage.setItem('user', JSON.stringify(user));
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
       router.push("/");

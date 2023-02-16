@@ -7,6 +7,7 @@ export interface User {
     password : string;
     role_id : number;
     isBanned : string;
+    isSubscribed : string;
     role?: {
       id?: number;
       name?: string;
