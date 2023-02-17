@@ -1,10 +1,10 @@
-import style from '../styles/signin.module.scss'
+import style from '../styles/LoginRegis/signin.module.scss'
 import Link from 'next/link';
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "@/components/ThemeContext";
-import { MainLogoEffect2 } from '@/components/LogoComponent'
-import { Input }from '@/components/InputComponent'
-import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg, BaseBackgroundColor, Loading }from '@/components/GlobalComponent'
+import { ThemeContext } from "@/components/Theme/ThemeContext";
+import { MainLogoEffect2 } from '@/components/Other/LogoComponent'
+import { Input }from '@/components/Other/InputComponent'
+import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg, BaseBackgroundColor, Loading }from '@/components/Other/GlobalComponent'
 import { User } from '@/types/models';
 import { useRouter } from 'next/router';
 import { login } from '@/components/RequestComponent';

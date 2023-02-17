@@ -1,7 +1,6 @@
 import Link from "next/link"
 import React, { useState,useContext } from "react";
-import {ThemeContext } from "./ThemeContext";
-
+import {ThemeContext } from "../Theme/ThemeContext";
 export function MainDivBg({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
     return <div style={{
@@ -86,4 +85,14 @@ export function Loading({children, ...attr}:any) {
         backgroundColor : theme.primaryColor,
         color : theme.secondaryColor
     }} {...attr}>{children}</div>
+}
+
+export function BackButton({target}:any){
+    return(
+        <Link href={target} className="back_container">
+            <div className="back">
+                Back
+            </div>
+        </Link>
+    )
 }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import {ThemeContext } from "./ThemeContext";
+import {ThemeContext } from "../Theme/ThemeContext";
 
 export function Logo({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);

@@ -1,17 +1,13 @@
 import Link from "next/link";
-import LogoutButton from "./InputComponent";
-import style from '@/styles/adminhome.module.scss'
-import { BaseBackgroundColor, MainDivBg, SecondaryLinkColor, SecondaryLinkColor2, SecondaryLinkColor3, SecondaryLinkColor4, SecondarySpanColor } from "./GlobalComponent";
-import { LogoSecondary } from "./LogoComponent";
+import LogoutButton from "../Other/InputComponent";
+import style from '@/styles/Admin/adminhome.module.scss'
+import { BackButton, BaseBackgroundColor, MainDivBg, SecondaryLinkColor, SecondaryLinkColor2, SecondaryLinkColor3, SecondaryLinkColor4, SecondarySpanColor } from "../Other/GlobalComponent";
+import { LogoSecondary } from "../Other/LogoComponent";
 export default function AdminHome() {
 
     return (
         <MainDivBg className={style.home}>
-            <Link href="/" className={style.back_container}>
-                <div className={style.back}>
-                    Back
-                </div>
-            </Link>
+            <BackButton target = "/"/>
             <div className={style.menu_list}>
             <SecondaryLinkColor4 href="/admin/add_voucher">
                     <div className={style.menu_item}>
@@ -21,7 +17,7 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
-                <SecondaryLinkColor4 href="/">
+                <SecondaryLinkColor4 href="/admin/view_users">
                     <div className={style.menu_item}>
                         <LogoSecondary className="uil uil-users-alt"></LogoSecondary>
                         <SecondarySpanColor>

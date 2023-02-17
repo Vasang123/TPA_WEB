@@ -1,11 +1,11 @@
 
-import style from '../styles/signup.module.scss'
+import style from '../styles/LoginRegis/signup.module.scss'
 import Link from 'next/link';
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "../components/ThemeContext";
-import { MainLogoEffect2 } from '@/components/LogoComponent'
-import { Input }from '@/components/InputComponent'
-import {SecondarySpanColor, SecondaryLinkColor, BaseBackgroundColor, Loading} from '@/components/GlobalComponent'
+import { ThemeContext } from "../components/Theme/ThemeContext";
+import { MainLogoEffect2 } from '@/components/Other/LogoComponent'
+import { Input }from '@/components/Other/InputComponent'
+import {SecondarySpanColor, SecondaryLinkColor, BaseBackgroundColor, Loading, SecondaryH1Color} from '@/components/Other/GlobalComponent'
 import { User } from '@/types/models';
 import register from '@/components/RequestComponent'
 import axios from 'axios';
@@ -116,9 +116,7 @@ export default function SignUp(){
                     </Link>
                 </div>
                 <form action="" onSubmit={handleSubmit}>
-                    <h1 className={style.sign_in_label} style={{
-                            'color' : theme.secondaryColor
-                        }}>Create An Account</h1>
+                    <SecondaryH1Color>Create An Account</SecondaryH1Color>
                     <Input name="firstName" onChange = {handleChange} type="text" placeholder='First Name'/>
                     <Input name="lastName" onChange = {handleChange} type="text" placeholder='Last Name'/>
                     <Input name="email" onChange = {handleChange} type="email" placeholder='Email Address'/>

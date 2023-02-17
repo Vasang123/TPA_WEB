@@ -1,11 +1,18 @@
 import React, { useState,useContext } from "react";
-import {ThemeContext } from "./ThemeContext";
+import {ThemeContext } from "../Theme/ThemeContext";
 export function Input({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
     return <input style={{
         backgroundColor : theme.inputColor,
         color : theme.secondaryColor
     }} {...attr} />
+}
+export function TextArea({children, ...attr}:any) {
+  const { theme } = useContext(ThemeContext);
+  return <textarea style={{
+      backgroundColor : theme.inputColor,
+      color : theme.secondaryColor
+  }} {...attr} />
 }
 
 const LogoutButton = () => {

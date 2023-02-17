@@ -1,4 +1,4 @@
-import { MainDivBg, SecondaryLinkColor, SecondaryLinkColor2} from "./GlobalComponent";
+import { MainDivBg, SecondaryLinkColor, SecondaryLinkColor2} from "../Other/GlobalComponent";
 export default function Subnav(){
     return(
         <MainDivBg className="sub-nav" >

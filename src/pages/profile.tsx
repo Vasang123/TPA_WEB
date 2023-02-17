@@ -1,10 +1,10 @@
-import LogoutButton from '@/components/InputComponent'
-import { Input }from '@/components/InputComponent'
+import LogoutButton from '@/components/Other/InputComponent'
+import { Input }from '@/components/Other/InputComponent'
 import Link from 'next/link'
 import { Router, useRouter } from 'next/router';
 import { useState } from 'react';
 import { useEffect } from 'react'
-import {Loading} from '@/components/GlobalComponent'
+import {Loading} from '@/components/Other/GlobalComponent'
 export default function Profile(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);

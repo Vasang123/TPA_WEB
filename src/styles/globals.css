@@ -426,3 +426,16 @@ input:checked + .slider:before {
   padding: .5em;
   border: none;
 }
+
+.back_container{
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  background-color: #1946B8;
+  border-radius: 5px;
+  padding: .5em;
+  font-size: 16px;
+  text-decoration: none;
+  color: white;
+  
+}

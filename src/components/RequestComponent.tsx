@@ -38,14 +38,14 @@ export const login = async (user: any, router: any) => {
         alert("Incorret Email or Password")
 
       } else {
-
+        // console.log(response.data.user.firstName);
         localStorage.setItem('token', response.data.token);
         user.email = response.data.email
-        user.firstName = response.data.firstName
-        user.lastName = response.data.lastName
-        user.password = response.data.password
-        user.role = response.data.role
-        user.role_id = response.data.role_id
+        user.firstName = response.data.user.firstName
+        user.lastName = response.data.user.lastName
+        user.password = response.data.user.password
+        user.role = response.data.user.role
+        user.role_id = response.data.user.role_id
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
         router.push("/");

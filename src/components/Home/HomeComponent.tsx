@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import {Product} from '@/types/models'
 import Image from "next/image";
-import style from '@/styles/homedisplay.module.scss'
-import { BaseBackgroundColor, MainDivBg,  SecondaryLinkColor3 } from "./GlobalComponent";
+import style from '@/styles/Home/homedisplay.module.scss'
+import { BaseBackgroundColor, MainDivBg,  SecondaryLinkColor3 } from "../Other/GlobalComponent";
 import Link from "next/link";
 interface Props {
   products: Product[];

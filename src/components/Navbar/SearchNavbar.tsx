@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import {THEME, ThemeContext } from "./ThemeContext";
+import {THEME, ThemeContext } from "../Theme/ThemeContext";
 
 export default function Search(){
     const { theme, toggleTheme } = useContext(ThemeContext);

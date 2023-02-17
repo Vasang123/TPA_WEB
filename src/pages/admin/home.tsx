@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import AdminHome from '@/components/AdminHome'
-import { BaseBackgroundColor } from "@/components/GlobalComponent";
+import AdminHome from '@/components/Admin/AdminHome'
+import { BaseBackgroundColor } from "@/components/Other/GlobalComponent";
 export default function AdminPag() { 
     const r = useRouter();
     const [loading, setLoading] = useState(true);

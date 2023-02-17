@@ -1,5 +1,5 @@
-import VoucherForm from "@/components/AddVoucher";
-import { ThemeContext } from "@/components/ThemeContext";
+import VoucherForm from "@/components/Admin/AddVoucher";
+import { ThemeContext } from "@/components/Theme/ThemeContext";
 import { Voucher } from "@/types/models";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";

@@ -1,7 +1,7 @@
-import style from '@/styles/landingpage.module.scss'
+import style from '@/styles/Home/landingpage.module.scss'
 import Carousel from './Carousel'
-import { SecondaryLandingMenu, SecondarySpanColor } from './GlobalComponent'
-import { LogoSecondary } from './LogoComponent'
+import { SecondaryLandingMenu, SecondarySpanColor } from '../Other/GlobalComponent'
+import { LogoSecondary } from '../Other/LogoComponent'
 export default function LandingPage(){
     const slides = [
         {url:"http://localhost:3000/carousel/1.jpg", title : '1'},

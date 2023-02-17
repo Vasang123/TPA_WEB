@@ -1,9 +1,9 @@
 import Link from "next/link"
 import React from "react";
-import { LogoSecondary, MainLogoEffect } from "./LogoComponent";
-import { MainDivBg, SecondaryBoldColor} from "./GlobalComponent";
+import { LogoSecondary, MainLogoEffect } from "../Other/LogoComponent";
+import { MainDivBg, SecondaryBoldColor} from "../Other/GlobalComponent";
 import Search from "./SearchNavbar";
-import ThemeSwitcher from "./ThemeSwitcher";
+import ThemeSwitcher from "../Theme/ThemeSwitcher";
 import Subnav from './SubNav'
 import Profile from "./Profile";
 export default function Navbar(){

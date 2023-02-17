@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { LogoSecondary } from "./LogoComponent";
+import { LogoSecondary } from "../Other/LogoComponent";
 import { useEffect, useState } from "react";
-import { SecondaryBoldColor } from "./GlobalComponent";
+import { SecondaryBoldColor } from "../Other/GlobalComponent";
 
 
 export default function Profile() {

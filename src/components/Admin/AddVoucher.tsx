@@ -1,10 +1,10 @@
-import style from '@/styles/addvoucher.module.scss'
-import { Input } from './InputComponent'
-import {add_voucher} from './RequestComponent'
+import style from '@/styles/Admin/addvoucher.module.scss'
+import { Input, TextArea } from '../Other/InputComponent'
+import {add_voucher} from '../RequestComponent'
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Voucher } from '@/types/models';
-import { ThemeContext } from './ThemeContext';
+import { BackButton, MainDivBg, SecondaryH1Color } from '../Other/GlobalComponent';
 export default function VoucherForm(){
 
     const router = useRouter();
@@ -38,18 +38,17 @@ export default function VoucherForm(){
         }
     };
     return(
-        <div className={style.form_container}>
+        <MainDivBg className={style.form_container}>
+            <BackButton target="/admin/home"/>
             <form action="" onSubmit={handleSubmit} >
-                <label htmlFor="">Voucher Code</label>
-                <Input name="name"  onChange={handleChange} type="text" id="" />
-                <label htmlFor="">Voucher Quantity</label>
-                <Input name="quantity"  onChange={handleChange} type="number" />
-                <label htmlFor="">Description</label>
-                <input name="description" onChange = {handleChange} ></input>
+                <SecondaryH1Color>Create Voucher</SecondaryH1Color>
+                <Input name="name"  onChange={handleChange} type="text" id="" placeholder ="Voucher Code" />
+                <Input name="quantity"  onChange={handleChange} type="number" placeholder ="Quantity" />
+                <TextArea name="description" onChange = {handleChange} placeholder ="Description"></TextArea>
                 <div className={style.button_container}>
                     <button className={style.submit_button}>Generate</button>
                 </div>
             </form>
-        </div>
+        </MainDivBg>
     )
 }

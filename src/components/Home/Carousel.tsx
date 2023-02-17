@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import style from '@/styles/landingpage.module.scss'
+import style from '@/styles/Home/landingpage.module.scss'
 import { transform } from "typescript";
 const Carousel = ({slides}:any) =>{
     const [currIndex, setCurrIndex] = useState(18);

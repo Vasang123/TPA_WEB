@@ -1,8 +1,8 @@
-import style from '@/styles/footer.module.scss'
+import style from '@/styles/Home/footer.module.scss'
 import Link from 'next/link'
-import {ThemeContext } from "./ThemeContext";
+import {ThemeContext } from "../Theme/ThemeContext";
 import { useContext } from 'react';
-import { Logo, LogoPrimary } from './LogoComponent';
+import { Logo, LogoPrimary } from '../Other/LogoComponent';
 export default function Footer(){
     const { theme } = useContext(ThemeContext);
     return(
