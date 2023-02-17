@@ -4,6 +4,14 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
+type Review struct {
+	ID        int64   `json:"id" pg:"id:bigserial pk"`
+	Name      string  `json:"name"`
+	UserId    int64   `json:"user_id"`
+	ProductId int64   `json:"product_id"`
+	Product   Product `json:"product"`
+	User      User    `json:"User"`
+}
 type Product struct {
 	ID          int64    `json:"id" pg:"id:bigserial pk"`
 	Name        string   `json:"name"`

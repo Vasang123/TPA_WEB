@@ -22,10 +22,14 @@ func main() {
 	db := connect.Connect()
 	defer db.Close()
 	r := mux.NewRouter()
-	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
+	// Login Regis
 	r.HandleFunc("/api/register", controller.Register).Methods("POST")
-	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
+	// Admin
+	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
+	r.HandleFunc("/api/paginate_users", controller.PaginateUsers).Methods("GET").Queries("page", "{page}")
+	// Products
+	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET")
 	r.HandleFunc("/api/products/{id}", controller.GetProduct).Methods("GET")
 	r.HandleFunc("/api/products/{id}", controller.UpdateProduct).Methods("PATCH")

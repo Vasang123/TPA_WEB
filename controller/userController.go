@@ -163,24 +163,23 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		RoleID:      user.RoleID,
 	}
 
-	userDataJSON, err := json.Marshal(userData)
+	tokenString, err := GenerateToken(user.FirstName)
 	if err != nil {
-		log.Println(err)
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		log.Println("Error generating JWT token:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error generating JWT token"})
 		return
 	}
-	// tokenString, err := GenerateToken(user.FirstName)
-	// if err != nil {
-	// 	log.Println("Error generating JWT token:", err)
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	json.NewEncoder(w).Encode(map[string]string{"message": "Error generating JWT token"})
-	// 	return
-	// }
-
+	response := struct {
+		User  *model.User `json:"user"`
+		Token string      `json:"token"`
+	}{
+		User:  userData,
+		Token: tokenString,
+	}
 	// Send Token
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(userDataJSON)
-	// json.NewEncoder(w).Encode(map[string]string{"token": tokenString})
+	json.NewEncoder(w).Encode(&response)
 }
 
 func getUserDataFromDB(email string) (*model.User, error) {
