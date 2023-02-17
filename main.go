@@ -24,6 +24,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/register", controller.Register).Methods("POST")
+	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET")
 	r.HandleFunc("/api/products/{id}", controller.GetProduct).Methods("GET")
