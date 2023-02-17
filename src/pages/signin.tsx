@@ -1,10 +1,10 @@
 import style from '../styles/signin.module.scss'
 import Link from 'next/link';
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "@/components/ThemeContext";
 import { MainLogoEffect2 } from '@/components/LogoComponent'
 import { Input }from '@/components/InputComponent'
-import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg, BaseBackgroundColor }from '@/components/GlobalComponent'
+import { SecondaryBoldColor, SecondaryLinkColor, SecondarySpanColor, SecondaryH1Color, ButtonInputBg, BaseBackgroundColor, Loading }from '@/components/GlobalComponent'
 import { User } from '@/types/models';
 import { useRouter } from 'next/router';
 import { login } from '@/components/RequestComponent';
@@ -22,6 +22,28 @@ export default function SignIn(){
         isBanned : '',
         isSubscribed : ''
       });
+    const r = useRouter();
+    const [loading, setLoading] = useState(true);
+   
+    useEffect(() => {
+        async function checkUser (){
+            const userData = localStorage.getItem('user');
+            if (userData === null) {
+                setLoading(false)
+            }else{
+                r.back();
+            }
+        }
+        checkUser();
+        
+    });   
+    if (loading) {
+        return <Loading>
+        <div className="loading_content">
+            Loading...
+        </div>
+    </Loading>;
+    }
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });

@@ -74,4 +74,16 @@ export function SecondaryLinkColor3({children, ...attr}:any) {
     }} {...attr}>{children}</Link>
 }
 
-
+export function SecondaryLinkColor4({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <Link style={{
+        backgroundColor : theme.landingMenu,
+    }} {...attr}>{children}</Link>
+}
+export function Loading({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <div className="loading" style={{
+        backgroundColor : theme.primaryColor,
+        color : theme.secondaryColor
+    }} {...attr}>{children}</div>
+}

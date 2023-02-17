@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Router, useRouter } from 'next/router';
 import { useState } from 'react';
 import { useEffect } from 'react'
+import {Loading} from '@/components/GlobalComponent'
 export default function Profile(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);
@@ -21,7 +22,11 @@ export default function Profile(){
         
     });
     if (loading) {
-        return <div className="loading">Loading...</div>;
+        return <Loading>
+        <div className="loading_content">
+            Loading...
+        </div>
+    </Loading>;
     }
     return(
         <>

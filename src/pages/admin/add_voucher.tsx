@@ -1,8 +1,10 @@
+import VoucherForm from "@/components/AddVoucher";
+import { ThemeContext } from "@/components/ThemeContext";
+import { Voucher } from "@/types/models";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import AdminHome from '@/components/AdminHome'
-import { BaseBackgroundColor } from "@/components/GlobalComponent";
-export default function AdminPag() { 
+import { useContext, useEffect, useState } from "react";
+
+export default function AddVoucher(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);
    
@@ -28,7 +30,7 @@ export default function AdminPag() {
     }
     return(
         <>
-            <AdminHome/>
+        <VoucherForm/>    
         </>
     )
- }
+}

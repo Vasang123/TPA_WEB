@@ -14,7 +14,7 @@ const LogoutButton = () => {
       window.location.assign("http://localhost:3000/");
     };
   
-    return <button onClick={handleClick}>Log Out</button>;
+    return <button className="logoutButton" onClick={handleClick}>Log Out</button>;
   };
   
 export default LogoutButton;

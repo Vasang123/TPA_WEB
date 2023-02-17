@@ -1,11 +1,11 @@
 
 import style from '../styles/signup.module.scss'
 import Link from 'next/link';
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../components/ThemeContext";
 import { MainLogoEffect2 } from '@/components/LogoComponent'
 import { Input }from '@/components/InputComponent'
-import {SecondarySpanColor, SecondaryLinkColor, BaseBackgroundColor} from '@/components/GlobalComponent'
+import {SecondarySpanColor, SecondaryLinkColor, BaseBackgroundColor, Loading} from '@/components/GlobalComponent'
 import { User } from '@/types/models';
 import register from '@/components/RequestComponent'
 import axios from 'axios';
@@ -25,7 +25,28 @@ export default function SignUp(){
         isBanned : 'no',
         isSubscribed : 'no'
       });
-      
+      const r = useRouter();
+      const [loading, setLoading] = useState(true);
+     
+      useEffect(() => {
+          async function checkUser (){
+              const userData = localStorage.getItem('user');
+              if (userData === null) {
+                  setLoading(false)
+              }else{
+                  r.back();
+              }
+          }
+          checkUser();
+          
+      });   
+      if (loading) {
+          return <Loading>
+            <div className="loading_content">
+                Loading...
+            </div>
+        </Loading>;
+      }  
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setUser({ ...user, [name]: value });
