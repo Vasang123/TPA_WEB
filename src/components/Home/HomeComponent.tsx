@@ -17,7 +17,7 @@ const HomeItem = ({ products }: { products: Product[] }) => {
           <h2>{product.name}</h2>
           <div className={style.product_desc}>
             <p>Price: {product.price}</p>
-            <p>Store: {product.store.name}</p>
+            <p>Store: {product.user.firstName}</p>
           </div>
           <div className={style.product_desc}>
             <p>Category : {product.category.name}</p>

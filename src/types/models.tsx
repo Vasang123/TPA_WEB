@@ -23,10 +23,10 @@ export interface Product {
   rating: number;
   description: string;
   category_id: number;
-  store_id: number;
-  store: {
+  user_id: number;
+  user: {
     id: number;
-    name: string;
+    firstName: string;
   };
   category: {
     id: number;

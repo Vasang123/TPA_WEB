@@ -25,7 +25,7 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
-                <SecondaryLinkColor4 href="/">
+                <SecondaryLinkColor4 href="/admin/view_shop">
                     <div className={style.menu_item}>
                         <LogoSecondary className="uil uil-store"></LogoSecondary>
                         <SecondarySpanColor>

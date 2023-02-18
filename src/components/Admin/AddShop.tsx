@@ -1,6 +1,6 @@
 import style from '@/styles/Admin/addvoucher.module.scss'
-import { Input, TextArea } from '../Other/InputComponent'
-import { add_user, add_voucher } from '../RequestComponent'
+import { Input } from '../Other/InputComponent'
+import { add_user } from '../RequestComponent'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { User } from '@/types/models';
