@@ -11,7 +11,7 @@ function TableDisplay() {
     const [totalPages, setTotalPages] = useState(1);
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:8000/api/paginate_users?page=${currentPage}`);
+            const response = await fetch(`http://localhost:8000/api/paginate_shops?page=${currentPage}`);
             const data = await response.json();
             setUsers(data.users);
             setTotalPages(data.totalPages);
@@ -98,12 +98,10 @@ function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
             <thead>
                 <tr>
                     <Th>ID</Th>
-                    <Th>First Name</Th>
-                    <Th>Last Name</Th>
-                    <Th>Email</Th>
+                    <Th>Shop Name</Th>
+                    <Th>Shop Email</Th>
                     <Th>Phone Number</Th>
                     <Th>Role</Th>
-                    <Th>Subscibe Status</Th>
                     <Th>Ban Status</Th>
                 </tr>
             </thead>
@@ -112,11 +110,9 @@ function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
                     <tr key={user.id}>
                         <Td>{user.id}</Td>
                         <Td>{user.firstName}</Td>
-                        <Td>{user.lastName}</Td>
                         <Td>{user.email}</Td>
                         <Td>{user.phoneNumber}</Td>
                         <Td>{getRoleName(user.role_id)}</Td>
-                        <Td>{user.isSubscribed}</Td>
                         <Td>
                             {user.isBanned == 'no' && (
                                 <button className={style.ban} onClick={() => handleBan(user.id)}>
