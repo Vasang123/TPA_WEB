@@ -106,7 +106,7 @@ func UpdateProduct(w http.ResponseWriter, r *http.Request) {
 
 	product := &model.Product{ID: productIDInt64}
 
-	_, err = db.Model(product).WherePK().Set("name = ?, quantity = ?, price = ?, store = ?", product.Name, product.Quantity, product.Price, product.Store).Update()
+	_, err = db.Model(product).WherePK().Set("name = ?, quantity = ?, price = ?, user = ?", product.Name, product.Quantity, product.Price, product.User).Update()
 	if err != nil {
 		log.Println(err)
 		w.WriteHeader(http.StatusBadRequest)

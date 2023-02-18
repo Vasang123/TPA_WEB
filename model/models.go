@@ -21,8 +21,8 @@ type Product struct {
 	Description string   `json:"description"`
 	Rating      float64  `json:"rating"`
 	CategoryID  int64    `json:"category_id"`
-	StoreID     int64    `json:"store_id"`
-	Store       Store    `json:"store"`
+	UserId      int64    `json:"user_id"`
+	User        User     `json:"user"`
 	Category    Category `json:"category"`
 }
 type Category struct {
@@ -36,11 +36,6 @@ type Voucher struct {
 	Description string `json:"description"`
 	Quantity    int64  `json:"quantity"`
 }
-type Store struct {
-	ID     int64  `json:"id"`
-	Name   string `json:"name"`
-	UserId int64  `json:"user_id"`
-}
 type User struct {
 	ID           int64  `json:"id" pg:"id:bigserial pk"`
 	FirstName    string `json:"firstName"`
@@ -51,7 +46,7 @@ type User struct {
 	RoleID       int64  `json:"role_id"`
 	IsBanned     string `json:"isBanned"`
 	IsSubscribed string `json:"isSubscribed"`
-	Role         Store  `json:"role"`
+	Role         Role   `json:"role"`
 }
 type Role struct {
 	ID       int64  `json:"id" pg:"id:bigserial pk"`

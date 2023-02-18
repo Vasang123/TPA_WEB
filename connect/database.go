@@ -35,7 +35,6 @@ func Connect() *pg.DB {
 func createSchema(db *pg.DB) error {
 	models := []interface{}{
 		(*model.Product)(nil),
-		(*model.Store)(nil),
 		(*model.User)(nil),
 		(*model.Claim)(nil),
 		(*model.Category)(nil),
