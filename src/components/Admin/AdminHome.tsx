@@ -33,11 +33,11 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
-                <SecondaryLinkColor4 href="/">
+                <SecondaryLinkColor4 href="/admin/add_shop">
                     <div className={style.menu_item}>
                         <LogoSecondary className="uil uil-store-alt"></LogoSecondary>
                         <SecondarySpanColor>
-                            Add Shops
+                            Add Shop
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>

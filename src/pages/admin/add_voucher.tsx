@@ -10,16 +10,16 @@ export default function AddVoucher(){
    
     useEffect(() => {
         async function checkUser (){
-            const userData = JSON.parse(localStorage.getItem('user'));
-
-            if (userData === null) {
-                r.back();
-            }else{
+            const userDataString = (localStorage.getItem('user'));
+            if(userDataString){
+                const userData = JSON.parse(userDataString);
                 if(userData.role_id == 3){
                     setLoading(false)
                 }else{
                     r.back();
                 }
+            }else{
+                r.back();
             }
         }
         checkUser();

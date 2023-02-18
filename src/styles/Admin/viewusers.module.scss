@@ -1,0 +1,74 @@
+.table_bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    .table_container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        table {
+            
+            border-collapse: collapse;
+            thead {
+                tr {
+                    th {
+                        padding: 0.5em;
+                        font-size: 14px;
+                        border: 1px solid black;
+                        border-spacing: 0cap;
+                    }
+                }
+            }
+            tbody {
+                tr {
+                    td {
+                        padding: 0.5em;
+                        font-size: 14px;
+                        border: 1px solid black;
+                        border-spacing: 0cap;
+                        button {
+                            font-size: 14px;
+                            border: none;
+                            padding: 0.5em;
+                            color: white;
+                            border-radius: 5px;
+                        }
+                        .ban {
+                            background-color: red;
+                        }
+                        .unban {
+                            background-color: rgb(21, 215, 21);
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+.paginate_container {
+    margin-top: 1em;
+    display: flex;
+    gap: 1em;
+    font-size: 14px;
+    button {
+        font-size: 14px;
+        border: none;
+        padding: 0.5em;
+        color: white;
+        border-radius: 5px;
+    }
+    .next, .prev{
+        background-color: rgb(76, 76, 166);
+    }
+    .pageNumber{
+        display: flex;
+        align-items: center;
+    }
+}

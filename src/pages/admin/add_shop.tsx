@@ -1,8 +1,8 @@
-import TableDisplay from '@/components/Admin/TableUsers'
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import ShopForm from "@/components/Admin/AddShop";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-export default function ViewUsers(){
+export default function AddShop(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);
    
@@ -28,7 +28,7 @@ export default function ViewUsers(){
     }
     return(
         <>
-            <TableDisplay/>
+        <ShopForm/>    
         </>
     )
 }

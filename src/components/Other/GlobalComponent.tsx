@@ -83,10 +83,27 @@ export function Loading({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
     return <div className="loading" style={{
         backgroundColor : theme.primaryColor,
-        color : theme.secondaryColor
+        // color : theme.secondaryColor
     }} {...attr}>{children}</div>
 }
-
+export function Table({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <table style={{
+        color : theme.secondaryColor,
+    }} {...attr}>{children}</table>
+}
+export function Th({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <th style={{
+        border: `1px solid ${theme.secondaryColor}`,
+    }} {...attr}>{children}</th>
+}
+export function Td({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <td style={{
+        border: `1px solid ${theme.secondaryColor}`,
+    }} {...attr}>{children}</td>
+}
 export function BackButton({target}:any){
     return(
         <Link href={target} className="back_container">
