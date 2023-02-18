@@ -8,12 +8,9 @@ import { Input }from '@/components/Other/InputComponent'
 import {SecondarySpanColor, SecondaryLinkColor, BaseBackgroundColor, Loading, SecondaryH1Color} from '@/components/Other/GlobalComponent'
 import { User } from '@/types/models';
 import register from '@/components/RequestComponent'
-import axios from 'axios';
-import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/router';
 export default function SignUp(){
     const router = useRouter();
-    const { theme } = useContext(ThemeContext);
     const [user, setUser] = useState<User>({
         id: 0,
         firstName: '',

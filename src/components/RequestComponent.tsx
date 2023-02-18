@@ -17,6 +17,20 @@ const register = async (user: any, router: any) => {
       console.log(response);
     });
 };
+export const add_user = async (user: any, router: any) => {
+  axios.post('http://localhost:8000/api/register', user)
+    .then(response => {
+      if (response.data.message === 'Email already exists') {
+        alert("Email already exists")
+      } else {
+        alert("Shop successfuly added")
+        router.push("/admin/home");
+      }
+    })
+    .catch(response => {
+      console.log(response);
+    });
+};
 export const add_voucher = async (voucher: any, router: any) => {
   axios.post('http://localhost:8000/api/create_voucher', voucher)
     .then(response => {
@@ -37,9 +51,7 @@ export const login = async (user: any, router: any) => {
       if (response.data.message == 'Invalid Credential') {
         alert("Incorret Email or Password")
 
-      } else if (response.data.message == 'Your Account Is Banned') {
-        alert("Your Account Is Banned")
-      }else {
+      } else {
         // console.log(response.data.user.firstName);
         localStorage.setItem('token', response.data.token);
         user.email = response.data.email

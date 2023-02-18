@@ -1,52 +1,50 @@
 import style from '@/styles/Admin/addvoucher.module.scss'
 import { Input, TextArea } from '../Other/InputComponent'
-import {add_voucher} from '../RequestComponent'
+import { add_user, add_voucher } from '../RequestComponent'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { Voucher } from '@/types/models';
+import { User } from '@/types/models';
 import { BackButton, MainDivBg, SecondaryH1Color } from '../Other/GlobalComponent';
-export default function ShopForm(){
-
-    const router = useRouter();
-    const [voucher, setVoucher] = useState<Voucher>({
+export default function ShopForm() {
+    const [user, setUser] = useState<User>({
         id: 0,
-        name : '',
-        description : '',
-        quantity : 0,
-      });
+        firstName: '',
+        lastName: '',
+        email: '',
+        phoneNumber: '',
+        role_id: 2,
+        password: '',
+        isBanned: 'no',
+        isSubscribed: 'no'
+    });
+    const router = useRouter();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        if (name === "quantity") {
-         const quantityAsNumber = parseInt(voucher.quantity, 10);
-            setVoucher({ ...voucher, [name]: parseInt(value) });
-        } else {
-            setVoucher({ ...voucher, [name]: value });
-        }
+        setUser({ ...user, [name]: value });
     };
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if(voucher.name === ""){
-            alert("Voucher name can't be empty")
-        }else if(voucher.quantity  <= 0){
-            alert("Voucher Quantity must be greater than 0")
-        }else if(voucher.description === ""){
-            alert("Description can't be empty")
-        }else {
-            console.log(voucher);
-            
-            add_voucher(voucher, router);
+        if (user.firstName === "") {
+            alert("Shop name can't be empty")
+        } else if (user.email === "") {
+            alert("Email can't be empty")
+        } else if (user.password === "") {
+            alert("Password can't be empty")
+        }else{
+            add_user(user, router);
         }
+
     };
-    return(
+    return (
         <MainDivBg className={style.form_container}>
-            <BackButton target="/admin/home"/>
+            <BackButton target="/admin/home" />
             <form action="" onSubmit={handleSubmit} >
                 <SecondaryH1Color>Add Shop</SecondaryH1Color>
-                <Input name="name"  onChange={handleChange} type="text" id="" placeholder ="Voucher Code" />
-                <Input name="quantity"  onChange={handleChange} type="number" placeholder ="Quantity" />
-                <TextArea name="description" onChange = {handleChange} placeholder ="Description"></TextArea>
+                <Input name="firstName" onChange={handleChange} type="text" id="" placeholder="Shop Name" />
+                <Input name="email" onChange={handleChange} type="email" placeholder="Shop Email" />
+                <Input name="password" onChange={handleChange} type="text" placeholder="Shop Password" />
                 <div className={style.button_container}>
-                    <button className={style.submit_button}>Generate</button>
+                    <button className={style.submit_button}>Add Shop</button>
                 </div>
             </form>
         </MainDivBg>

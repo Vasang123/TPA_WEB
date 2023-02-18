@@ -1,6 +1,6 @@
 import style from '@/styles/Admin/addvoucher.module.scss'
 import { Input, TextArea } from '../Other/InputComponent'
-import {add_voucher} from '../RequestComponent'
+import {add_user, add_voucher} from '../RequestComponent'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Voucher } from '@/types/models';
@@ -31,9 +31,7 @@ export default function VoucherForm(){
             alert("Voucher Quantity must be greater than 0")
         }else if(voucher.description === ""){
             alert("Description can't be empty")
-        }else {
-            console.log(voucher);
-            
+        }else {            
             add_voucher(voucher, router);
         }
     };
