@@ -37,7 +37,8 @@ func main() {
 	r.HandleFunc("/api/update/promo/{id}/{status}/{role_id}", controller.UpdatePromoStatus).Methods("PUT")
 	// Products
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
-	r.HandleFunc("/api/products", controller.GetProduct).Methods("GET").Queries("name", "{name}")
+	r.HandleFunc("/api/search", controller.GetProduct).Methods("GET").
+		Queries("name", "{name}", "page", "{page}")
 	r.HandleFunc("/api/products/{id}", controller.GetProduct).Methods("GET")
 	r.HandleFunc("/api/products/{id}", controller.UpdateProduct).Methods("PATCH")
 	r.HandleFunc("/api/products/{id}", controller.DeleteProduct).Methods("DELETE")

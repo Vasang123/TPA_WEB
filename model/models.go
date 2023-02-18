@@ -49,8 +49,9 @@ type User struct {
 	Role         Role   `json:"role"`
 }
 type Role struct {
-	ID       int64  `json:"id" pg:"id:bigserial pk"`
-	RoleName string `json:"roleName"`
+	ID          int64  `json:"id" pg:"id:bigserial pk"`
+	RoleName    string `json:"roleName"`
+	Description string `json:"description"`
 }
 type Claim struct {
 	Username string `json:"username"`

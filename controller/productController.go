@@ -70,29 +70,55 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	db := connect.Connect()
 	defer db.Close()
 
-	// Get the name query parameter from the URL
+	itemsPerPage := 12
 	name := r.URL.Query().Get("name")
-	// fmt.Println("request URL:", r.URL.String())
-	// fmt.Println("name:", name)
 
 	// Build the search pattern using the % wildcard character
-	pattern := "%" + name + "%"
 
 	// Query the database for products that match the search pattern
+	pattern := "%" + name + "%"
 	var products []*model.Product
 	err := db.Model(&products).
 		Column("product.*", "User", "Category").
 		Relation("User").
 		Relation("Category").
 		Where("product.name ILIKE ?", pattern).
+		Order("id").
 		Select()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	totalPages := (len(products) + itemsPerPage - 1) / itemsPerPage
+	pageNumber := 1
 
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
+		if p, err := strconv.Atoi(pageStr); err == nil {
+			pageNumber = p
+		}
+	}
+	if pageNumber < 1 {
+		pageNumber = 1
+	}
+
+	if pageNumber > totalPages {
+		pageNumber = totalPages
+	}
+	startIndex := (pageNumber - 1) * itemsPerPage
+	endIndex := startIndex + itemsPerPage
+	if endIndex > len(products) {
+		endIndex = len(products)
+	}
+	productsOnPage := products[startIndex:endIndex]
+	response := struct {
+		Products   []*model.Product `json:"products"`
+		TotalPages int              `json:"totalPages"`
+	}{
+		Products:   productsOnPage,
+		TotalPages: totalPages,
+	}
 	// Return the products as JSON
-	json.NewEncoder(w).Encode(products)
+	json.NewEncoder(w).Encode(response)
 }
 
 func UpdateProduct(w http.ResponseWriter, r *http.Request) {
