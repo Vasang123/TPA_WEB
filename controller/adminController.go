@@ -52,6 +52,7 @@ func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
+		Where("role_id = 1").
 		Order("id").
 		Select()
 	if err != nil {
