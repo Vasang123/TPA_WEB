@@ -73,7 +73,7 @@ func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 15
+	itemsPerPage := 2
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
@@ -131,7 +131,7 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 15
+	itemsPerPage := 10
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
@@ -189,7 +189,7 @@ func PaginatePromo(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 15
+	itemsPerPage := 10
 	promos := []*model.Promo{}
 	err := db.Model(&promos).
 		Column("promo.*").
