@@ -9,13 +9,6 @@ interface Props {
 }
 const Carousel = ({ slides }: Props) => {
     const [currIndex, setCurrIndex] = useState(slides.length - 1);
-    useEffect(() => {
-        // Preload images
-        slides.forEach(slide => {
-            const img = new Image();
-            img.src = slide.image;
-        });
-    }, [slides]);
     const slideStyles = {
         backgroundImage: slides[currIndex]?.image ? `url(${slides[currIndex].image})` : '',
         backgroundSize: "cover",

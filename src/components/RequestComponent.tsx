@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import axios from 'axios';
 import {storage} from '@/firebase'
 import { ref, uploadBytes } from "firebase/storage";

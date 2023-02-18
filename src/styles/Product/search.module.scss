@@ -1,0 +1,21 @@
+.paginate_container{
+    display: flex;
+    justify-content: center;
+    padding: 1em;
+    gap: 1em;
+    font-size: 16px;
+    button {
+        font-size: 16px;
+        border: none;
+        padding: 0.5em;
+        color: white;
+        border-radius: 5px;
+    }
+    .next, .prev{
+        background-color: rgb(76, 76, 166);
+    }
+    .pageNumber{
+        display: flex;
+        align-items: center;
+    }
+}
