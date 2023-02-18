@@ -73,7 +73,7 @@ func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 2
+	itemsPerPage := 15
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
@@ -131,7 +131,7 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 2
+	itemsPerPage := 15
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
@@ -182,6 +182,63 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	// Encode the response as JSON and write it to the response body
 	json.NewEncoder(w).Encode(response)
 }
+func PaginatePromo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	// Calculate pagination information
+	itemsPerPage := 15
+	promos := []*model.Promo{}
+	err := db.Model(&promos).
+		Column("promo.*").
+		Order("id").
+		Select()
+	if err != nil {
+		panic(err)
+	}
+	totalPages := (len(promos) + itemsPerPage - 1) / itemsPerPage
+	pageNumber := 1
+
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
+		if p, err := strconv.Atoi(pageStr); err == nil {
+			pageNumber = p
+		}
+	}
+
+	if pageNumber < 1 {
+		pageNumber = 1
+	}
+
+	if pageNumber > totalPages {
+		pageNumber = totalPages
+	}
+	// Slice the user data based on the page number
+	startIndex := (pageNumber - 1) * itemsPerPage
+	endIndex := startIndex + itemsPerPage
+
+	if endIndex > len(promos) {
+		endIndex = len(promos)
+	}
+
+	promosOnPage := promos[startIndex:endIndex]
+
+	// Construct the JSON response
+	response := struct {
+		Promos     []*model.Promo `json:"promos"`
+		TotalPages int            `json:"totalPages"`
+	}{
+		Promos:     promosOnPage,
+		TotalPages: totalPages,
+	}
+
+	// Set the "Content-Type" header to "application/json"
+	w.Header().Set("Content-Type", "application/json")
+
+	// Encode the response as JSON and write it to the response body
+	json.NewEncoder(w).Encode(response)
+}
 func UpdateBanStatus(w http.ResponseWriter, r *http.Request) {
 
 	db := connect.Connect()
@@ -213,6 +270,45 @@ func UpdateBanStatus(w http.ResponseWriter, r *http.Request) {
 		statusInt = "no"
 	}
 	_, err = db.Query(pg.Scan(&userID), "UPDATE users SET is_banned=? WHERE id=?", statusInt, userID)
+	if err != nil {
+		http.Error(w, "Invalid Credential", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func UpdatePromoStatus(w http.ResponseWriter, r *http.Request) {
+
+	db := connect.Connect()
+	defer db.Close()
+	vars := mux.Vars(r)
+	roleId, err := strconv.Atoi(vars["role_id"])
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+	if roleId != 3 {
+		http.Error(w, "Unauthorized", http.StatusBadRequest)
+		return
+	}
+	promoId, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid promo ID", http.StatusBadRequest)
+		return
+	}
+	status, err := strconv.ParseBool(vars["status"])
+	if err != nil {
+		http.Error(w, "Error Status", http.StatusBadRequest)
+		return
+	}
+	statusInt := ""
+	if status {
+		statusInt = "active"
+	} else {
+		statusInt = "inactive"
+	}
+	_, err = db.Query(pg.Scan(&promoId), "UPDATE promos SET status=? WHERE id=?", statusInt, promoId)
 	if err != nil {
 		http.Error(w, "Invalid Credential", http.StatusBadRequest)
 		return

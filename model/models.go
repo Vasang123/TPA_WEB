@@ -58,6 +58,8 @@ type Claim struct {
 }
 
 type Promo struct {
-	ID    int64  `json:"id" pg:"id:bigserial pk"`
-	Image string `json:"image"`
+	ID     int64  `json:"id" pg:"id:bigserial pk"`
+	Name   string `json:"name"`
+	Image  string `json:"image"`
+	Status string `json:"status"`
 }
