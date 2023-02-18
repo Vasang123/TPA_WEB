@@ -73,9 +73,6 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	itemsPerPage := 12
 	name := r.URL.Query().Get("name")
 
-	// Build the search pattern using the % wildcard character
-
-	// Query the database for products that match the search pattern
 	pattern := "%" + name + "%"
 	var products []*model.Product
 	err := db.Model(&products).
