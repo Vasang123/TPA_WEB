@@ -22,6 +22,8 @@ func main() {
 	db := connect.Connect()
 	defer db.Close()
 	r := mux.NewRouter()
+	//Home
+	r.HandleFunc("/api/carousel", controller.GetCarouselData).Methods("GET")
 	// Login Regis
 	r.HandleFunc("/api/register", controller.Register).Methods("POST")
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
