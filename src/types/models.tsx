@@ -42,5 +42,7 @@ export interface Voucher {
 }
 export interface Promo {
   id: number;
+  name: string;
   image: string;
+  status: string;
 }

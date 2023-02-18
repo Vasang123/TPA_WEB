@@ -10,7 +10,9 @@ export default function PromoForm() {
 
     const [promo, setPromo] = useState<Promo>({
         id: 0,
-        image: ''
+        name :'',
+        image: '',
+        status: 'inactive'
     });
     const [imageFile, setImageFile] = useState<File>();
     const router = useRouter();
@@ -53,7 +55,8 @@ export default function PromoForm() {
             <BackButton target="/admin/home" />
             <form action="" onSubmit={handleSubmit} >
                 <SecondaryH1Color>Add Promo</SecondaryH1Color>
-                <Input name="image" onChange={handleImageChange} type="file" id="" placeholder="Shop Name" />
+                <Input name="name" onChange={handleChange} type="text" id="" placeholder="Promo Name" />
+                <Input name="image" onChange={handleImageChange} type="file" id="" placeholder="Image" />
                 <div className={style.button_container}>
                     <button className={style.submit_button}>Add Promo</button>
                 </div>

@@ -15,20 +15,20 @@ const Carousel = ({slides}:any) =>{
     }
     const prev = () => {
         if(currIndex == 0){
-            setCurrIndex(19)
+            setCurrIndex(slides.length-1)
         }else{
             setCurrIndex(currIndex-1)
         }
     }
     const next = () => {
-        if(currIndex == 19){
+        if(currIndex == slides.length-1 ){
             setCurrIndex(0)
         }else{
             setCurrIndex(currIndex+1)
         }
     }
     function loop(count:any){
-        if(count === 19){
+        if(count === slides.length-1){
             return count = 0;
         }else{
             return count = currIndex -1

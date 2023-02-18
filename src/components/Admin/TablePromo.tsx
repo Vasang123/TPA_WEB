@@ -1,23 +1,22 @@
 import { useState, useEffect } from 'react';
 import { BackButton, MainDivBg, SecondarySpanColor, Table, Td, Th } from '../Other/GlobalComponent';
 import style from '@/styles/Admin/viewusers.module.scss'
-import { User } from '@/types/models';
+import { Promo } from '@/types/models';
 
 function TableDisplay() {
-    const [users, setUsers] = useState<User[]>([]);
+    const [promos, setPromos] = useState<Promo[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:8000/api/paginate_shops?page=${currentPage}`);
+            const response = await fetch(`http://localhost:8000/api/paginate_promos?page=${currentPage}`);
             const data = await response.json();
-            setUsers(data.users);
+            setPromos(data.promos);
             setTotalPages(data.totalPages);
         };
 
         fetchData();
     }, [currentPage]);
-    // console.log(users);
 
     const prev = () => {
         setCurrentPage(currentPage - 1);
@@ -31,7 +30,7 @@ function TableDisplay() {
         <MainDivBg className={style.table_bg}>
             <BackButton target="/admin/home/" />
             <div className={style.table_container}>
-                <UserTable users={users} setUsers={setUsers} />
+                <PromoTable promos={promos} setPromos={setPromos} />
                 <Paginate
                     currentPage={currentPage}
                     totalPages={totalPages}
@@ -42,32 +41,21 @@ function TableDisplay() {
         </MainDivBg >
     );
 }
-function getRoleName(roleId: number): string {
-    if (roleId === 3) {
-        return 'Admin';
-    } else if (roleId === 1) {
-        return 'User';
-    } else if (roleId === 2) {
-        return 'Seller';
-    } else {
-        return 'Unknown Role';
-    }
-}
-function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
+function PromoTable({ promos, setPromos }: { promos: Promo[], setPromos: Function }) {
     const userDataString = (localStorage.getItem('user'));
     
     let userData: any;
     if (userDataString) {
         userData = JSON.parse(userDataString);
     }
-    function toggleBanStatus(userId: number, isBanned: string, status: number) {
-        const updatedUserList = users.map((user: User) => {
-            if (user.id === userId) {
-                return { ...user, isBanned: isBanned };
+    function togglePromoStatus(promoId: number, status: string, status2: number) {
+        const updatePromosList = promos.map((promo: Promo) => {
+            if (promo.id === promoId) {
+                return { ...promo, status: status };
             }
-            return user;
+            return promo;
         });
-        fetch(`http://localhost:8000/api/ban/${userId}/${status}/${userData.role_id}`, {
+        fetch(`http://localhost:8000/api/update/promo/${promoId}/${status2}/${userData.role_id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -79,16 +67,16 @@ function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
             .catch(error => {
                 console.error('There was a problem with the fetch operation:', error);
             });
-        setUsers(updatedUserList);
+        setPromos(updatePromosList);
 
     }
 
 
-    function handleBan(userId: number) {
-        toggleBanStatus(userId, "yes", 1);
+    function handleActivateStatus(promoId: number) {
+        togglePromoStatus(promoId, "active", 1);
     }
-    function handleUnban(userId: number) {
-        toggleBanStatus(userId, "no", 0);
+    function handleDeactivateStatus(promoId: number) {
+        togglePromoStatus(promoId, "inactive", 0);
     }
 
 
@@ -97,31 +85,29 @@ function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
             <thead>
                 <tr>
                     <Th>ID</Th>
-                    <Th>Shop Name</Th>
-                    <Th>Shop Email</Th>
-                    <Th>Phone Number</Th>
-                    <Th>Role</Th>
-                    <Th>Ban Status</Th>
+                    <Th>Promo Name</Th>
+                    <Th>Promo Banner</Th>
+                    <Th>Status</Th>
                 </tr>
             </thead>
             <tbody>
-                {users.map((user: any) => (
-                    <tr key={user.id}>
-                        <Td>{user.id}</Td>
-                        <Td>{user.firstName}</Td>
-                        <Td>{user.email}</Td>
-                        <Td>{user.phoneNumber}</Td>
-                        <Td>{getRoleName(user.role_id)}</Td>
+                {promos.map((promo: any) => (
+                    <tr key={promo.id}>
+                        <Td>{promo.id}</Td>
+                        <Td>{promo.name}</Td>
                         <Td>
-                            {user.isBanned == 'no' && (
-                                <button className={style.ban} onClick={() => handleBan(user.id)}>
-                                    Ban
+                            <img src={promo.image} alt="" />
+                        </Td>
+                        <Td>
+                            {promo.status == 'inactive' && (
+                                <button className={style.unban} onClick={() => handleActivateStatus(promo.id)}>
+                                    Activate
                                 </button>
                             )}
                             {
-                                user.isBanned == 'yes' && (
-                                    <button className={style.unban} onClick={() => handleUnban(user.id)}>
-                                        Unban
+                                promo.status == 'active' && (
+                                    <button className={style.ban} onClick={() => handleDeactivateStatus(promo.id)}>
+                                        Deactivate
                                     </button>
                                 )
                             }

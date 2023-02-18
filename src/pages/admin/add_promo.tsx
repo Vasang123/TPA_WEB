@@ -3,7 +3,7 @@ import { Loading } from "@/components/Other/GlobalComponent";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function AddShop(){
+export default function AddPromo(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);
    

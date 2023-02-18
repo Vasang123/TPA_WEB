@@ -1,5 +1,3 @@
-// pages/users.js
-
 import { useState, useEffect } from 'react';
 import { BackButton, MainDivBg, SecondarySpanColor, Table, Td, Th } from '../Other/GlobalComponent';
 import style from '@/styles/Admin/viewusers.module.scss'
