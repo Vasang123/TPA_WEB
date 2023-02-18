@@ -27,6 +27,7 @@ func main() {
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
 	// Admin
 	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
+	r.HandleFunc("/api/create_promo", controller.AddPromo).Methods("POST")
 	r.HandleFunc("/api/paginate_users", controller.PaginateUsers).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/paginate_shops", controller.PaginateShops).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/ban/{id}/{status}/{role_id}", controller.UpdateBanStatus).Methods("PUT")

@@ -56,3 +56,8 @@ type Claim struct {
 	Username string `json:"username"`
 	jwt.StandardClaims
 }
+
+type Promo struct {
+	ID    int64  `json:"id" pg:"id:bigserial pk"`
+	Image string `json:"image"`
+}

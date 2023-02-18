@@ -40,7 +40,32 @@ func AddVoucher(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+func AddPromo(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	db := connect.Connect()
+	defer db.Close()
 
+	promo := &model.Promo{}
+
+	err := json.NewDecoder(r.Body).Decode(promo)
+	// fmt.Println("Payload:", r.Body)
+
+	if err != nil {
+		log.Println("Error decoding payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding payload"})
+		return
+	}
+
+	err = db.Insert(promo)
+	if err != nil {
+		log.Println("Error inserting promo into database:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Create Promo"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
 func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
