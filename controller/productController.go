@@ -51,8 +51,8 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "Store", "Category").
-		Relation("Store").
+		Column("product.*", "User", "Category").
+		Relation("User").
 		Relation("Category").
 		Offset(offset).
 		Limit(pageSize).
