@@ -57,6 +57,14 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
+                <SecondaryLinkColor4 href="/admin/add_promo">
+                    <div className={style.menu_item}>
+                        <LogoSecondary className="uil uil-newspaper"></LogoSecondary>
+                        <SecondarySpanColor>
+                            Manage Promo
+                        </SecondarySpanColor>
+                    </div>
+                </SecondaryLinkColor4>
             </div>
             <LogoutButton />
         </MainDivBg>

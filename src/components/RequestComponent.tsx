@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
-
+import {storage} from '@/firebase'
+import { ref, uploadBytes } from "firebase/storage";
+import { getStorage, getDownloadURL } from "firebase/storage";
 const register = async (user: any, router: any) => {
   axios.post('http://localhost:8000/api/register', user)
     .then(response => {
@@ -31,6 +33,39 @@ export const add_user = async (user: any, router: any) => {
       console.log(response);
     });
 };
+
+
+
+
+export const add_promo = async (promo: any, imageFile: File, router: any) => {
+  let loading = true;
+  const storageRef = ref(storage, `images/${imageFile.name}`);
+  await uploadBytes(storageRef, imageFile)
+  let starsRef = ref(storage, `images/${imageFile.name}`);
+
+  const downloadURL = await getDownloadURL(starsRef);
+
+  promo.image = downloadURL;
+
+  axios.post('http://localhost:8000/api/create_promo', promo)
+    .then(response => {
+      if (response.data.message == 'Success') {
+        alert("Promo successfully added")
+        router.push("/admin/home");
+      } else {
+        alert("Failed to insert promo")
+      }
+    })
+    .catch(response => {
+      console.log(response);
+    }).finally(() => {
+      // Set loading state to false
+      loading = false;
+    });
+    
+  return loading;
+};
+
 export const add_voucher = async (voucher: any, router: any) => {
   axios.post('http://localhost:8000/api/create_voucher', voucher)
     .then(response => {

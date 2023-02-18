@@ -1,41 +1,39 @@
-import VoucherForm from "@/components/Admin/AddVoucher";
+import PromoForm from "@/components/Admin/AddPromo";
 import { Loading } from "@/components/Other/GlobalComponent";
-import { ThemeContext } from "@/components/Theme/ThemeContext";
-import { Voucher } from "@/types/models";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-export default function AddVoucher() {
+export default function AddShop(){
     const r = useRouter();
     const [loading, setLoading] = useState(true);
-
+   
     useEffect(() => {
-        async function checkUser() {
+        async function checkUser (){
             const userDataString = (localStorage.getItem('user'));
-            if (userDataString) {
+            if(userDataString){
                 const userData = JSON.parse(userDataString);
-                if (userData.role_id == 3) {
+                if(userData.role_id == 3){
                     setLoading(false)
-                } else {
+                }else{
                     r.back();
                 }
-            } else {
+            }else{
                 r.back();
             }
         }
         checkUser();
-
+        
     });
     if (loading) {
         return <Loading>
-            <div className="loading_content">
-                Loading...
-            </div>
-        </Loading>;
+        <div className="loading_content">
+            Loading...
+        </div>
+    </Loading>;
     }
-    return (
+    return(
         <>
-            <VoucherForm />
+        <PromoForm/>    
         </>
     )
 }

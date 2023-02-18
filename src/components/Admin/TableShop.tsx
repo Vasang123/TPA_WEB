@@ -57,9 +57,10 @@ function getRoleName(roleId: number): string {
 }
 function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
     const userDataString = (localStorage.getItem('user'));
-    let userData:any;
-    if(userDataString){
-        userData = JSON.parse(userDataString);   
+    
+    let userData: any;
+    if (userDataString) {
+        userData = JSON.parse(userDataString);
     }
     function toggleBanStatus(userId: number, isBanned: string, status: number) {
         const updatedUserList = users.map((user: User) => {
