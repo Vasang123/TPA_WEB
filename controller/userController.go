@@ -155,12 +155,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userData := &model.User{
-		FirstName:   user.FirstName,
-		LastName:    user.LastName,
-		Email:       user.Email,
-		Password:    user.Password,
-		PhoneNumber: user.PhoneNumber,
-		RoleID:      user.RoleID,
+		FirstName:    user.FirstName,
+		LastName:     user.LastName,
+		Email:        user.Email,
+		Password:     user.Password,
+		PhoneNumber:  user.PhoneNumber,
+		RoleID:       user.RoleID,
+		IsBanned:     user.IsBanned,
+		IsSubscribed: user.IsSubscribed,
 	}
 
 	tokenString, err := GenerateToken(user.FirstName)
@@ -186,8 +188,9 @@ func getUserDataFromDB(email string) (*model.User, error) {
 	db := connect.Connect()
 	defer db.Close()
 	user := &model.User{}
-	_, err := db.Query(pg.Scan(&user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID),
-		"SELECT first_name, last_name, email, password, phone_number, role_id FROM users WHERE email=? ", email)
+
+	_, err := db.Query(pg.Scan(&user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID, &user.IsBanned, &user.IsSubscribed),
+		"SELECT first_name, last_name, email, password, phone_number, role_id, is_banned,is_subscribed FROM users WHERE email=? ", email)
 	if err != nil {
 		return nil, err
 	}

@@ -9,6 +9,8 @@ import (
 
 	"github.com/Vasang123/new_egg/connect"
 	"github.com/Vasang123/new_egg/model"
+	"github.com/go-pg/pg"
+	"github.com/gorilla/mux"
 )
 
 func AddVoucher(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +52,7 @@ func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 	users := []*model.User{}
 	err := db.Model(&users).
 		Column("user.*").
+		Order("id").
 		Select()
 	if err != nil {
 		panic(err)
@@ -94,4 +97,43 @@ func PaginateUsers(w http.ResponseWriter, r *http.Request) {
 
 	// Encode the response as JSON and write it to the response body
 	json.NewEncoder(w).Encode(response)
+}
+
+func UpdateBanStatus(w http.ResponseWriter, r *http.Request) {
+
+	db := connect.Connect()
+	defer db.Close()
+	vars := mux.Vars(r)
+	roleId, err := strconv.Atoi(vars["role_id"])
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+	if roleId != 3 {
+		http.Error(w, "Unauthorized", http.StatusBadRequest)
+		return
+	}
+	userID, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
+		return
+	}
+	isBanned, err := strconv.ParseBool(vars["status"])
+	if err != nil {
+		http.Error(w, "Error Status", http.StatusBadRequest)
+		return
+	}
+	statusInt := ""
+	if isBanned {
+		statusInt = "yes"
+	} else {
+		statusInt = "no"
+	}
+	_, err = db.Query(pg.Scan(&userID), "UPDATE users SET is_banned=? WHERE id=?", statusInt, userID)
+	if err != nil {
+		http.Error(w, "Invalid Credential", http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }

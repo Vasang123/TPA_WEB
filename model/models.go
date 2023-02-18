@@ -10,7 +10,7 @@ type Review struct {
 	UserId    int64   `json:"user_id"`
 	ProductId int64   `json:"product_id"`
 	Product   Product `json:"product"`
-	User      User    `json:"User"`
+	User      User    `json:"user"`
 }
 type Product struct {
 	ID          int64    `json:"id" pg:"id:bigserial pk"`
@@ -29,15 +29,17 @@ type Category struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
-type Store struct {
-	ID   int64  `json:"id"`
-	Name string `json:"name"`
-}
+
 type Voucher struct {
 	ID          int64  `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	Quantity    int64  `json:"quantity"`
+}
+type Store struct {
+	ID     int64  `json:"id"`
+	Name   string `json:"name"`
+	UserId int64  `json:"user_id"`
 }
 type User struct {
 	ID           int64  `json:"id" pg:"id:bigserial pk"`
