@@ -128,8 +128,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	email := data.Email
 	password := data.Password
 
-	fmt.Println("Email:", email)
-	fmt.Println("Password:", password)
+	// fmt.Println("Email:", email)
+	// fmt.Println("Password:", password)
 
 	// Get the password hash from the database for the email provided
 	passwordHash, err := getPasswordHashFromDB(email)
@@ -163,6 +163,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		RoleID:       user.RoleID,
 		IsBanned:     user.IsBanned,
 		IsSubscribed: user.IsSubscribed,
+	}
+	if userData.IsBanned == "yes" {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Your Account Is Banned"})
+		return
 	}
 
 	tokenString, err := GenerateToken(user.FirstName)
