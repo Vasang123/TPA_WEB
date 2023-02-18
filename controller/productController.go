@@ -70,23 +70,29 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	db := connect.Connect()
 	defer db.Close()
 
-	params := mux.Vars(r)
-	productIDString := params["id"]
-	productID, err := uuid.Parse(productIDString)
+	// Get the name query parameter from the URL
+	name := r.URL.Query().Get("name")
+	// fmt.Println("request URL:", r.URL.String())
+	// fmt.Println("name:", name)
+
+	// Build the search pattern using the % wildcard character
+	pattern := "%" + name + "%"
+
+	// Query the database for products that match the search pattern
+	var products []*model.Product
+	err := db.Model(&products).
+		Column("product.*", "User", "Category").
+		Relation("User").
+		Relation("Category").
+		Where("product.name ILIKE ?", pattern).
+		Select()
 	if err != nil {
-
-	}
-
-	productIDInt64 := int64(productID.Variant())
-
-	product := &model.Product{ID: productIDInt64}
-	if err := db.Model(product).WherePK().Select(); err != nil {
-		log.Println(err)
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	json.NewEncoder(w).Encode(product)
+	// Return the products as JSON
+	json.NewEncoder(w).Encode(products)
 }
 
 func UpdateProduct(w http.ResponseWriter, r *http.Request) {
