@@ -43,6 +43,8 @@ func createSchema(db *pg.DB) error {
 		(*model.Review)(nil),
 		(*model.Promo)(nil),
 		(*model.Brand)(nil),
+		(*model.WishList)(nil),
+		(*model.Cart)(nil),
 	}
 
 	for _, model := range models {

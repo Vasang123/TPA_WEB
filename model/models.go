@@ -12,6 +12,20 @@ type Review struct {
 	Product   Product `json:"product"`
 	User      User    `json:"user"`
 }
+type Cart struct {
+	ID        int64   `json:"id" pg:"id:bigserial pk"`
+	UserId    int64   `json:"user_id"`
+	User      User    `json:"user"`
+	ProductId int64   `json:"product_id"`
+	Product   Product `json:"product"`
+}
+type WishList struct {
+	ID        int64   `json:"id" pg:"id:bigserial pk"`
+	UserId    int64   `json:"user_id"`
+	User      User    `json:"user"`
+	ProductId int64   `json:"product_id"`
+	Product   Product `json:"product"`
+}
 type Product struct {
 	ID          int64    `json:"id" pg:"id:bigserial pk"`
 	Name        string   `json:"name"`
