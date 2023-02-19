@@ -7,6 +7,7 @@ import ThemeSwitcher from "../Theme/ThemeSwitcher";
 import Subnav from './SubNav'
 import Profile from "./Profile";
 import CartNav from "./CartNav";
+import WishListNav from "./WishlistNav";
 export default function Navbar(){
     
 
@@ -55,17 +56,7 @@ export default function Navbar(){
                 <ThemeSwitcher/>
             </div>
             <Profile/>
-            <div className="return-order-container">
-                <div className="address-temp">
-                    <div className="address-welcome">
-                        Return
-                    </div>
-                    <div className="address-select">
-                        <span><SecondaryBoldColor>&</SecondaryBoldColor></span>
-                        <span><SecondaryBoldColor>Orders</SecondaryBoldColor></span>
-                    </div>
-                </div>
-            </div>
+            <WishListNav/>
             <CartNav/>
         </MainDivBg>
         <Subnav />

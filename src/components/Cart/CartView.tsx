@@ -4,9 +4,9 @@ import style from '@/styles/Cart/cartview.module.scss'
 import { Counter } from "../Product/Counter";
 import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
-function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any) {
+function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like=string) {
     event.preventDefault();
-    fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}`, {
+    fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
     }).then(response => {
@@ -77,7 +77,7 @@ export default function CartDisplay({ user_id, is_like}: any) {
                                         />
                                     </SecondarySpanColor>
                                 </div>
-                                <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts)}>
+                                <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts,is_like)}>
                                     <i className="uil uil-trash-alt"></i>
                                     Remove
                                 </button>

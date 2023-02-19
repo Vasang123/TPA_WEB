@@ -23,20 +23,24 @@ function ProductView({ product, user_id }: any) {
     const Login = (e: any) => {
         r.push('/signin')
     }
-    const HandleSubmit = async (e: any) => {
+    const HandleSubmit = async (e: any, is_like:any) => {
         e.preventDefault();
-        if (counter == 0) {
+        if (counter == 0 && is_like == "no") {
             alert("Minimum Transaction must be 1")
         } else {
             setLoading(true);
+            if (is_like == "yes"){
+                setCounter(0)
+            }
             const newCart: Cart = {
                 id: 0,
                 user_id: user_id,
                 product_id: product.id,
-                quantity: counter
+                quantity: counter,
+                is_like: is_like
             };
             setCart(newCart);
-
+            
             await add_cart(cart)
 
             // Set loading state to false
@@ -76,14 +80,15 @@ function ProductView({ product, user_id }: any) {
                                     <div className={style.cart_container}>
                                         <button
                                             className={style.cart_button}
-                                            onClick={HandleSubmit}
+                                            onClick={(e)=>HandleSubmit(e,"no")}
                                         >
                                             <i className="uil uil-shopping-cart-alt"></i>
                                             Add To Cart
                                         </button>
                                         <Counter count={counter} setCount={setCounter} limit={product.quantity} />
                                     </div>
-                                    <button className={style.wish_button}>
+                                    <button className={style.wish_button}
+                                    onClick={(e)=>HandleSubmit(e,"yes")}>
                                         <i className="uil uil-heart"></i>
                                         Add To Wishlist
                                     </button>
