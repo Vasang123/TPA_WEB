@@ -14,6 +14,11 @@ export interface User {
   }
 }
 
+export interface Brand{
+  id: number;
+  name: string;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -29,6 +34,10 @@ export interface Product {
     firstName: string;
   };
   category: {
+    id: number;
+    name: string;
+  };
+  brand: {
     id: number;
     name: string;
   };

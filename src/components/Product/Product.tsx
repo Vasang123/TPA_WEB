@@ -28,7 +28,7 @@ export const HomeItem = ({ products }: Props) => {
             <p>Store: {product.user.firstName}</p>
           </div>
           <div className={style.product_desc}>
-            <p>Category : {product.category.name}</p>
+            <p>Brand : {product.brand.name}</p>
             <p>Quantity: {product.quantity}</p>
           </div>
           </SecondaryLinkColor3>
