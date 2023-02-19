@@ -2,37 +2,11 @@ import { Product } from "@/types/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from '@/styles/Product/detail.module.scss'
-import { MainDivBg, ProductDivBg, SecondarySpanColor2 } from "../Other/GlobalComponent";
+import { ProductDivBg } from "../Other/GlobalComponent";
 import { SecondaryH1Color } from "../Other/GlobalComponent";
 import { SecondarySpanColor } from "../Other/GlobalComponent";
+import { Counter } from "./Counter";
 
-function Counter({ count, setCount, limit }: any) {
-
-    function increment() {
-        if(count == limit){
-            setCount(limit);
-        }else{
-            setCount(count + 1);
-        }
-    }
-
-    function decrement() {
-        if(count == 0){
-            setCount(0);
-        }else{
-            setCount(count - 1);
-
-        }
-    }
-
-    return (
-        <div className={style.incre_container}>
-            <button onClick={decrement} className={style.count_button} >-</button>
-            <SecondarySpanColor2>{count}</SecondarySpanColor2>
-            <button onClick={increment} className={style.count_button} >+</button>
-        </div>
-    );
-}
 
 function ProductView({ product }: any) {
     const [counter, setCounter] = useState(0)
