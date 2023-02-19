@@ -32,6 +32,15 @@ export const add_user = async (user: any, router: any) => {
       console.log(response);
     });
 };
+export const add_cart = async (cart: any) => {
+  axios.post('http://localhost:8000/api/cart', cart)
+    .then(response => {
+      alert(response.data.message)
+    })
+    .catch(response => {
+      console.log(response);
+    });
+};
 
 
 

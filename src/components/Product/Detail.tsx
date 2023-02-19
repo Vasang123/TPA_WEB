@@ -1,4 +1,4 @@
-import { Product } from "@/types/models";
+import { Cart, Product } from "@/types/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from '@/styles/Product/detail.module.scss'
@@ -6,9 +6,25 @@ import { ProductDivBg } from "../Other/GlobalComponent";
 import { SecondaryH1Color } from "../Other/GlobalComponent";
 import { SecondarySpanColor } from "../Other/GlobalComponent";
 import { Counter } from "./Counter";
+import { add_cart } from "../RequestComponent";
 
-
-function ProductView({ product }: any) {
+function ProductView({ product, user_id }: any) {
+    const [cart, setCart] = useState<Cart>();
+    const HandleSubmit = (e: any) => {
+        e.preventDefault();
+        if (counter == 0) {
+            alert("Minimum Transaction must be 1")
+        } else {
+            const newCart: Cart = {
+                id: 0,
+                user_id: user_id,
+                product_id: product.id,
+                quantity: counter
+            };
+            setCart(newCart);
+            add_cart(cart);
+        }
+    };
     const [counter, setCounter] = useState(0)
     return (
         product && (
@@ -32,7 +48,9 @@ function ProductView({ product }: any) {
                         <SecondarySpanColor className={style.description}>Description: {product.description}</SecondarySpanColor>
                         <div className={style.button_container}>
                             <div className={style.cart_container}>
-                                <button className={style.cart_button}>
+                                <button className={style.cart_button}
+                                    onClick={HandleSubmit}
+                                >
                                     <i className="uil uil-shopping-cart-alt"></i>
                                     Add To Cart
                                 </button>
@@ -51,7 +69,8 @@ function ProductView({ product }: any) {
         )
     );
 }
-export default function DetailPage() {
+
+export default function DetailPage({user_id} :any ) {
     const router = useRouter();
     const id = router.query.id;
     const [product, setProduct] = useState<Product>();

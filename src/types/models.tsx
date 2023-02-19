@@ -14,11 +14,43 @@ export interface User {
   }
 }
 
-export interface Brand{
+export interface Brand {
   id: number;
   name: string;
 }
-
+export interface Cart {
+  id: number;
+  user_id: number;
+  quantity: number; // requested item
+  product_id: number;
+  user?: {
+    id?: number;
+    firstName?: string;
+  };
+  product?: {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+    image: string;
+    rating: number;
+    description: string;
+    category_id: number;
+    user_id: number; // shop
+    user?: {
+      id?: number;
+      firstName?: string;
+    };
+    category: {
+      id: number;
+      name: string;
+    };
+    brand: {
+      id: number;
+      name: string;
+    };
+  }
+}
 export interface Product {
   id: number;
   name: string;
