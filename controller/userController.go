@@ -155,6 +155,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userData := &model.User{
+		ID:           user.ID,
 		FirstName:    user.FirstName,
 		LastName:     user.LastName,
 		Email:        user.Email,
@@ -193,8 +194,8 @@ func getUserDataFromDB(email string) (*model.User, error) {
 	defer db.Close()
 	user := &model.User{}
 
-	_, err := db.Query(pg.Scan(&user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID, &user.IsBanned, &user.IsSubscribed),
-		"SELECT first_name, last_name, email, password, phone_number, role_id, is_banned,is_subscribed FROM users WHERE email=? ", email)
+	_, err := db.Query(pg.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID, &user.IsBanned, &user.IsSubscribed),
+		"SELECT id, first_name, last_name, email, password, phone_number, role_id, is_banned,is_subscribed FROM users WHERE email=? ", email)
 	if err != nil {
 		return nil, err
 	}
