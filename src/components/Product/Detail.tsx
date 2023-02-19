@@ -2,19 +2,29 @@ import { Cart, Product } from "@/types/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import style from '@/styles/Product/detail.module.scss'
-import { ProductDivBg } from "../Other/GlobalComponent";
+import { Loading, ProductDivBg } from "../Other/GlobalComponent";
 import { SecondaryH1Color } from "../Other/GlobalComponent";
 import { SecondarySpanColor } from "../Other/GlobalComponent";
 import { Counter } from "./Counter";
 import { add_cart } from "../RequestComponent";
 
 function ProductView({ product, user_id }: any) {
+    const [loading, setLoading] = useState(false);
     const [cart, setCart] = useState<Cart>();
-    const HandleSubmit = (e: any) => {
+    const [counter, setCounter] = useState(0)
+    if (loading) {
+        return <Loading>
+            <div className="loading_content">
+                Loading...
+            </div>
+        </Loading>;
+    }
+    const HandleSubmit = async (e: any) => {
         e.preventDefault();
         if (counter == 0) {
             alert("Minimum Transaction must be 1")
         } else {
+            setLoading(true);
             const newCart: Cart = {
                 id: 0,
                 user_id: user_id,
@@ -22,10 +32,14 @@ function ProductView({ product, user_id }: any) {
                 quantity: counter
             };
             setCart(newCart);
-            add_cart(cart);
+           
+            await add_cart(cart)
+
+            // Set loading state to false
+            setLoading(false);
         }
     };
-    const [counter, setCounter] = useState(0)
+    
     return (
         product && (
             <div className={style.product_detail}>
@@ -90,7 +104,7 @@ export default function DetailPage({user_id} :any ) {
 
     return (
         <ProductDivBg className={style.detail_container}>
-            <ProductView product={product} />
+            <ProductView product={product} user_id = {user_id}/>
             <div className={style.review_container}>
 
             </div>

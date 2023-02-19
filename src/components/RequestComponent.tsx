@@ -97,7 +97,8 @@ export const login = async (user: any, router: any) => {
       } else {
         // console.log(response.data.user.firstName);
         localStorage.setItem('token', response.data.token);
-        user.email = response.data.email
+        user.id = response.data.user.id
+        user.email = response.data.user.email
         user.firstName = response.data.user.firstName
         user.lastName = response.data.user.lastName
         user.password = response.data.user.password
