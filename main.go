@@ -44,7 +44,8 @@ func main() {
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
-	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").
+		Queries("user_id", "{user_id}", "is_like", "{is_like}")
 	r.HandleFunc("/api/cart/delete", controller.DeleteCartItem).Methods("GET").
 		Queries("user_id", "{user_id}", "product_id", "{product_id}")
 	handler := cors.New(corsOpts).Handler(r)
