@@ -5,13 +5,16 @@ import { User } from '@/types/models';
 
 function TableDisplay() {
     const [users, setUsers] = useState<User[]>([]);
+    const [dynamicUser, setDynamicUser] = useState<User[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [filter, setFilter] = useState('all');
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/paginate_shops?page=${currentPage}`);
             const data = await response.json();
             setUsers(data.users);
+            setDynamicUser(data.users);
             setTotalPages(data.totalPages);
         };
 
@@ -27,10 +30,43 @@ function TableDisplay() {
         setCurrentPage(currentPage + 1);
     };
 
+    const handleFilterChange = (newFilter: 'all' | 'banned' | 'unbanned') => {
+        setFilter(newFilter);
+        if(newFilter === 'all'){
+            setUsers(dynamicUser)
+        }else if (newFilter === 'banned'){
+            const bannedUsers = dynamicUser.filter(user => user.isBanned == 'yes');
+            setUsers(bannedUsers);
+        }else if (newFilter === 'unbanned'){
+            const unbannedUsers = dynamicUser.filter(user => user.isBanned == 'no');
+            setUsers(unbannedUsers);
+        }
+        setCurrentPage(1);
+    };
     return (
         <MainDivBg className={style.table_bg}>
             <BackButton target="/admin/home/" />
             <div className={style.table_container}>
+            <div className={style.filter_container}>
+                    <button
+                        className={`${style.filter_button} ${filter === 'all' && style.active}`}
+                        onClick={() => handleFilterChange('all')}
+                    >
+                        All
+                    </button>
+                    <button
+                        className={`${style.filter_button} ${filter === 'banned' && style.active}`}
+                        onClick={() => handleFilterChange('banned')}
+                    >
+                        Banned Users
+                    </button>
+                    <button
+                        className={`${style.filter_button} ${filter === 'unbanned' && style.active}`}
+                        onClick={() => handleFilterChange('unbanned')}
+                    >
+                        Unbanned Users
+                    </button>
+                </div>
                 <UserTable users={users} setUsers={setUsers} />
                 <Paginate
                     currentPage={currentPage}
@@ -55,7 +91,8 @@ function getRoleName(roleId: number): string {
 }
 function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
     const userDataString = (localStorage.getItem('user'));
-    
+    const [showBanned, setShowBanned] = useState(false);
+    const [showUnbanned, setShowUnbanned] = useState(false);
     let userData: any;
     if (userDataString) {
         userData = JSON.parse(userDataString);
@@ -90,7 +127,6 @@ function UserTable({ users, setUsers }: { users: User[], setUsers: Function }) {
     function handleUnban(userId: number) {
         toggleBanStatus(userId, "no", 0);
     }
-
 
     return (
         <Table>
