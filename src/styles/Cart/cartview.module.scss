@@ -1,0 +1,77 @@
+.cart_list {
+    display: flex;
+    padding: 1em;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .cart_container {
+        display: flex;
+        width: 80%;
+        font-size: 16px;
+        gap: 1em;
+        a {
+            width: 100%;
+            img {
+                height: 250px;
+                object-fit: contain;
+                border-radius: 10px;
+            }
+        }
+        .right_container {
+            width: 100%;
+            h1 {
+                font-size: 40px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 700px;
+            }
+            .middle {
+                margin: 12px 0;
+                display: flex;
+                justify-content: space-between;
+                button {
+                    font-size: 16px;
+                    height: 33px;
+                    border: none;
+                    padding: 0.5em;
+                }
+                .quantity_container {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+                .delete {
+                    display: flex;
+                    gap: 10px;
+                    border-radius: 5px;
+                    background-color: red;
+                    color: white;
+                }
+            }
+            .bottom {
+                span {
+                    display: flex;
+                    gap: 20px;
+                }
+            }
+        }
+        padding: 3em 0;
+        border-bottom: 1px solid rgb(192, 105, 34);
+    }
+    .total_container{
+        padding: 2em 0;
+        display: flex;
+        justify-content: space-between;
+        font-size: 20px;
+        width: 80%;
+        .order{
+            font-size: 20px;
+            background-color: rgb(21, 224, 21);
+            color: white;
+            border: none;
+            padding: .5em;
+            border-radius: 5px;
+        }
+    }
+}
