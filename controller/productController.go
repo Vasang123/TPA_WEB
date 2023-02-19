@@ -82,8 +82,12 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 		Where("product.name ILIKE ?", pattern).
 		Order("id").
 		Select()
+	if len(products) == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
 		return
 	}
 	totalPages := (len(products) + itemsPerPage - 1) / itemsPerPage
