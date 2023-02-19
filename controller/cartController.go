@@ -25,6 +25,7 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
 		return
 	}
+	cart.IsLike = "no"
 	var cart_check model.Cart
 	err = db.Model(&cart_check).
 		Column("cart.*", "User", "Product").
