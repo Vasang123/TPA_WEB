@@ -141,11 +141,11 @@ func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 
 	user_id := r.URL.Query().Get("user_id")
 	product_id := r.URL.Query().Get("product_id")
-
+	is_like := r.URL.Query().Get("is_like")
 	cart := model.Cart{}
 
 	res, err := db.Model(&cart).
-		Where("cart.user_id = ? AND cart.product_id = ?", user_id, product_id).
+		Where("cart.user_id = ? AND cart.product_id = ? AND is_like = ?", user_id, product_id, is_like).
 		Delete()
 	if err != nil {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Error while Deleting Product"})

@@ -47,7 +47,7 @@ func main() {
 	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").
 		Queries("user_id", "{user_id}", "is_like", "{is_like}")
 	r.HandleFunc("/api/cart/delete", controller.DeleteCartItem).Methods("GET").
-		Queries("user_id", "{user_id}", "product_id", "{product_id}")
+		Queries("user_id", "{user_id}", "product_id", "{product_id}", "is_like", "{is_like}")
 	handler := cors.New(corsOpts).Handler(r)
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
