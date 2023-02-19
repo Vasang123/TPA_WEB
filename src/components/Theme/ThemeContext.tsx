@@ -14,6 +14,7 @@ export const THEME = {
     searchColor : "#e6e5fa",
     toggleSwitch : "#ffffff",
     landingMenu : "#e6e5faee",
+    productBg : "#ffffff",
   },
   dark: {
     primaryColor: "#050c2e",
@@ -28,6 +29,7 @@ export const THEME = {
     searchColor : "#170f5c",
     toggleSwitch : "#e77221",
     landingMenu : "#000000",
+    productBg : "#262626",
   },
 };
 

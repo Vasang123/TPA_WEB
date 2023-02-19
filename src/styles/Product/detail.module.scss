@@ -1,7 +1,7 @@
 .detail_container{
     display: flex;
     flex-direction: column;
-    margin : 3em;
+    padding : 3em;
     .product_detail{
         display: flex;
         gap: 1em;
@@ -9,6 +9,7 @@
         .left_detail{
             img{
                 width: 100%;
+                border-radius: 10px;
             }
         }
         .right_detail{
@@ -31,10 +32,11 @@
             }
             .description{
                 margin: .5em 0;
-                height: 100%px;
+                height: 100%;
             }
             .button_container{
                 button{
+                    cursor: pointer;
                     font-size: 16px;
                     color: white;
                     border: none;
@@ -42,6 +44,12 @@
                     border-radius: 5px;
                     display: flex;
                     gap: 5px;
+                    height: 35px;
+                }
+                .cart_container{
+                    display: flex;
+                    gap: 10px;
+
                 }
                 .cart_button{
                     background-color: green;
@@ -51,5 +59,19 @@
                 }
             }
         }
+    }
+}
+.incre_container{
+    display: flex;
+    align-items: center;
+    .count_button{
+        border-radius: 0px !important;
+        background-color: rgb(223, 119, 55);
+        // height: 14px !important;
+        // padding: 1px !important;
+        // width: 15px;
+    }
+    span{
+        padding: 4px 10px;
     }
 }
