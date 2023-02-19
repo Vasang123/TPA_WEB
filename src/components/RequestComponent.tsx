@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {storage} from '@/firebase'
+import { storage } from '@/firebase'
 import { ref, uploadBytes } from "firebase/storage";
 import { getStorage, getDownloadURL } from "firebase/storage";
 const register = async (user: any, router: any) => {
@@ -34,16 +34,34 @@ export const add_user = async (user: any, router: any) => {
     });
 };
 export const add_cart = async (cart: any) => {
-  axios.post('http://localhost:8000/api/cart', cart)
-    .then(response => {
-      alert(response.data.message)
-    })
-    .catch(response => {
-      console.log(response);
-    });
+  const response = await fetch(`http://localhost:8000/api/cart`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cart)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
 };
 
+export const update_cart = async (cart: any) => {
+  const response = await fetch(`http://localhost:8000/api/cart/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cart)
+  });
 
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
 
 
 export const add_promo = async (promo: any, imageFile: File, router: any) => {
@@ -71,7 +89,7 @@ export const add_promo = async (promo: any, imageFile: File, router: any) => {
       // Set loading state to false
       loading = false;
     });
-    
+
   return loading;
 };
 

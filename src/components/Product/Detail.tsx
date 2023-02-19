@@ -14,22 +14,25 @@ function ProductView({ product, user_id }: any) {
     const r = useRouter();
     const [counter, setCounter] = useState(0)
     if (loading) {
-        return <Loading>
-            <div className="loading_content">
-                Loading...
-            </div>
-        </Loading>;
+        return (
+            <Loading>
+                <div className="loading_content">
+                    Loading...
+                </div>
+            </Loading>
+        )
+
     }
     const Login = (e: any) => {
         r.push('/signin')
     }
-    const HandleSubmit = async (e: any, is_like:any) => {
+    const HandleSubmit = async (e: any, is_like: any) => {
         e.preventDefault();
-        if (counter == 0 && is_like == "no") {
+        if (counter == 0) {
             alert("Minimum Transaction must be 1")
         } else {
             setLoading(true);
-            if (is_like == "yes"){
+            if (is_like == "yes") {
                 setCounter(0)
             }
             const newCart: Cart = {
@@ -39,10 +42,10 @@ function ProductView({ product, user_id }: any) {
                 quantity: counter,
                 is_like: is_like
             };
-            setCart(newCart);
-            
-            await add_cart(cart)
 
+            await add_cart(newCart)
+
+            setCart(newCart);
             // Set loading state to false
             setLoading(false);
         }
@@ -69,31 +72,31 @@ function ProductView({ product, user_id }: any) {
                         <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor>
                         <SecondarySpanColor className={style.description}>Description: {product.description}</SecondarySpanColor>
                         {user_id === null ? (
-                             <div className={style.button_container}>
-                             <button className={style.wish_button} onClick={Login}>
-                                 <i className="uil uil-signin"></i>
-                                 Login To Buy Item
-                             </button>
+                            <div className={style.button_container}>
+                                <button className={style.wish_button} onClick={Login}>
+                                    <i className="uil uil-signin"></i>
+                                    Login To Buy Item
+                                </button>
                             </div>
                         ) : (
-                                <div className={style.button_container}>
-                                    <div className={style.cart_container}>
-                                        <button
-                                            className={style.cart_button}
-                                            onClick={(e)=>HandleSubmit(e,"no")}
-                                        >
-                                            <i className="uil uil-shopping-cart-alt"></i>
-                                            Add To Cart
-                                        </button>
-                                        <Counter count={counter} setCount={setCounter} limit={product.quantity} />
-                                    </div>
-                                    <button className={style.wish_button}
-                                    onClick={(e)=>HandleSubmit(e,"yes")}>
-                                        <i className="uil uil-heart"></i>
-                                        Add To Wishlist
+                            <div className={style.button_container}>
+                                <div className={style.cart_container}>
+                                    <button
+                                        className={style.cart_button}
+                                        onClick={(e) => HandleSubmit(e, "no")}
+                                    >
+                                        <i className="uil uil-shopping-cart-alt"></i>
+                                        Add To Cart
                                     </button>
+                                    <Counter count={counter} setCount={setCounter} limit={product.quantity} />
                                 </div>
-                            )
+                                <button className={style.wish_button}
+                                    onClick={(e) => HandleSubmit(e, "yes")}>
+                                    <i className="uil uil-heart"></i>
+                                    Add To Wishlist
+                                </button>
+                            </div>
+                        )
                         }
 
                     </div>

@@ -4,7 +4,8 @@ import style from '@/styles/Cart/cartview.module.scss'
 import { Counter } from "../Product/Counter";
 import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
-function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like=string) {
+import { add_cart, update_cart } from "../RequestComponent";
+function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like = string) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
         method: 'GET',
@@ -22,9 +23,12 @@ function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: numbe
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-export default function CartDisplay({ user_id, is_like}: any) {
+export default function CartDisplay({ user_id, is_like }: any) {
+
     let Total = 0;
     const [carts, setCarts] = useState<Cart[]>([])
+    const [cart, setCart] = useState<Cart>()
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}&is_like=${is_like}`);
@@ -35,6 +39,13 @@ export default function CartDisplay({ user_id, is_like}: any) {
         fetchData();
     }, [user_id]);
 
+    if (loading) {
+        return <Loading>
+            <div className="loading_content">
+                Loading...
+            </div>
+        </Loading>;
+    }
     if (carts.length > 0) {
         carts.forEach((cart) => {
             Total += cart.product?.price * cart.quantity
@@ -46,6 +57,18 @@ export default function CartDisplay({ user_id, is_like}: any) {
             </Loading>
         )
     }
+    const AddItemCart = async (e: any, cart: Cart) => {
+        e.preventDefault();
+        if (cart.quantity == 0) {
+            alert("Minimum Transaction must be 1")
+        } else {
+            setLoading(true)
+            await update_cart(cart);
+            setLoading(false);
+            const updatedCarts = carts.filter((c) => c.product_id !== cart.product_id);
+            setCarts(updatedCarts);
+        }
+    };
 
     return (
         <ProductDivBg className={style.cart_list}>
@@ -77,7 +100,17 @@ export default function CartDisplay({ user_id, is_like}: any) {
                                         />
                                     </SecondarySpanColor>
                                 </div>
-                                <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts,is_like)}>
+
+                                {is_like === "no" ? (
+                                    <div>
+                                    </div>
+                                ) : (
+                                    <button className={style.add_cart} onClick={(e) => AddItemCart(e, cart)}>
+                                        <i className="uil uil-shopping-cart"></i>
+                                        Add To Cart
+                                    </button>
+                                )}
+                                <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts, is_like)}>
                                     <i className="uil uil-trash-alt"></i>
                                     Remove
                                 </button>
@@ -92,12 +125,21 @@ export default function CartDisplay({ user_id, is_like}: any) {
                     </div>
                 ))
             }
-            <SecondarySpanColor className={style.total_container}>
-                Total Price {Total}
-                <button className={style.order}>
-                    Check Out
-                </button>
-            </SecondarySpanColor>
+            {is_like === "no" ? (
+                <SecondarySpanColor className={style.total_container}>
+                    Total Price {Total}
+                    <button className={style.order}>
+                        Check Out
+                    </button>
+                </SecondarySpanColor>
+            ) : (
+                <SecondarySpanColor className={style.total_container}>
+                    Total Price {Total}
+                    <button className={style.order}>
+                        Add All Items to Cart
+                    </button>
+                </SecondarySpanColor>
+            )}
         </ProductDivBg>
     )
 }
