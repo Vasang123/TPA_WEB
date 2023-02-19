@@ -130,17 +130,30 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	db := connect.Connect()
 	defer db.Close()
 
-	// Calculate pagination information
-	itemsPerPage := 10
+	ban := r.URL.Query().Get("status")
 	users := []*model.User{}
-	err := db.Model(&users).
-		Column("user.*").
-		Where("role_id = 2").
-		Order("id").
-		Select()
-	if err != nil {
-		panic(err)
+	itemsPerPage := 10
+
+	if ban == "yes" || ban == "no" {
+		err := db.Model(&users).
+			Column("user.*").
+			Where("role_id = 2 AND is_banned = ?", ban).
+			Order("id").
+			Select()
+		if err != nil {
+			panic(err)
+		}
+	} else {
+		err := db.Model(&users).
+			Column("user.*").
+			Where("role_id = 2").
+			Order("id").
+			Select()
+		if err != nil {
+			panic(err)
+		}
 	}
+
 	totalPages := (len(users) + itemsPerPage - 1) / itemsPerPage
 	pageNumber := 1
 
@@ -157,6 +170,7 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	if pageNumber > totalPages {
 		pageNumber = totalPages
 	}
+
 	// Slice the user data based on the page number
 	startIndex := (pageNumber - 1) * itemsPerPage
 	endIndex := startIndex + itemsPerPage
@@ -182,6 +196,7 @@ func PaginateShops(w http.ResponseWriter, r *http.Request) {
 	// Encode the response as JSON and write it to the response body
 	json.NewEncoder(w).Encode(response)
 }
+
 func PaginatePromo(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
