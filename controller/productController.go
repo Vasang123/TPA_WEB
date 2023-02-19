@@ -172,6 +172,7 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
 		Limit(1).
 		Select()
+	// If item is the first 1
 	if err != nil {
 		err = db.Insert(cart)
 		if err != nil {
@@ -179,7 +180,12 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		_, err = db.Query(pg.Scan(&cart.UserId, &cart.ProductId), "UPDATE carts SET quantity = ? WHERE carts.user_id = ? AND carts.product_id = ?", (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
+		if (cart.Quantity + cart_check.Quantity) > cart_check.Product.Quantity {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
+			return
+		} else {
+			_, err = db.Query(pg.Scan(&cart.UserId, &cart.ProductId), "UPDATE carts SET quantity = ? WHERE carts.user_id = ? AND carts.product_id = ?", (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
+		}
 	}
 	if err != nil {
 		log.Println("Error inserting cart into database:", err)
@@ -187,5 +193,5 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
 		return
 	}
-	// json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
