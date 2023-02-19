@@ -52,6 +52,13 @@ export function SecondaryLinkColor({children, ...attr}:any) {
         'color' : theme.secondaryColor
     }} {...attr}>{children}</Link>
 }
+export function Select({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <select style={{
+        backgroundColor : theme.primaryColor,
+        'color' : theme.secondaryColor
+    }} {...attr}>{children}</select>
+}
 export function SecondaryH1Color({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
     return <h1 style={{

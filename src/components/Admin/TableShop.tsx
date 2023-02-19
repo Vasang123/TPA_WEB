@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { BackButton, MainDivBg, SecondarySpanColor, Table, Td, Th } from '../Other/GlobalComponent';
+import { BackButton, MainDivBg, SecondarySpanColor, Select, Table, Td, Th } from '../Other/GlobalComponent';
 import style from '@/styles/Admin/viewusers.module.scss'
 import { User } from '@/types/models';
 
 function FilterButtons({ activeFilter, onFilterChange }: any) {
     return (
-        <select value={activeFilter} onChange={onFilterChange}>
-            <option value="all">All</option>
-            <option value="yes">Banned Users</option>
-            <option value="no">Unbanned Users</option>
-        </select>
+        <div className={style.filter_contianer}>
+            <SecondarySpanColor>Filter : </SecondarySpanColor>
+            <Select value={activeFilter} onChange={onFilterChange}>
+                <option value="all">All</option>
+                <option value="yes">Banned Users</option>
+                <option value="no">Active Users</option>
+            </Select>
+        </div>
     );
 }
 
