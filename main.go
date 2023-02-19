@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+
 	corsOpts := cors.Options{
 		AllowedOrigins: []string{"*"},
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -41,7 +42,9 @@ func main() {
 	r.HandleFunc("/api/search", controller.GetProduct).Methods("GET").
 		Queries("name", "{name}", "page", "{page}")
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
+	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
+	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").Queries("user_id", "{user_id}")
 	handler := cors.New(corsOpts).Handler(r)
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
