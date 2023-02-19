@@ -6,6 +6,7 @@ import Search from "./SearchNavbar";
 import ThemeSwitcher from "../Theme/ThemeSwitcher";
 import Subnav from './SubNav'
 import Profile from "./Profile";
+import CartNav from "./CartNav";
 export default function Navbar(){
     
 
@@ -65,12 +66,7 @@ export default function Navbar(){
                     </div>
                 </div>
             </div>
-            <div className="cart-container">
-                <div className="cart-temp">
-                    <LogoSecondary className="uil uil-shopping-cart-alt"></LogoSecondary>
-                </div>  
-                
-            </div>
+            <CartNav/>
         </MainDivBg>
         <Subnav />
 
