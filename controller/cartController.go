@@ -112,3 +112,44 @@ func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+func UpdateWishlist(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	cart := &model.Cart{}
+
+	err := json.NewDecoder(r.Body).Decode(cart)
+	// fmt.Print(cart)
+	if err != nil {
+		log.Println("Error decoding cart payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
+		return
+	}
+	var cart_check model.Cart
+	err = db.Model(&cart_check).
+		Column("cart.*", "User", "Product").
+		Relation("User").
+		Relation("Product").
+		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
+		Limit(1).
+		Select()
+	// fmt.Println("cart.Quantity:", cart.Quantity)
+	// fmt.Println("cart_check.Quantity:", cart_check.Quantity)
+	// fmt.Println("cart_check.Product.Quantity:", cart_check.Product.Quantity)
+	if (cart.Quantity + cart_check.Quantity) > cart_check.Product.Quantity {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
+		return
+	}
+	_, err = db.Query(pg.Scan(&cart.IsLike, &cart.UserId, &cart.ProductId), "UPDATE carts SET is_like= ?, quantity = ? WHERE user_id = ? AND product_id = ?  ", cart.IsLike, (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
+
+	if err != nil {
+		log.Println("Error inserting cart into database:", err)
+		// w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
