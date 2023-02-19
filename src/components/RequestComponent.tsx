@@ -8,10 +8,11 @@ const register = async (user: any, router: any) => {
       if (response.data.message === 'Email already exists') {
         alert("Email already exists")
       } else {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(user));
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
-        router.push("/");
+        // localStorage.setItem('token', response.data.token);
+        // localStorage.setItem('user', JSON.stringify(user));
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
+        alert("Success")
+        router.push("/signin");
       }
     })
     .catch(response => {
