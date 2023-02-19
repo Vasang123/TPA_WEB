@@ -11,6 +11,7 @@ import { add_cart } from "../RequestComponent";
 function ProductView({ product, user_id }: any) {
     const [loading, setLoading] = useState(false);
     const [cart, setCart] = useState<Cart>();
+    const r = useRouter();
     const [counter, setCounter] = useState(0)
     if (loading) {
         return <Loading>
@@ -18,6 +19,9 @@ function ProductView({ product, user_id }: any) {
                 Loading...
             </div>
         </Loading>;
+    }
+    const Login = (e: any) => {
+        r.push('/signin')
     }
     const HandleSubmit = async (e: any) => {
         e.preventDefault();
@@ -32,14 +36,14 @@ function ProductView({ product, user_id }: any) {
                 quantity: counter
             };
             setCart(newCart);
-           
+
             await add_cart(cart)
 
             // Set loading state to false
             setLoading(false);
         }
     };
-    
+
     return (
         product && (
             <div className={style.product_detail}>
@@ -60,22 +64,32 @@ function ProductView({ product, user_id }: any) {
                         </div>
                         <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor>
                         <SecondarySpanColor className={style.description}>Description: {product.description}</SecondarySpanColor>
-                        <div className={style.button_container}>
-                            <div className={style.cart_container}>
-                                <button className={style.cart_button}
-                                    onClick={HandleSubmit}
-                                >
-                                    <i className="uil uil-shopping-cart-alt"></i>
-                                    Add To Cart
-                                </button>
-                                <Counter count={counter} setCount={setCounter} limit={product.quantity} />
+                        {user_id === null ? (
+                             <div className={style.button_container}>
+                             <button className={style.wish_button} onClick={Login}>
+                                 <i className="uil uil-signin"></i>
+                                 Login To Buy Item
+                             </button>
                             </div>
-
-                            <button className={style.wish_button}>
-                                <i className="uil uil-heart"></i>
-                                Add To Wishlist
-                            </button>
-                        </div>
+                        ) : (
+                                <div className={style.button_container}>
+                                    <div className={style.cart_container}>
+                                        <button
+                                            className={style.cart_button}
+                                            onClick={HandleSubmit}
+                                        >
+                                            <i className="uil uil-shopping-cart-alt"></i>
+                                            Add To Cart
+                                        </button>
+                                        <Counter count={counter} setCount={setCounter} limit={product.quantity} />
+                                    </div>
+                                    <button className={style.wish_button}>
+                                        <i className="uil uil-heart"></i>
+                                        Add To Wishlist
+                                    </button>
+                                </div>
+                            )
+                        }
 
                     </div>
                 </div>
@@ -84,7 +98,7 @@ function ProductView({ product, user_id }: any) {
     );
 }
 
-export default function DetailPage({user_id} :any ) {
+export default function DetailPage({ user_id }: any) {
     const router = useRouter();
     const id = router.query.id;
     const [product, setProduct] = useState<Product>();
@@ -104,7 +118,7 @@ export default function DetailPage({user_id} :any ) {
 
     return (
         <ProductDivBg className={style.detail_container}>
-            <ProductView product={product} user_id = {user_id}/>
+            <ProductView product={product} user_id={user_id} />
             <div className={style.review_container}>
 
             </div>
