@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -19,60 +20,13 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 	cart := &model.Cart{}
 
 	err := json.NewDecoder(r.Body).Decode(cart)
+	fmt.Print(cart)
 	if err != nil {
 		log.Println("Error decoding cart payload:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
 		return
 	}
-	cart.IsLike = "no"
-	var cart_check model.Cart
-	err = db.Model(&cart_check).
-		Column("cart.*", "User", "Product").
-		Relation("User").
-		Relation("Product").
-		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
-		Limit(1).
-		Select()
-	// If item is the first 1
-	if err != nil {
-		err = db.Insert(cart)
-		if err != nil {
-			json.NewEncoder(w).Encode(map[string]string{"message": "Error when inserting into db"})
-			return
-		}
-	} else {
-		if (cart.Quantity + cart_check.Quantity) > cart_check.Product.Quantity {
-			json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
-			return
-		} else {
-			_, err = db.Query(pg.Scan(&cart.UserId, &cart.ProductId), "UPDATE carts SET quantity = ? WHERE carts.user_id = ? AND carts.product_id = ?", (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
-		}
-	}
-	if err != nil {
-		log.Println("Error inserting cart into database:", err)
-		// w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
-		return
-	}
-	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
-}
-func InsertWishlist(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	db := connect.Connect()
-	defer db.Close()
-
-	cart := &model.Cart{}
-
-	err := json.NewDecoder(r.Body).Decode(cart)
-	if err != nil {
-		log.Println("Error decoding cart payload:", err)
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
-		return
-	}
-	cart.IsLike = "no"
 	var cart_check model.Cart
 	err = db.Model(&cart_check).
 		Column("cart.*", "User", "Product").
