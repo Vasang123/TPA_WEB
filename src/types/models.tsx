@@ -23,6 +23,7 @@ export interface Cart {
   user_id: number;
   quantity: number; // requested item
   product_id: number;
+  is_like : string;
   user?: {
     id?: number;
     firstName?: string;

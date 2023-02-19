@@ -22,12 +22,12 @@ function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: numbe
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-export default function CartDisplay({ user_id }: any) {
+export default function CartDisplay({ user_id, is_like}: any) {
     let Total = 0;
     const [carts, setCarts] = useState<Cart[]>([])
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}`);
+            const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}&is_like=${is_like}`);
             const data = await response.json();
             setCarts(data)
         };

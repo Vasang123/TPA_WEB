@@ -34,7 +34,7 @@ export default function Cart() {
     return (
         <>
             <Navbar />
-            <CartDisplay  user_id={userData ? userData.id : null}/>
+            <CartDisplay  user_id={userData ? userData.id : null} is_like ="no"/>
             <Footer/>
         </>
     )
