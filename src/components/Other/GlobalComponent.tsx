@@ -39,6 +39,13 @@ export function SecondarySpanColor({children, ...attr}:any) {
         'color' : theme.secondaryColor
     }} {...attr}>{children}</span>
 }
+export function SecondarySpanColor2({children, ...attr}:any) {
+    const { theme } = useContext(ThemeContext);
+    return <span style={{
+        'color' : theme.secondaryColor,
+        backgroundColor : theme.primaryColor
+    }} {...attr}>{children}</span>
+}
 export function SecondaryLinkColor({children, ...attr}:any) {
     const { theme } = useContext(ThemeContext);
     return <Link style={{

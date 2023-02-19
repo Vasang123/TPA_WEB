@@ -2,7 +2,7 @@ import { Product } from '@/types/models';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { HomeItem } from './Product';
-import { SecondarySpanColor } from '../Other/GlobalComponent';
+import { BaseBackgroundColor, SecondarySpanColor } from '../Other/GlobalComponent';
 import style from '@/styles/Product/search.module.scss'
 export default function SearchResults() {
   const router = useRouter();
@@ -49,10 +49,10 @@ export default function SearchResults() {
 }
 function Paginate({ currentPage, totalPages, onPrevPage, onNextPage }: any) {
   return (
-    <div className={style.paginate_container}>
+    <BaseBackgroundColor className={style.paginate_container}>
       <button className={style.prev} onClick={onPrevPage} disabled={currentPage === 1}>Prev</button>
       <SecondarySpanColor className={style.pageNumber}>{currentPage} of {totalPages}</SecondarySpanColor>
       <button className={style.next} onClick={onNextPage} disabled={currentPage === totalPages}>Next</button>
-    </div>
+    </BaseBackgroundColor>
   );
 }

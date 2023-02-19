@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {Product} from '@/types/models'
 import Image from "next/image";
 import style from '@/styles/Home/homedisplay.module.scss'
-import { BaseBackgroundColor, MainDivBg,  SecondaryLinkColor3 } from "../Other/GlobalComponent";
+import { BaseBackgroundColor, Loading, MainDivBg,  SecondaryBoldColor,  SecondaryLinkColor3, SecondarySpanColor, SecondarySpanColor2 } from "../Other/GlobalComponent";
 
 interface Props {
   products: Product[];
@@ -11,7 +11,10 @@ interface Props {
 export const HomeItem = ({ products }: Props) => {
   if (!Array.isArray(products)) {
     
-    return <div>No products found</div>;
+    return (
+      <SecondarySpanColor2 className="no_product">
+            No Product Match Your Result
+      </SecondarySpanColor2>);
   }
   return (
     <BaseBackgroundColor className={style.product_list_container}>

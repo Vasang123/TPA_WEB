@@ -5,19 +5,25 @@ import { useRouter } from "next/router";
 
 export default function Search() {
     const router = useRouter();
-    function HandleSearch(event: any) {
+    const [searchQuery, setSearchQuery] = useState('123');
+    const HandleSearch = (event: any) => {
         event.preventDefault();
-        const query = event.target.elements.search.value;
-        router.push(`/products/search?q=${encodeURIComponent(query)}`);
+        setSearchQuery(event.target.value);
+        // const query = event.target.elements.search.value;
+        router.push(`/products/search?q=${encodeURIComponent(searchQuery)}`);
     }
     const { theme } = useContext(ThemeContext);
     return (
-        <form action="" onSubmit={HandleSearch}>
+        <form action="" 
+        // onSubmit={HandleSearch}
+        >
             <input type="text" name="search" className="search-input"
                 style={{
                     backgroundColor: theme.searchColor,
                     color: theme.secondaryColor
-                }} />
+                }}
+                onChange={HandleSearch}
+            />
             <button className="search-button" style={{
                 backgroundColor: theme.thirdColor
             }} type="submit">
