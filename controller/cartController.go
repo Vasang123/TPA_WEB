@@ -84,3 +84,29 @@ func GetProductCart(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(carts)
 }
+
+func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	user_id := r.URL.Query().Get("user_id")
+	product_id := r.URL.Query().Get("product_id")
+
+	cart := model.Cart{}
+
+	res, err := db.Model(&cart).
+		Where("cart.user_id = ? AND cart.product_id = ?", user_id, product_id).
+		Delete()
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error while Deleting Product"})
+		return
+	}
+	if res.RowsAffected() == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
