@@ -40,6 +40,7 @@ func main() {
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/search", controller.GetProduct).Methods("GET").
 		Queries("name", "{name}", "page", "{page}")
+	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	r.HandleFunc("/api/products/{id}", controller.GetProduct).Methods("GET")
 	r.HandleFunc("/api/products/{id}", controller.UpdateProduct).Methods("PATCH")
 	r.HandleFunc("/api/products/{id}", controller.DeleteProduct).Methods("DELETE")

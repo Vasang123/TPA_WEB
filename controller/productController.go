@@ -51,7 +51,7 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "User", "Category", "Brand").
+		Column("product.*", "User.first_name", "User.id", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
 		Relation("Brand").
@@ -64,7 +64,31 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(products)
 }
-
+func GetProductDetail(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	db := connect.Connect()
+	defer db.Close()
+	idString := r.URL.Query().Get("id")
+	id, err := strconv.Atoi(idString)
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	var product model.Product
+	err = db.Model(&product).
+		Column("product.*", "User.first_name", "User.id", "Category", "Brand").
+		Relation("User").
+		Relation("Category").
+		Relation("Brand").
+		Where("product.id  = ?", id).
+		Limit(1).
+		Select()
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	json.NewEncoder(w).Encode(product)
+}
 func GetProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -77,7 +101,7 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	pattern := "%" + name + "%"
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "User", "Category", "Brand").
+		Column("product.*", "User.first_name", "User.id", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
 		Relation("Brand").
