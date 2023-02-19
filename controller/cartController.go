@@ -136,14 +136,11 @@ func UpdateWishlist(w http.ResponseWriter, r *http.Request) {
 		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
 		Limit(1).
 		Select()
-	// fmt.Println("cart.Quantity:", cart.Quantity)
-	// fmt.Println("cart_check.Quantity:", cart_check.Quantity)
-	// fmt.Println("cart_check.Product.Quantity:", cart_check.Product.Quantity)
 	if (cart.Quantity + cart_check.Quantity) > cart_check.Product.Quantity {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
 		return
 	}
-	_, err = db.Query(pg.Scan(&cart.IsLike, &cart.UserId, &cart.ProductId), "UPDATE carts SET is_like= ?, quantity = ? WHERE user_id = ? AND product_id = ?  ", cart.IsLike, (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
+	_, err = db.Query(pg.Scan(&cart.IsLike, &cart.UserId, &cart.ProductId), "UPDATE carts SET is_like= 'no', quantity = ? WHERE user_id = ? AND product_id = ?  ", (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
 
 	if err != nil {
 		log.Println("Error inserting cart into database:", err)
