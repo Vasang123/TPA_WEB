@@ -51,9 +51,10 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "User", "Category").
+		Column("product.*", "User", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
+		Relation("Brand").
 		Offset(offset).
 		Limit(pageSize).
 		Select()
@@ -76,12 +77,16 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	pattern := "%" + name + "%"
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "User", "Category").
+		Column("product.*", "User", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
-		Where("product.name ILIKE ?", pattern).
+		Relation("Brand").
+		// Join("JOIN brands ON brands.id = product.brand_id").
+		Where("product.name ILIKE ? OR brand.name ILIKE ?", pattern, pattern).
+		// Where("product.name ILIKE ?", pattern).
 		Order("id").
 		Select()
+	// fmt.Print(products)
 	if len(products) == 0 {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
 		return

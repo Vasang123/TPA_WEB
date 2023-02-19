@@ -24,6 +24,12 @@ type Product struct {
 	UserId      int64    `json:"user_id"`
 	User        User     `json:"user"`
 	Category    Category `json:"category"`
+	BrandId     int64    `json:"brand_id"`
+	Brand       Brand    `json:"brand"`
+}
+type Brand struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name"`
 }
 type Category struct {
 	ID   int64  `json:"id"`
