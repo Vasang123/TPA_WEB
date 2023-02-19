@@ -29,7 +29,12 @@
                 background-color: rgba(193, 174, 174, 0.671);
             }
             h2{
+             
                 font-size: 23px;
+                white-space: nowrap; 
+                overflow: hidden; 
+                text-overflow: ellipsis; 
+                width: 200px;
             }
             .product_desc{
                 margin: 5px 0;

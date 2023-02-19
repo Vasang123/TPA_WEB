@@ -29,9 +29,9 @@ export interface Product {
   description: string;
   category_id: number;
   user_id: number;
-  user: {
-    id: number;
-    firstName: string;
+  user?: {
+    id?: number;
+    firstName?: string;
   };
   category: {
     id: number;

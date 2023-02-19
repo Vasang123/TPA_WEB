@@ -12,10 +12,16 @@ export default function Search() {
         // const query = event.target.elements.search.value;
         router.push(`/products/search?q=${encodeURIComponent(searchQuery)}`);
     }
+    const HandleSubmit = (event: any) => {
+        event.preventDefault();
+        const query = event.target.elements.search.value;
+        setSearchQuery(event.target.elements.search.value);
+        router.push(`/products/search?q=${encodeURIComponent(searchQuery)}`);
+    }
     const { theme } = useContext(ThemeContext);
     return (
         <form action="" 
-        // onSubmit={HandleSearch}
+        onSubmit={HandleSubmit}
         >
             <input type="text" name="search" className="search-input"
                 style={{

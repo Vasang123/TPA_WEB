@@ -20,7 +20,7 @@ export const HomeItem = ({ products }: Props) => {
     <BaseBackgroundColor className={style.product_list_container}>
       {products.map((product) => (
         <div key={product.id} className={style.product_container}>
-          <SecondaryLinkColor3 href="/">
+          <SecondaryLinkColor3 href={`/products/detail?id=${encodeURIComponent(product.id)}`}>
           <img src={product.image}/>
           <h2>{product.name}</h2>
           <div className={style.product_desc}>
