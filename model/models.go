@@ -1,17 +1,23 @@
 package model
 
 import (
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 )
 
 type Review struct {
-	ID        int64   `json:"id" pg:"id:bigserial pk"`
-	Name      string  `json:"name"`
-	UserId    int64   `json:"user_id"`
-	ProductId int64   `json:"product_id"`
-	Product   Product `json:"product"`
-	User      User    `json:"user"`
+	ID         int64     `json:"id" pg:"id:bigserial pk"`
+	Comment    string    `json:"comment"`
+	Rating     float64   `json:"rating"`
+	UserId     int64     `json:"user_id"`
+	ProductId  int64     `json:"product_id"`
+	CreatedAt  time.Time `json:"created_at" pg:"default:now()"`
+	ModifiedAt time.Time `json:"modified_at" pg:"default:now()"`
+	Product    Product   `json:"product"`
+	User       User      `json:"user"`
 }
+
 type Cart struct {
 	ID        int64   `json:"id" pg:"id:bigserial pk"`
 	UserId    int64   `json:"user_id"`
@@ -40,6 +46,7 @@ type Brand struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
 }
+
 type Category struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
