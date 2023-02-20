@@ -51,6 +51,7 @@ func main() {
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "is_like", "{is_like}")
 	// Review
 	r.HandleFunc("/api/review/add", controller.InsertReview).Methods("POST")
+	r.HandleFunc("/api/review/update", controller.UpdateReview).Methods("POST")
 	r.HandleFunc("/api/review/view", controller.GetProductReview).Methods("GET").
 		Queries("product_id", "{product_id}")
 	r.HandleFunc("/api/review/delete", controller.DeleteReview).Methods("GET").

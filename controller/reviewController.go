@@ -87,3 +87,34 @@ func DeleteReview(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+func UpdateReview(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	review := &model.Review{}
+	err := json.NewDecoder(r.Body).Decode(review)
+	// fmt.Print(review)
+	if err != nil {
+		log.Println("Error decoding review payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding review payload"})
+		return
+	}
+	res, err := db.Model(review).
+		Column("rating", "comment", "modified_at").
+		Where("id = ? AND review.user_id = ? AND review.product_id = ?", review.ID, review.UserId, review.ProductId).
+		Update()
+
+	if err != nil {
+		log.Println("Error updating review into database:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Update Review"})
+		return
+	}
+	if res.RowsAffected() == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing to update"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
