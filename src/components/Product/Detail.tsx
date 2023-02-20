@@ -108,8 +108,8 @@ function ProductView({ product, user_id }: any) {
                
             </div>
             <InsertComment user_id= {user_id} product_id={product.id}/>
-            <ReviewList product_id={product.id}/>
-            </div>
+            <ReviewList product_id={product.id} user_id= {user_id}/>
+            </div> 
         )
     );
 }
