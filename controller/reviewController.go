@@ -61,3 +61,29 @@ func GetProductReview(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(reviews)
 }
+
+func DeleteReview(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	id := r.URL.Query().Get("id")
+	user_id := r.URL.Query().Get("user_id")
+	product_id := r.URL.Query().Get("product_id")
+	review := model.Review{}
+
+	res, err := db.Model(&review).
+		Where("id = ? AND review.user_id = ? AND review.product_id = ?", id, user_id, product_id).
+		Delete()
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error while Deleting Review"})
+		return
+	}
+	if res.RowsAffected() == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}

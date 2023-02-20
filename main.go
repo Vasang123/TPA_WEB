@@ -53,6 +53,8 @@ func main() {
 	r.HandleFunc("/api/review/add", controller.InsertReview).Methods("POST")
 	r.HandleFunc("/api/review/view", controller.GetProductReview).Methods("GET").
 		Queries("product_id", "{product_id}")
+	r.HandleFunc("/api/review/delete", controller.DeleteReview).Methods("GET").
+		Queries("user_id", "{user_id}", "product_id", "{product_id}", "id", "{id}")
 	handler := cors.New(corsOpts).Handler(r)
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
