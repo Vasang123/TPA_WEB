@@ -24,7 +24,7 @@ export interface Review {
   rating: number;
   comment: string;
   product_id: number;
-  created_at: Date;
+  created_at?: Date;
   modified_at: Date;
   user?: {
     id?: number;

@@ -4,6 +4,7 @@ import { add_review } from '../RequestComponent';
 import style from '@/styles/Product/detail.module.scss'
 import { Input, TextArea } from '../Other/InputComponent';
 import { SecondarySpanColor } from '../Other/GlobalComponent';
+import ReviewForm from './Form';
 interface Props {
     product_id: number;
     user_id: number;
@@ -13,6 +14,8 @@ export default function InsertComment({ product_id, user_id }: Props) {
     const [rating, setRating] = useState('');
     const [comment, setComment] = useState('');
     const [review, setReview] = useState<Review>();
+
+
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -46,33 +49,19 @@ export default function InsertComment({ product_id, user_id }: Props) {
 
     return product_id ? (
         (user_id ? (
-            <div className={style.review_input}>
-                <form onSubmit={handleSubmit}>
-                    <label className={style.rating_container}>
-                        <SecondarySpanColor>
-                            Rating:
-                        </SecondarySpanColor>
-                        <Input type="text" value={rating} onChange={(event) => setRating(event.target.value)} />
-                    </label>
-                    <br />
-                    <label className={style.comment_container}>
-                        <SecondarySpanColor>
-                            Comment:
-                        </SecondarySpanColor>
-                        <TextArea value={comment} onChange={(event) => setComment(event.target.value)} />
-                    </label>
-                    <br />
-                    <button type="submit" >Submit</button>
-                </form>
-            </div>
+            <ReviewForm
+                handleSubmit={handleSubmit}
+                rating={rating}
+                comment={comment}
+                setRating={setRating}
+                setComment={setComment}
+                css={style.review_input} />
         ) :
             (
                 <div>
 
                 </div>
             )
-
         )
-
     ) : null;
 }

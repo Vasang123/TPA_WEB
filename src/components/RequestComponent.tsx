@@ -77,6 +77,20 @@ export const add_review = async (review: any) => {
     alert(JSON.stringify(data.message));
   }
 };
+export const update_review = async (review: any) => {
+  const response = await fetch(`http://localhost:8000/api/review/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(review)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
 export const add_promo = async (promo: any, imageFile: File, router: any) => {
   let loading = true;
   const storageRef = ref(storage, `images/${imageFile.name}`);
