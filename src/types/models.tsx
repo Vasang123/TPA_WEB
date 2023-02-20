@@ -18,12 +18,25 @@ export interface Brand {
   id: number;
   name: string;
 }
+export interface Review {
+  id: number;
+  user_id: number;
+  rating: number;
+  comment: string;
+  product_id: number;
+  created_at: Date;
+  modified_at: Date;
+  user?: {
+    id?: number;
+    firstName?: string;
+  };
+}
 export interface Cart {
   id: number;
   user_id: number;
   quantity: number; // requested item
   product_id: number;
-  is_like : string;
+  is_like: string;
   user?: {
     id?: number;
     firstName?: string;

@@ -10,6 +10,7 @@ interface Props {
 const Carousel = ({ slides }: Props) => {
     const [currIndex, setCurrIndex] = useState(slides.length - 1);
     const slideStyles = {
+        // backgroundImage: slides[currIndex]?.image ? `url(${slides[currIndex].image})` : '',
         backgroundImage: slides[currIndex]?.image ? `url(${slides[currIndex].image})` : '',
         backgroundSize: "cover",
         backgroundPosition: "center center",

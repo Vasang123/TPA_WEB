@@ -7,6 +7,8 @@ import { SecondaryH1Color } from "../Other/GlobalComponent";
 import { SecondarySpanColor } from "../Other/GlobalComponent";
 import { Counter } from "./Counter";
 import { add_cart } from "../RequestComponent";
+import ReviewList from "../Review/Show";
+import InsertComment from "../Review/Insert";
 
 function ProductView({ product, user_id }: any) {
     const [loading, setLoading] = useState(false);
@@ -50,9 +52,9 @@ function ProductView({ product, user_id }: any) {
             setLoading(false);
         }
     };
-
     return (
         product && (
+            <div className={style.product_page}>
             <div className={style.product_detail}>
                 <div className={style.left_detail}>
                     <img src={product.image} alt="" />
@@ -101,6 +103,12 @@ function ProductView({ product, user_id }: any) {
 
                     </div>
                 </div>
+               
+                
+               
+            </div>
+            <InsertComment user_id= {user_id} product_id={product.id}/>
+            <ReviewList product_id={product.id}/>
             </div>
         )
     );
