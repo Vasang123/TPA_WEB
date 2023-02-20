@@ -44,6 +44,8 @@ func createSchema(db *pg.DB) error {
 		(*model.Promo)(nil),
 		(*model.Brand)(nil),
 		(*model.Cart)(nil),
+		(*model.Wishlist)(nil),
+		(*model.WishlistDetail)(nil),
 	}
 
 	for _, model := range models {
@@ -54,6 +56,5 @@ func createSchema(db *pg.DB) error {
 			return err
 		}
 	}
-
 	return nil
 }

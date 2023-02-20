@@ -25,7 +25,7 @@ type Cart struct {
 	Product   Product `json:"product"`
 	ProductId int64   `json:"product_id"`
 	Quantity  int     `json:"quantity"`
-	IsLike    string  `json:"is_like,omitempty" default:"no"`
+	IsLike    string  `json:"is_like"`
 }
 type Product struct {
 	ID          int64    `json:"id" pg:"id:bigserial pk"`
@@ -85,4 +85,19 @@ type Promo struct {
 	Name   string `json:"name"`
 	Image  string `json:"image"`
 	Status string `json:"status"`
+}
+type Wishlist struct {
+	ID      int64  `json:"id" pg:"id:bigserial pk"`
+	UserId  int64  `json:"user_id"`
+	User    User   `json:"user"`
+	Name    string `json:"name"`
+	Privacy string `json:"privacy"`
+}
+type WishlistDetail struct {
+	ID         int64    `json:"id" pg:"id:bigserial pk"`
+	WishlistId int64    `json:"wishlist_id"`
+	Wishlist   Wishlist `json:"wishlist"`
+	Product    Product  `json:"product"`
+	ProductId  int64    `json:"product_id"`
+	Quantity   int      `json:"quantity"`
 }
