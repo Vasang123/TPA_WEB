@@ -2,14 +2,14 @@ import Footer from "@/components/Home/Footer";
 import Navbar from "@/components/Navbar/Navbar";
 import SearchResults from "@/components/Product/SearchResult";
 
-export default function SearchPage(){
+export default function SearchPage() {
 
-    return(
+    return (
         <div>
-            <Navbar/>
+            <Navbar />
             <SearchResults />
-            <Footer/>
+            <Footer />
         </div>
     )
-    
+
 }

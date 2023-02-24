@@ -1,6 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import SearchDisplay from "../SearchBar/SearchDisplay";
+
 
 
 export default function Search() {
@@ -11,13 +12,13 @@ export default function Search() {
         setSearchQuery(event.target.value);
         // const query = event.target.elements.search.value;
         router.push(`/products/search?q=${encodeURIComponent(searchQuery)}`);
-    }
+    };
     const HandleSubmit = (event: any) => {
         event.preventDefault();
         const query = event.target.elements.search.value;
         setSearchQuery(event.target.elements.search.value);
         router.push(`/products/search?q=${encodeURIComponent(searchQuery)}`);
-    }
+    };
 
     return (
         <>
@@ -25,5 +26,5 @@ export default function Search() {
                 HandleSearch={HandleSearch}
                 HandleSubmit={HandleSubmit} />
         </>
-    )
+    );
 }

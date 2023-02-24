@@ -121,7 +121,7 @@ export default function ReviewList({ product_id, user_id }: Props) {
                             </div>
                             <div className={style.middle}>
                                 <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
-                                <SecondarySpanColor>Created at: {review.modified_at.toString()}</SecondarySpanColor>
+                                <SecondarySpanColor>Updated at: {review.modified_at.toString()}</SecondarySpanColor>
                             </div>
                             <SecondarySpanColor>{review.comment}</SecondarySpanColor>
                         </div>

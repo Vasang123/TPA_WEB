@@ -65,6 +65,56 @@ export interface Cart {
     };
   }
 }
+export interface Wishlist {
+  id: number;
+  name: string;
+  user?: {
+    id?: number;
+    firstName?: string;
+  };
+  privacy: string;
+  image: string;
+}
+export interface WishlistDetail {
+  id: number;
+  wishlist_id: number;
+  product_id: number;
+  wishlist?: {
+    id: number;
+    name: string;
+    user?: {
+      id?: number;
+      firstName?: string;
+    };
+    privacy: string;
+    image: string;
+  }
+  product?: {
+    id: number;
+    name: string;
+    quantity: number;
+    price: number;
+    image: string;
+    rating: number;
+    description: string;
+    category_id: number;
+    user_id: number; // shop
+    user?: {
+      id?: number;
+      firstName?: string;
+    };
+    category: {
+      id: number;
+      name: string;
+    };
+    brand: {
+      id: number;
+      name: string;
+    };
+  }
+  quantity: number;
+
+}
 export interface Product {
   id: number;
   name: string;
@@ -100,4 +150,20 @@ export interface Promo {
   name: string;
   image: string;
   status: string;
+}
+
+export interface FavoriteList {
+  id: number;
+  user_id: number;
+  wishlist?: {
+    id: number;
+    name: string;
+    user?: {
+      id?: number;
+      firstName?: string;
+    };
+    privacy: string;
+    image: string;
+  }
+  wishlist_id: number;
 }
