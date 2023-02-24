@@ -7,6 +7,12 @@ import { useRouter } from "next/router";
 
 
 export default function WishlistHome({ user_id }: any) {
+    console.log(user_id);
+    if (user_id == '') {
+        user_id = 0
+
+    }
+
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [wishlists, setWishlists] = useState<Wishlist[]>([])
@@ -26,7 +32,7 @@ export default function WishlistHome({ user_id }: any) {
 
     useEffect(() => {
         const fetchData = async () => {
-            fetch(`http://localhost:8000/api/wishlist/public/view?page=${currentPage}&itemsPerPage=${itemsPerPage}`)
+            fetch(`http://localhost:8000/api/wishlist/public/view?page=${currentPage}&itemsPerPage=${itemsPerPage}&user_id=${user_id}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.wishlists) {
@@ -40,11 +46,11 @@ export default function WishlistHome({ user_id }: any) {
             fetch(`http://localhost:8000/api/favorite/view?user_id=${user_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.favorites);
+                    // console.log(data.favorites);
 
                     if (data.favorites) {
                         setFavorites(data.favorites)
-                        console.log(favorites);
+                        // console.log(favorites);
                     } else {
 
                     }

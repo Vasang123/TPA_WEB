@@ -4,8 +4,7 @@ import { LogoSecondary } from "../Other/LogoComponent"
 import SearchDisplay from "../SearchBar/SearchDisplay"
 import style from '@/styles/Wishlist/wishlisthome.module.scss'
 
-export default function WishlistNav() {
-
+export default function PrivateNav() {
     return (
         <MainDivBg className="nav">
             <Link href="/wishlist/home">

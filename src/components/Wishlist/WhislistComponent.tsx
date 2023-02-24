@@ -4,8 +4,10 @@ import { BaseBackgroundColor, SecondaryDivColor3, SecondaryLinkColor } from '../
 import { useState, useEffect } from 'react'
 import { Wishlist } from '@/types/models'
 import { SecondarySpanColor } from '../Other/GlobalComponent'
+import { useRouter } from 'next/router'
 
 export default function WishlistDisplay({ user_id, wishlists, favorites, likeCount, setLikeCount, dislikeCount, setDislikeCount }: any) {
+    const router = useRouter();
     const HandleLike = async (e: any, user_id: any, wishlist_id: any) => {
         e.preventDefault()
         try {
@@ -41,6 +43,12 @@ export default function WishlistDisplay({ user_id, wishlists, favorites, likeCou
             console.error('There was a problem with the fetch operation:', error);
         }
     }
+    const HandleSearch = ({ event, wish, uid }: any) => {
+        event.preventDefault();
+        console.log(uid);
+
+        router.push(`/wishlist/detail?q=${encodeURIComponent(wish)}&user_id=${encodeURIComponent(uid)}`);
+    }
     return (
         <div>
             <BaseBackgroundColor className={style.list}>
@@ -71,9 +79,10 @@ export default function WishlistDisplay({ user_id, wishlists, favorites, likeCou
                                     </button>
                                 ))}
 
-                                <button className={style.wish_button}>
+                                <button className={style.wish_button} onClick={(event) => HandleSearch({ event: event, wish: wishlist.id, uid: user_id })}>
                                     View Detail
                                 </button>
+
                             </div>
                         </SecondaryDivColor3>
                     )

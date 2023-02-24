@@ -34,7 +34,8 @@ export default function WishlistPrivate({ user_id }: any) {
     return (
         <div>
             <WishlistDisplay
-                wishlists={wishlists} />
+                wishlists={wishlists}
+                user_id={user_id} />
             <Paginate
                 currentPage={currentPage}
                 totalPages={totalPages}

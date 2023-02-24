@@ -14,19 +14,19 @@ export default function SearchResults() {
       const res = await fetch(`http://localhost:8000/api/search?name=${router.query.q}&page=${currentPage}`);
       const data = await res.json();
       console.log(data);
-      
+
       setProducts(data.products);
       setTotalPages(data.totalPages);
-      if(currentPage > data.totalPages){
+      if (currentPage > data.totalPages) {
         setCurrentPage(data.totalPages);
       }
-      
+
     };
 
     if (router.query.q) {
       fetchResults();
     }
-   
+
   }, [router.query.q, currentPage]);
   const prev = () => {
     setCurrentPage(currentPage - 1);

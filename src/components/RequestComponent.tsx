@@ -47,6 +47,35 @@ export const add_cart = async (cart: any) => {
     alert(JSON.stringify(data.message));
   }
 };
+export const cart_quantity_controller = async (cart: any) => {
+  const response = await fetch(`http://localhost:8000/api/cart/quantity`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cart)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    // alert(JSON.stringify(data.message));
+  }
+};
+export const wish_quantity_controller = async (cart: any) => {
+  const response = await fetch(`http://localhost:8000/api/wishlist/quantity`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cart)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    // alert(JSON.stringify(data.message));
+  }
+};
+
 
 export const update_cart = async (cart: any) => {
   const response = await fetch(`http://localhost:8000/api/cart/update`, {

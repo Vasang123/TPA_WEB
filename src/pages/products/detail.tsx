@@ -3,12 +3,13 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Loading } from "@/components/Other/GlobalComponent";
 import DetailPage from "@/components/Product/Detail";
 import { User } from "@/types/models";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function ProductDetail() {
   const [userData, setUserData] = useState<User>();
   const [loading, setLoading] = useState(true);
-
+  const router = useRouter();
   useEffect(() => {
     const userDataString = localStorage.getItem("user");
     if (userDataString) {

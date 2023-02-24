@@ -3,17 +3,18 @@ import style from '@/styles/Product/detail.module.scss'
 export function Counter({ count, setCount, limit }: any) {
 
     function increment() {
-        if(count == limit){
+        if (count == limit) {
             setCount(limit);
-        }else{
+
+        } else {
             setCount(count + 1);
         }
     }
 
     function decrement() {
-        if(count == 0){
+        if (count == 0) {
             setCount(0);
-        }else{
+        } else {
             setCount(count - 1);
 
         }

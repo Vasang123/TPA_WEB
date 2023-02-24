@@ -1,10 +1,10 @@
 import { Cart } from "@/types/models";
 import { useEffect, useState } from "react"
 import style from '@/styles/Cart/cartview.module.scss'
-import { Counter } from "../Product/Counter";
 import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import { add_cart, update_cart } from "../RequestComponent";
+import { Counter } from "./ListCounter";
 function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like = string) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
@@ -97,6 +97,11 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                                     setCarts(updatedCarts);
                                                 }}
                                             limit={cart.product?.quantity}
+                                            setCart={setCart}
+                                            user_id={user_id}
+                                            product_id={cart.product_id}
+                                            is_like={cart.is_like}
+                                            type={1}
                                         />
                                     </SecondarySpanColor>
                                 </div>
