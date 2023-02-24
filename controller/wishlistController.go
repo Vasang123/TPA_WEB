@@ -9,6 +9,7 @@ import (
 
 	"github.com/Vasang123/new_egg/connect"
 	"github.com/Vasang123/new_egg/model"
+	"github.com/go-pg/pg"
 )
 
 func CreateWishlist(w http.ResponseWriter, r *http.Request) {
@@ -125,7 +126,29 @@ func InsertWishlist(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+func UpdateWishQuantity(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	db := connect.Connect()
+	defer db.Close()
+
+	wishlist := &model.WishlistDetail{}
+	err := json.NewDecoder(r.Body).Decode(wishlist)
+	if err != nil {
+		log.Println("Error decoding wishlist payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding wishlist payload"})
+		return
+	}
+	_, err = db.Query(pg.Scan(&wishlist.WishlistId, &wishlist.ProductId), "UPDATE wishlist_details SET quantity = ? WHERE wishlist_details.wishlist_id = ? AND wishlist_details.product_id = ?", (wishlist.Quantity), wishlist.WishlistId, wishlist.ProductId)
+	if err != nil {
+		log.Println("Error inserting cart into database:", err)
+		// w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
 func DeleteWishlist(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
@@ -158,14 +181,13 @@ func PublicWishlist(w http.ResponseWriter, r *http.Request) {
 	if err != nil || itemsPerPage < 1 {
 		itemsPerPage = 15
 	}
-
+	user_id, err := strconv.Atoi(r.FormValue("user_id"))
 	db := connect.Connect()
 	defer db.Close()
-
 	var wishlists []*model.Wishlist
 	err = db.Model(&wishlists).
 		Column("wishlist.*").
-		Where("wishlist.privacy = 'public' AND wishlist.image != ''").
+		Where("wishlist.privacy = 'public' AND wishlist.image != ''  AND wishlist.user_id != ?", user_id).
 		Select()
 
 	if err != nil {
@@ -277,4 +299,31 @@ func PrivateWishlist(w http.ResponseWriter, r *http.Request) {
 
 	// Encode the response as JSON and write it to the response body
 	json.NewEncoder(w).Encode(response)
+}
+
+func WishlistDetail(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	wishlist_id := r.URL.Query().Get("wishlist_id")
+	var wishlists []*model.WishlistDetail
+	err := db.Model(&wishlists).
+		Column("wishlist_detail.*", "Product", "Wishlist").
+		Relation("Wishlist").
+		Relation("Product").
+		Where("wishlist_id = ?", wishlist_id).
+		Order("id").
+		Select()
+	if len(wishlists) == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(wishlists)
 }

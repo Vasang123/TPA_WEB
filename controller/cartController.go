@@ -58,7 +58,30 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+func UpdateQuantity(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 
+	db := connect.Connect()
+	defer db.Close()
+
+	cart := &model.Cart{}
+
+	err := json.NewDecoder(r.Body).Decode(cart)
+	if err != nil {
+		log.Println("Error decoding cart payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
+		return
+	}
+	_, err = db.Query(pg.Scan(&cart.UserId, &cart.ProductId), "UPDATE carts SET quantity = ? WHERE carts.user_id = ? AND carts.product_id = ?", (cart.Quantity), cart.UserId, cart.ProductId)
+	if err != nil {
+		log.Println("Error inserting cart into database:", err)
+		// w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
 func GetProductCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 

@@ -44,6 +44,7 @@ func main() {
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
+	r.HandleFunc("/api/cart/quantity", controller.UpdateQuantity).Methods("POST")
 	r.HandleFunc("/api/cart/update", controller.UpdateWishlist).Methods("POST")
 	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").
 		Queries("user_id", "{user_id}", "is_like", "{is_like}")
@@ -51,6 +52,7 @@ func main() {
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "is_like", "{is_like}")
 	// Wishlist
 	r.HandleFunc("/api/wishlist/create", controller.CreateWishlist).Methods("POST")
+	r.HandleFunc("/api/wishlist/quantity", controller.UpdateWishQuantity).Methods("POST")
 	r.HandleFunc("/api/wishlist/public/view", controller.PublicWishlist).Methods("GET").
 		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}")
 	r.HandleFunc("/api/wishlist/private/view", controller.PrivateWishlist).Methods("GET").
@@ -59,6 +61,8 @@ func main() {
 	r.HandleFunc("/api/wishlist/insert", controller.InsertWishlist).Methods("POST")
 	r.HandleFunc("/api/wishlist/delete", controller.DeleteWishlist).Methods("GET").
 		Queries("wish_id", "{wish_id}", "product_id", "{product_id}")
+	r.HandleFunc("/api/wishlist/detail", controller.WishlistDetail).Methods("GET").
+		Queries("wishlist_id", "{wishlist_id}")
 	// Review
 	r.HandleFunc("/api/review/add", controller.InsertReview).Methods("POST")
 	r.HandleFunc("/api/review/update", controller.UpdateReview).Methods("POST")
