@@ -17,7 +17,17 @@ type Review struct {
 	Product    Product   `json:"product"`
 	User       User      `json:"user"`
 }
-
+type WishlistReview struct {
+	ID         int64     `json:"id" pg:"id:bigserial pk"`
+	Comment    string    `json:"comment"`
+	Rating     float64   `json:"rating"`
+	UserId     int64     `json:"user_id"`
+	WishlistId int64     `json:"wishlist_id"`
+	Wishlist   Wishlist  `json:"wishlist"`
+	CreatedAt  time.Time `json:"created_at" pg:"default:now()"`
+	ModifiedAt time.Time `json:"modified_at" pg:"default:now()"`
+	User       User      `json:"user"`
+}
 type Cart struct {
 	ID        int64   `json:"id" pg:"id:bigserial pk"`
 	UserId    int64   `json:"user_id"`
@@ -88,10 +98,11 @@ type Promo struct {
 }
 type Wishlist struct {
 	ID      int64  `json:"id" pg:"id:bigserial pk"`
-	UserId  int64  `json:"user_id"`
+	UserId  int64  `json:"user_id" pg:"-"`
 	User    User   `json:"user"`
 	Name    string `json:"name"`
 	Privacy string `json:"privacy"`
+	Image   string `json:"image"`
 }
 type WishlistDetail struct {
 	ID         int64    `json:"id" pg:"id:bigserial pk"`
@@ -100,4 +111,11 @@ type WishlistDetail struct {
 	Product    Product  `json:"product"`
 	ProductId  int64    `json:"product_id"`
 	Quantity   int      `json:"quantity"`
+}
+
+type FavoriteList struct {
+	ID         int64    `json:"id" pg:"id:bigserial pk"`
+	WishlistId int64    `json:"wishlist_id"`
+	Wishlist   Wishlist `json:"wishlist"`
+	UserId     int64    `json:"user_id" pg:"-"`
 }

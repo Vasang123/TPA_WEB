@@ -204,7 +204,7 @@ func PaginatePromo(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	// Calculate pagination information
-	itemsPerPage := 2
+	itemsPerPage := 10
 	promos := []*model.Promo{}
 	err := db.Model(&promos).
 		Column("promo.*").

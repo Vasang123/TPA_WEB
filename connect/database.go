@@ -18,6 +18,7 @@ func Connect() *pg.DB {
 		Database: os.Getenv("DATABASE"),
 	}
 	var db *pg.DB = pg.Connect(opts)
+
 	if db == nil {
 		log.Printf("Failed to connect  to database\n")
 		os.Exit(100)
@@ -46,6 +47,8 @@ func createSchema(db *pg.DB) error {
 		(*model.Cart)(nil),
 		(*model.Wishlist)(nil),
 		(*model.WishlistDetail)(nil),
+		(*model.FavoriteList)(nil),
+		(*model.WishlistReview)(nil),
 	}
 
 	for _, model := range models {

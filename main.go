@@ -51,6 +51,10 @@ func main() {
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "is_like", "{is_like}")
 	// Wishlist
 	r.HandleFunc("/api/wishlist/create", controller.CreateWishlist).Methods("POST")
+	r.HandleFunc("/api/wishlist/public/view", controller.PublicWishlist).Methods("GET").
+		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}")
+	r.HandleFunc("/api/wishlist/private/view", controller.PrivateWishlist).Methods("GET").
+		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}", "user_id", "{user_id}")
 	r.HandleFunc("/api/wishlist/update", controller.UpdateWishlistHeader).Methods("POST")
 	r.HandleFunc("/api/wishlist/insert", controller.InsertWishlist).Methods("POST")
 	r.HandleFunc("/api/wishlist/delete", controller.DeleteWishlist).Methods("GET").
@@ -63,6 +67,16 @@ func main() {
 	r.HandleFunc("/api/review/delete", controller.DeleteReview).Methods("GET").
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "id", "{id}")
 	handler := cors.New(corsOpts).Handler(r)
+
+	// Favorite List
+	r.HandleFunc("/api/favorite/add", controller.AddFavourite).Methods("GET").
+		Queries("user_id", "{user_id}", "wishlist_id", "{wishlist_id}")
+	r.HandleFunc("/api/favorite/view", controller.ViewFavourite).Methods("GET").
+		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/my_favorite/view", controller.MyFavourite).Methods("GET").
+		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/favorite/delete", controller.DeleteFavourite).Methods("GET").
+		Queries("user_id", "{user_id}", "wishlist_id", "{wishlist_id}")
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
 }
