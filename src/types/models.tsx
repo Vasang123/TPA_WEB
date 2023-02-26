@@ -68,18 +68,21 @@ export interface Cart {
 export interface Wishlist {
   id: number;
   name: string;
+  user_id: number;
   user?: {
     id?: number;
     firstName?: string;
   };
   privacy: string;
-  image: string;
+  image?: string;
+  note?: string;
 }
 export interface WishlistDetail {
   id: number;
   wishlist_id: number;
   product_id: number;
   wishlist?: {
+    user_id: number;
     id: number;
     name: string;
     user?: {

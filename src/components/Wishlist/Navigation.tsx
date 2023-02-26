@@ -1,16 +1,13 @@
 import Link from "next/link"
 import { MainDivBg } from "../Other/GlobalComponent"
 import { LogoSecondary } from "../Other/LogoComponent"
-import SearchDisplay from "../SearchBar/SearchDisplay"
-import style from '@/styles/Wishlist/wishlisthome.module.scss'
-
 export default function WishlistNav() {
 
     return (
-        <MainDivBg className="nav">
+        <MainDivBg className="wish-nav">
             <Link href="/wishlist/home">
                 <div className="address-container">
-                    <LogoSecondary className="uil uil-map-marker"></LogoSecondary>
+                    <LogoSecondary className="uil uil-search"></LogoSecondary>
                     <div className="address-temp">
                         <div className="address-welcome">
                             Public Wishlist
@@ -20,7 +17,7 @@ export default function WishlistNav() {
             </Link>
             <Link href="/wishlist/favorite">
                 <div className="address-container">
-                    <LogoSecondary className="uil uil-map-marker"></LogoSecondary>
+                    <LogoSecondary className="uil uil-heart-alt"></LogoSecondary>
                     <div className="address-temp">
                         <div className="address-welcome">
                             Favorited Wishlist
@@ -30,7 +27,7 @@ export default function WishlistNav() {
             </Link>
             <Link href="/wishlist/private">
                 <div className="address-container">
-                    <LogoSecondary className="uil uil-map-marker"></LogoSecondary>
+                    <LogoSecondary className="uil uil-keyhole-circle"></LogoSecondary>
                     <div className="address-temp">
                         <div className="address-welcome">
                             My Wishlist

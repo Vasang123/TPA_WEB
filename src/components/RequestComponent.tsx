@@ -191,5 +191,18 @@ export const login = async (user: any, router: any) => {
       console.log(response);
     });
 };
+export const create_wishlist = async (wishlist: any) => {
+  const response = await fetch(`http://localhost:8000/api/wishlist/create`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(wishlist)
+  });
 
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
 export default register;

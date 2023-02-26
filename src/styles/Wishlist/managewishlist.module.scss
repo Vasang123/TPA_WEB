@@ -1,0 +1,83 @@
+.container {
+    z-index: 1003;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    background-color: rgba(45, 43, 39, 0.808);
+    height: 100%;
+    font-size: 16px;
+    .table_container {
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        background-color: rgba(80, 76, 73, 0.587);
+        position: absolute;
+        padding: 1em;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30%;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            // border: 2px solid rgb(0, 0, 0);
+            margin-bottom: 0.5em;
+            tr {
+                th {
+                    padding: 0.5em;
+                    font-size: 16px;
+                    border: 1px solid black;
+                    border-spacing: 0cap;
+                    border: none;
+                    background-color: rgba(137, 134, 134, 0.831);
+                }
+            }
+            tr {
+                td {
+                    // border: none;
+                    .td_container {
+                        display: flex;
+                        justify-content: center;
+                        padding: 0.4em 0;
+                        input {
+                            padding: 2px;
+                            height: 22px;
+                            border: 1px solid rgba(125, 124, 124, 0.863);
+                            width: 90%;
+                        }
+                        select {
+                            option {
+                                padding: 2px;
+                            }
+                            height: 25px;
+                            // border: 1px solid rgba(125, 124, 124, 0.863);
+                            width: 90%;
+                        }
+                    }
+                }
+            }
+        }
+        .form_button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: red($color: #000000);
+            width: 100%;
+            gap: 20px;
+            button {
+                width: 100%;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                color: white;
+                height: 40px;
+                background-color: #e77221;
+            }
+            .cancel {
+                background-color: red;
+            }
+        }
+    }
+}

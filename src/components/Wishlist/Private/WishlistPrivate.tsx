@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import WishlistDisplay, { Paginate } from "./WhislistComponent";
+import WishlistDisplay, { Paginate } from "../WhislistComponent";
 import next from "next/types";
 import { Wishlist } from "@/types/models";
+import CreateWishlist from "./CreateWishlist";
 
 
 export default function WishlistPrivate({ user_id }: any) {
@@ -22,7 +23,7 @@ export default function WishlistPrivate({ user_id }: any) {
         fetch(`http://localhost:8000/api/wishlist/private/view?page=${currentPage}&itemsPerPage=${itemsPerPage}&user_id=${user_id}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                // console.log(data);
 
                 if (data.wishlists) {
                     setWishlists(data.wishlists)
@@ -30,12 +31,13 @@ export default function WishlistPrivate({ user_id }: any) {
                 }
             })
             .catch(error => console.error(error))
-    }, [currentPage])
+    }, [currentPage, wishlists])
     return (
         <div>
             <WishlistDisplay
                 wishlists={wishlists}
-                user_id={user_id} />
+                user_id={user_id}
+                type={1} />
             <Paginate
                 currentPage={currentPage}
                 totalPages={totalPages}

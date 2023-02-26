@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
-import WishlistDisplay, { Paginate } from "./WhislistComponent";
+import WishlistDisplay, { Paginate } from "../WhislistComponent";
 import next from "next/types";
 import { FavoriteList, Wishlist } from "@/types/models";
 import { setFips } from "crypto";
 import { useRouter } from "next/router";
 
 
-export default function WishlistHome({ user_id }: any) {
-    console.log(user_id);
-    if (user_id == '') {
-        user_id = 0
-
-    }
-
+export default function WishlistFav({ user_id }: any) {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [wishlists, setWishlists] = useState<Wishlist[]>([])
@@ -31,33 +25,25 @@ export default function WishlistHome({ user_id }: any) {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            fetch(`http://localhost:8000/api/wishlist/public/view?page=${currentPage}&itemsPerPage=${itemsPerPage}&user_id=${user_id}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.wishlists) {
-                        setWishlists(data.wishlists)
-                        setTotalPages(data.totalPages);
-                    }
-                })
-                .catch(error => console.error(error))
-        }
         const fetchFav = async () => {
-            fetch(`http://localhost:8000/api/favorite/view?user_id=${user_id}`)
+            fetch(`http://localhost:8000/api/my_favorite/view?user_id=${user_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    // console.log(data.favorites);
+                    console.log(data.favorites);
 
                     if (data.favorites) {
                         setFavorites(data.favorites)
-                        // console.log(favorites);
+                        const wishlistArray = data.favorites.map((favorite: FavoriteList) => favorite.wishlist);
+
+                        const mergedWishlists = [].concat.apply([], wishlistArray);
+                        setWishlists(mergedWishlists);
+                        setTotalPages(data.totalPages);
                     } else {
 
                     }
                 })
                 .catch(error => console.error(error))
         }
-        fetchData()
         fetchFav()
     }, [currentPage, favorites])
     return (

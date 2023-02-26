@@ -3,7 +3,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Loading } from "@/components/Other/GlobalComponent";
 import WishlistNav from "@/components/Wishlist/Navigation";
 import WishlistDisplay from "@/components/Wishlist/WhislistComponent";
-import WishlistHome from "@/components/Wishlist/WishlistHome";
+import WishlistHome from "@/components/Wishlist/Public/WishlistHome";
 import { User } from "@/types/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";

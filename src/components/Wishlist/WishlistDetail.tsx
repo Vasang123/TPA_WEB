@@ -6,11 +6,30 @@ import { Counter } from '../Cart/ListCounter';
 import { useEffect, useState } from 'react';
 import { WishlistDetail } from '@/types/models';
 import { useRouter } from 'next/router';
+function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, wishlist_id: number, product_id: number, carts: WishlistDetail[], setCarts: any) {
+    event.preventDefault();
+    fetch(`http://localhost:8000/api/wishlist/detail/delete?product_id=${product_id}&wishlist_id=${wishlist_id}`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+    }).then(response => {
+        if (response.ok) {
+            alert("Item Removed")
+            const updatedCarts = carts.filter((cart) => cart.product_id !== product_id);
+            setCarts(updatedCarts);
+        } else {
+            alert(response.statusText);
+        }
+
+    }).catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
 export default function ListDisplay() {
     let Total = 0;
     const [list, setList] = useState<WishlistDetail[]>([])
     const [cart, setCart] = useState<WishlistDetail>()
     const router = useRouter();
+    let temp;
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/wishlist/detail?wishlist_id=${router.query.q}`);
@@ -23,6 +42,7 @@ export default function ListDisplay() {
     if (list.length > 0) {
         list.forEach((c) => {
             Total += c.product?.price * c.quantity
+            temp = c.wishlist?.user_id
         })
     } else {
         return (
@@ -46,30 +66,42 @@ export default function ListDisplay() {
                             <div className={style.middle}>
                                 <div className={style.temp}>
                                     <SecondarySpanColor className={style.quantity_container}>
-                                        Quantity:
-                                        <Counter count={cart.quantity}
-                                            setCount={
-                                                (newCount: number) => {
-                                                    const updatedCarts = list.map((c) => {
-                                                        if (c.id === cart.id) {
-                                                            return { ...c, quantity: newCount };
-                                                        }
-                                                        return c;
-                                                    });
-                                                    setList(updatedCarts);
-                                                }}
-                                            limit={cart.product?.quantity}
-                                            setCart={setCart}
-                                            wishlist_id={cart.wishlist_id}
-                                            product_id={cart.product_id}
-                                            type={2}
-                                        />
+                                        {
+                                            cart.wishlist?.user_id == parseInt(router.query.user_id) && (
+                                                <div>
+                                                    Quantity:
+                                                    <Counter count={cart.quantity}
+                                                        setCount={
+                                                            (newCount: number) => {
+                                                                const updatedCarts = list.map((c) => {
+                                                                    if (c.id === cart.id) {
+                                                                        return { ...c, quantity: newCount };
+                                                                    }
+                                                                    return c;
+                                                                });
+                                                                setList(updatedCarts);
+                                                            }}
+                                                        limit={cart.product?.quantity}
+                                                        setCart={setCart}
+                                                        wishlist_id={cart.wishlist_id}
+                                                        product_id={cart.product_id}
+                                                        type={2}
+                                                    />
+                                                </div>
+
+                                            )
+                                        }
+
                                     </SecondarySpanColor>
                                 </div>
-                                <button className={style.delete} >
-                                    <i className="uil uil-trash-alt"></i>
-                                    Remove
-                                </button>
+                                {
+                                    cart.wishlist?.user_id == parseInt(router.query.user_id) && (
+                                        <button className={style.delete} onClick={(event) => HandleDelete(event, cart.wishlist_id, cart.product_id, list, setList)} >
+                                            <i className="uil uil-trash-alt"></i>
+                                            Remove
+                                        </button>
+                                    )
+                                }
                             </div>
                             <div className={style.bottom}>
                                 <SecondarySpanColor>
@@ -81,12 +113,24 @@ export default function ListDisplay() {
                     </div>
                 ))
             }
-            <SecondarySpanColor className={style.total_container}>
-                Total Price {Total}
-                <button className={style.order}>
-                    Add All Items to Cart
-                </button>
-            </SecondarySpanColor>
+            {
+                temp == parseInt(router.query.user_id) ? (
+                    <SecondarySpanColor className={style.total_container}>
+                        Total Price {Total}
+                        <button className={style.order}>
+                            Add All Items to Cart
+                        </button>
+                    </SecondarySpanColor>
+                ) : (
+                    <SecondarySpanColor className={style.total_container}>
+                        Total Price {Total}
+                        <button className={style.order}>
+                            Duplicate Items into cart
+                        </button>
+                    </SecondarySpanColor>
+                )
+            }
+
         </ProductDivBg >
     )
 

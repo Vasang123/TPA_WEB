@@ -16,6 +16,19 @@ body{
 
 
 .nav{
+  z-index: 1000;
+  padding-top: .5em;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5em 1em;
+  gap: 2%;
+  align-self: center;
+  position: sticky;
+  top:0;
+  background-color: var(--primaryColor);
+  
+}
+.wish-nav{
   z-index: 999;
   padding-top: .5em;
   display: flex;
@@ -27,6 +40,18 @@ body{
   top:0;
   background-color: var(--primaryColor);
   
+}
+.private-nav{
+  z-index: 998;
+  padding-top: .5em;
+  display: flex;
+  /* justify-content: space-between; */
+  padding: 0.5em 1em;
+  gap: 2%;
+  align-self: center;
+  position: sticky;
+  top:0;
+  background-color: var(--primaryColor);
 }
 .logo-container{
   position: relative;
