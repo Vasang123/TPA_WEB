@@ -91,6 +91,7 @@ export interface WishlistDetail {
     };
     privacy: string;
     image: string;
+    note?: string;
   }
   product?: {
     id: number;
@@ -169,4 +170,22 @@ export interface FavoriteList {
     image: string;
   }
   wishlist_id: number;
+}
+
+export interface WishlistReview {
+  id: number;
+  name: string;
+  title: string;
+  comment: string;
+  rating: number;
+  user_id?: number;
+  wishlist_id: number
+  created_at?: Date;
+  modified_at: Date;
+  wishlist?: {
+
+  }
+  user?: {
+
+  }
 }

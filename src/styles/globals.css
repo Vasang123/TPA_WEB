@@ -478,3 +478,9 @@ input:checked + .slider:before {
   height: 70vh;
   align-items: center;
 }
+
+.buy_later{
+  display: flex;
+  margin-left: 10%;
+  /* background-color: red; */
+}

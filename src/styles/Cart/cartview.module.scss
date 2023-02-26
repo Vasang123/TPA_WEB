@@ -31,6 +31,7 @@
                 display: flex;
                 justify-content: space-between;
                 button {
+                    cursor: pointer;
                     font-size: 16px;
                     height: 33px;
                     border: none;
@@ -41,7 +42,7 @@
                     align-items: center;
                     gap: 10px;
                 }
-                .add_cart{
+                .add_cart {
                     display: flex;
                     gap: 10px;
                     border-radius: 5px;
@@ -66,19 +67,28 @@
         padding: 3em 0;
         border-bottom: 1px solid rgb(192, 105, 34);
     }
-    .total_container{
+    .total_container {
         padding: 2em 0;
         display: flex;
         justify-content: space-between;
         font-size: 20px;
         width: 80%;
-        .order{
+        .order {
             font-size: 20px;
             background-color: rgb(21, 224, 21);
             color: white;
             border: none;
-            padding: .5em;
+            padding: 0.5em;
             border-radius: 5px;
         }
     }
+}
+
+.detail_button {
+    width: 80%;
+    .total_container {
+        width: 100%;
+    }
+    display: flex !important;
+    justify-content: space-between !important;
 }

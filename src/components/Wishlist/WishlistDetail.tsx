@@ -4,8 +4,13 @@ import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from '../
 import Link from 'next/link';
 import { Counter } from '../Cart/ListCounter';
 import { useEffect, useState } from 'react';
-import { WishlistDetail } from '@/types/models';
+import { Cart, Wishlist, WishlistDetail } from '@/types/models';
 import { useRouter } from 'next/router';
+import AddNote from './Private/WishlistNote';
+import InsertComment from '@/components/Wishlist/WishlistReview/Insert';
+import ReviewList from './WishlistReview/Show';
+import axios from 'axios';
+import { add_cart } from '../RequestComponent';
 function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, wishlist_id: number, product_id: number, carts: WishlistDetail[], setCarts: any) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/wishlist/detail/delete?product_id=${product_id}&wishlist_id=${wishlist_id}`, {
@@ -28,32 +33,196 @@ export default function ListDisplay() {
     let Total = 0;
     const [list, setList] = useState<WishlistDetail[]>([])
     const [cart, setCart] = useState<WishlistDetail>()
+    const [item, setItem] = useState<Cart>()
+    const [note, setNote] = useState('')
+    const [wishlist, setWishlist] = useState<Wishlist>()
+    let owner: number;
+    let i = 0;
     const router = useRouter();
-    let temp;
+    let wish_id;
+    const DuplicateItem = async (e: any, productId: number, quantity: number) => {
+        e.preventDefault();
+        const newCart: Cart = {
+            id: 0,
+            user_id: parseInt(router.query.user_id),
+            product_id: productId,
+            quantity: quantity,
+            is_like: "no"
+        };
+        await add_cart(newCart)
+
+    }
+    const DuplicateAllItem = async () => {
+        list.forEach((item) => {
+            const newCart: Cart = {
+                id: 0,
+                user_id: parseInt(router.query.user_id),
+                product_id: item.product_id,
+                quantity: item.quantity,
+                is_like: "no"
+            };
+            add_cart(newCart)
+        });
+        router.back()
+
+
+    }
+    const handleAddAllToCart = () => {
+        list.forEach((item) => {
+            const newCart: Cart = {
+                id: 0,
+                quantity: item.quantity,
+                user_id: owner,
+                product_id: item.product_id,
+                is_like: "no"
+            };
+            axios.post('http://localhost:8000/api/wishlist/cart/add', {
+                cart: newCart,
+                wishlist_id: item.wishlist_id
+
+            })
+                .then((response) => {
+                    if (i == 0) {
+                        alert(response.data.message)
+                        i += 1
+                    }
+                    const updatedList = list.filter((cart) => cart.wishlist_id !== wishlistId || cart.product_id !== productId);
+                    setList(updatedList);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        });
+        router.back()
+    };
+
+    const AddToCart = (event: any, wishlistId: number, productId: number, quantity: number) => {
+        const newCart: Cart = {
+            id: 0,
+            quantity: quantity,
+            user_id: owner,
+            product_id: productId,
+            is_like: "no"
+        };
+        axios.post('http://localhost:8000/api/wishlist/cart/add', {
+            cart: newCart,
+            wishlist_id: wishlistId
+        })
+            .then((response) => {
+                alert(response.data.message)
+                const updatedList = list.filter((cart) => cart.wishlist_id !== wishlistId || cart.product_id !== productId);
+                setList(updatedList);
+                // setCart(response.data.cart);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const AddAllItemToWishlist = async () => {
+        try {
+            wishlist.user_id = parseInt(router.query.user_id)
+
+            const response = await fetch('http://localhost:8000/api/wishlist/duplicate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    wishlist: wishlist,
+                    items: list,
+                })
+            })
+
+            if (response.ok) {
+                // Clear the list of items
+                setList([])
+                alert('Items duplicated successfully')
+            } else {
+                alert(response)
+            }
+        } catch (err) {
+            console.error(err)
+            alert('An error occurred while duplicating items')
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/wishlist/detail?wishlist_id=${router.query.q}`);
             const data = await response.json();
             setList(data)
-        };
 
+        };
         fetchData();
-    }, [router.query.q])
+    }, [router.query.q]);
+
+    useEffect(() => {
+        if (Array.isArray(list)) {
+            const notes = Array.from(new Set(list.map((c) => c.wishlist?.note).filter((note) => note !== undefined))) as string[];
+            const note = notes.length > 0 ? notes.join('') : '';
+
+            setNote(note);
+        }
+    }, [list]);
+
+    useEffect(() => {
+        console.log('Wishlist updated:', wishlist);
+    }, [wishlist]);
+
     if (list.length > 0) {
+
+
         list.forEach((c) => {
-            Total += c.product?.price * c.quantity
-            temp = c.wishlist?.user_id
-        })
+            const price = c.product?.price;
+            if (price !== undefined) {
+                Total += price * c.quantity;
+                if (wishlist == null) {
+                    setWishlist(c.wishlist);
+                    // console.log(c.wishlist);
+                    // console.log(wishlist);
+
+
+
+                }
+            }
+            wish_id = c.wishlist_id;
+            owner = c.wishlist?.user_id;
+        });
+
     } else {
         return (
-            <Loading>
-                <div className="loading_content">No Item in the list</div>
-            </Loading>
+            <>
+                <div>
+                    <Loading>
+                        <div className="loading_content">No Item in the list</div>
+                    </Loading>
+                </div>
+                <div>
+                    {
+                        owner && wish_id && (
+                            <ReviewList
+                                user_id={owner}
+                                wishlist_id={wish_id}
+                            />
+                        )
+                    }
+                </div>
+            </>
         )
     }
     return (
 
         <ProductDivBg className={style.cart_list}>
+            {
+                parseInt(router.query.user_id) == owner && (
+                    <AddNote
+                        user_id={owner}
+                        wishlist_id={wish_id}
+                        note={note}
+                        setNote={setNote} />
+                )
+            }
             {list.length > 0 &&
                 list.map((cart) => (
                     <div key={cart.id} className={style.cart_container}>
@@ -65,6 +234,20 @@ export default function ListDisplay() {
                             <SecondarySpanColor>Price/item: {cart.product?.price}</SecondarySpanColor>
                             <div className={style.middle}>
                                 <div className={style.temp}>
+                                    {
+                                        owner == parseInt(router.query.user_id) ? (
+                                            <button className={style.add_cart} onClick={event => AddToCart(event, cart.wishlist_id, cart.product_id, cart.quantity)}>
+                                                <i className="uil uil-shopping-cart"  ></i>
+                                                Add To Cart
+                                            </button>
+                                        ) : (
+                                            <button className={style.add_cart} onClick={event => DuplicateItem(event, cart.product_id, cart.quantity)}>
+                                                <i className="uil uil-shopping-cart"  ></i>
+                                                Add To Cart
+                                            </button>
+                                        )
+                                    }
+
                                     <SecondarySpanColor className={style.quantity_container}>
                                         {
                                             cart.wishlist?.user_id == parseInt(router.query.user_id) && (
@@ -114,23 +297,42 @@ export default function ListDisplay() {
                 ))
             }
             {
-                temp == parseInt(router.query.user_id) ? (
+                owner == parseInt(router.query.user_id) ? (
                     <SecondarySpanColor className={style.total_container}>
                         Total Price {Total}
-                        <button className={style.order}>
+                        <button className={style.order} onClick={handleAddAllToCart}>
                             Add All Items to Cart
                         </button>
                     </SecondarySpanColor>
                 ) : (
-                    <SecondarySpanColor className={style.total_container}>
-                        Total Price {Total}
-                        <button className={style.order}>
-                            Duplicate Items into cart
-                        </button>
-                    </SecondarySpanColor>
+                    <div className={style.detail_button}>
+                        <SecondarySpanColor className={style.total_container}>
+                            Total Price {Total}
+                            <button className={style.order} onClick={AddAllItemToWishlist}>
+                                Duplicate Items into wishlist
+                            </button>
+                            <button className={style.order} onClick={DuplicateAllItem}>
+                                Duplicate Items into cart
+                            </button>
+                        </SecondarySpanColor>
+                    </div>
                 )
             }
-
+            {
+                router.query.user_id != owner && owner && wish_id && (
+                    <InsertComment
+                        user_id={owner}
+                        wishlist_id={wish_id} />
+                )
+            }
+            {
+                owner && wish_id && (
+                    <ReviewList
+                        user_id={owner}
+                        wishlist_id={wish_id}
+                    />
+                )
+            }
         </ProductDivBg >
     )
 

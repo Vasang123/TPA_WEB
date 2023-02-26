@@ -75,7 +75,20 @@ export const wish_quantity_controller = async (cart: any) => {
     // alert(JSON.stringify(data.message));
   }
 };
+export const wish_note_controller = async (wish: any) => {
+  const response = await fetch(`http://localhost:8000/api/wishlist/private/note`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(wish)
+  });
 
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
 
 export const update_cart = async (cart: any) => {
   const response = await fetch(`http://localhost:8000/api/cart/update`, {
@@ -94,6 +107,20 @@ export const update_cart = async (cart: any) => {
 
 export const add_review = async (review: any) => {
   const response = await fetch(`http://localhost:8000/api/review/add`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(review)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const add_wishlist_review = async (review: any) => {
+  const response = await fetch(`http://localhost:8000/api/wishlist/review/add`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(review)

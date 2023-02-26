@@ -1,0 +1,43 @@
+.review_list {
+    width: 80%;
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    .review_container {
+        .top {
+            margin-bottom: 1em;
+            display: flex;
+            justify-content: space-between;
+            font-size: 16px;
+            b:hover {
+                text-decoration: underline;
+            }
+            .button_container {
+                display: flex;
+                gap: 20px;
+                button {
+                    width: 28px;
+                    height: 28px;
+                    border: none;
+                    color: white;
+                    font-size: 20px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                }
+                .delete_review {
+                    background-color: red;
+                }
+                .update_review {
+                    background-color: #32e721;
+                }
+            }
+        }
+        padding: 1em 0;
+        border-bottom: 1px solid #e77221;
+        .middle {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+}

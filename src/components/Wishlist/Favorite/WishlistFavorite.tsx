@@ -29,7 +29,7 @@ export default function WishlistFav({ user_id }: any) {
             fetch(`http://localhost:8000/api/my_favorite/view?user_id=${user_id}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data.favorites);
+                    // console.log(data.favorites);
 
                     if (data.favorites) {
                         setFavorites(data.favorites)

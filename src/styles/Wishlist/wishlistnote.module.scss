@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    form {
+        width: 100%;
+        .note_container {
+            font-size: 16px;
+            display: flex;
+            flex-direction: column;
+            textarea {
+                padding: 0.5em;
+                font-size: 16px;
+                resize: none;
+                height: 100px;
+            }
+        }
+        .form_button {
+            display: flex;
+            gap: 20px;
+            button {
+                cursor: pointer;
+                width: 20%;
+                font-size: 16px;
+                border: none;
+                border-radius: 5px;
+                color: white;
+                height: 40px;
+                background-color: #e77221;
+            }
+        }
+    }
+}
