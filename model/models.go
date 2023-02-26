@@ -19,6 +19,8 @@ type Review struct {
 }
 type WishlistReview struct {
 	ID         int64     `json:"id" pg:"id:bigserial pk"`
+	Name       string    `json:"name"`
+	Title      string    `json:"title"`
 	Comment    string    `json:"comment"`
 	Rating     float64   `json:"rating"`
 	UserId     int64     `json:"user_id"`
@@ -123,4 +125,14 @@ type FavoriteList struct {
 
 type UpdateWishlistRequest struct {
 	Wishlists []Wishlist `json:"wishlists"`
+}
+
+type DuplicateRequest struct {
+	Wishlist Wishlist         `json:"wishlist"`
+	Items    []WishlistDetail `json:"items"`
+}
+
+type CartWithWishlist struct {
+	Cart       Cart `json:"cart"`
+	WishlistId int  `json:"wishlist_id"`
 }

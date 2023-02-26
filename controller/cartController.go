@@ -20,7 +20,8 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 	cart := &model.Cart{}
 
 	err := json.NewDecoder(r.Body).Decode(cart)
-	fmt.Print(cart)
+	cart.IsLike = "no"
+
 	if err != nil {
 		log.Println("Error decoding cart payload:", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -135,41 +136,68 @@ func DeleteCartItem(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
-func UpdateWishlist(w http.ResponseWriter, r *http.Request) {
+
+func WishToCart(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	db := connect.Connect()
 	defer db.Close()
+	var req model.CartWithWishlist
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
 
-	cart := &model.Cart{}
-
-	err := json.NewDecoder(r.Body).Decode(cart)
-	// fmt.Print(cart)
+	cart := &req.Cart
+	wishlistId := req.WishlistId
+	cart.IsLike = "no"
+	fmt.Print(cart.UserId)
 	if err != nil {
 		log.Println("Error decoding cart payload:", err)
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding cart payload"})
 		return
 	}
-	var cart_check model.Cart
-	err = db.Model(&cart_check).
+
+	// Check if the item is already in the cart
+	var cartCheck model.Cart
+	err = db.Model(&cartCheck).
 		Column("cart.*", "User", "Product").
 		Relation("User").
 		Relation("Product").
 		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
 		Limit(1).
 		Select()
-	if (cart.Quantity + cart_check.Quantity) > cart_check.Product.Quantity {
-		json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
-		return
+	// If the item is not in the cart, insert it
+	if err != nil {
+		err = db.Insert(cart)
+		if err != nil {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Error when inserting into db"})
+			return
+		}
+	} else {
+		// If the item is already in the cart, update the quantity
+		if (cart.Quantity + cartCheck.Quantity) > cartCheck.Product.Quantity {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
+			return
+		} else {
+			_, err = db.Query(pg.Scan(&cart.UserId, &cart.ProductId), "UPDATE carts SET quantity = ? WHERE carts.user_id = ? AND carts.product_id = ?", (cart.Quantity + cartCheck.Quantity), cart.UserId, cart.ProductId)
+		}
 	}
-	_, err = db.Query(pg.Scan(&cart.IsLike, &cart.UserId, &cart.ProductId), "UPDATE carts SET is_like= 'no', quantity = ? WHERE user_id = ? AND product_id = ?  ", (cart.Quantity + cart_check.Quantity), cart.UserId, cart.ProductId)
+
+	_, err = db.Query(&model.WishlistDetail{}, `
+		DELETE FROM wishlist_details
+		USING wishlists
+		WHERE wishlists.user_id = ? AND wishlist_details.product_id = ? AND wishlist_details.wishlist_id = ?
+		RETURNING wishlist_details.*
+	`, cart.UserId, cart.ProductId, wishlistId)
 
 	if err != nil {
-		log.Println("Error inserting cart into database:", err)
-		// w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Insert Cart"})
+		log.Println("Error deleting item from wishlist:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error deleting item from wishlist"})
 		return
 	}
+
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }

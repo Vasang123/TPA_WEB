@@ -44,19 +44,18 @@ func main() {
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
+
 	r.HandleFunc("/api/cart/quantity", controller.UpdateQuantity).Methods("POST")
-	r.HandleFunc("/api/cart/update", controller.UpdateWishlist).Methods("POST")
 	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").
 		Queries("user_id", "{user_id}", "is_like", "{is_like}")
 	r.HandleFunc("/api/cart/delete", controller.DeleteCartItem).Methods("GET").
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "is_like", "{is_like}")
 	// Wishlist
 	r.HandleFunc("/api/wishlist/create", controller.CreateWishlist).Methods("POST")
+	r.HandleFunc("/api/wishlist/duplicate", controller.HandleDuplicateItems).Methods("POST")
 	r.HandleFunc("/api/wishlist/quantity", controller.UpdateWishQuantity).Methods("POST")
 	r.HandleFunc("/api/wishlist/public/view", controller.PublicWishlist).Methods("GET").
 		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}")
-	r.HandleFunc("/api/wishlist/private/view", controller.PrivateWishlist).Methods("GET").
-		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}", "user_id", "{user_id}")
 	r.HandleFunc("/api/wishlist/update", controller.UpdateWishlistHeader).Methods("POST")
 	r.HandleFunc("/api/wishlist/insert", controller.InsertWishlist).Methods("POST")
 	r.HandleFunc("/api/wishlist/delete", controller.DeleteWishlist).Methods("GET").
@@ -65,6 +64,7 @@ func main() {
 		Queries("wishlist_id", "{wishlist_id}")
 	r.HandleFunc("/api/wishlist/detail/delete", controller.DeleteWishItem).Methods("GET").
 		Queries("wishlist_id", "{wishlist_id}", "product_id", "{product_id}")
+
 	// Review
 	r.HandleFunc("/api/review/add", controller.InsertReview).Methods("POST")
 	r.HandleFunc("/api/review/update", controller.UpdateReview).Methods("POST")
@@ -87,6 +87,18 @@ func main() {
 	r.HandleFunc("/api/wishlist/manage/view", controller.ManageWishlistView).Methods("GET").
 		Queries("user_id", "{user_id}")
 	r.HandleFunc("/api/wishlist/manage/update", controller.ManageWishlistUpdate).Methods("PUT")
+	// Private Wishlist View
+	r.HandleFunc("/api/wishlist/private/view", controller.PrivateWishlist).Methods("GET").
+		Queries("itemsPerPage", "{itemsPerPage}", "page", "{page}", "user_id", "{user_id}")
+	// Update Note
+	r.HandleFunc("/api/wishlist/private/note", controller.UpdateWishNote).Methods("POST")
+	// Wishlist Review
+	r.HandleFunc("/api/wishlist/review/add", controller.InsertWishlistReview).Methods("POST")
+	r.HandleFunc("/api/wishlist/review/view", controller.GetWishlistReview).Methods("GET").
+		Queries("wishlist_id", "{wishlist_id}")
+
+	// Handle Wish And Cart Controller
+	r.HandleFunc("/api/wishlist/cart/add", controller.WishToCart).Methods("POST")
 	// Port
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
