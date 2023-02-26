@@ -254,6 +254,7 @@ func PrivateWishlist(w http.ResponseWriter, r *http.Request) {
 	err = db.Model(&wishlists).
 		Column("wishlist.*").
 		Where("user_id = ?", user_id).
+		Order("id").
 		Select()
 
 	if err != nil {
@@ -326,4 +327,136 @@ func WishlistDetail(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(wishlists)
+}
+func DeleteWishItem(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	wishlist_id := r.URL.Query().Get("wishlist_id")
+	product_id := r.URL.Query().Get("product_id")
+	list := model.WishlistDetail{}
+
+	res, err := db.Model(&list).
+		Where("wishlist_detail.wishlist_id = ? AND wishlist_detail.product_id = ?", wishlist_id, product_id).
+		Delete()
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error while Deleting Product"})
+		return
+	}
+	if res.RowsAffected() == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	wishlist := &model.WishlistDetail{}
+	err = db.Model(wishlist).
+		Column("wishlist_detail.*", "Product").
+		Relation("Product").
+		Where("wishlist_id = ?", wishlist_id).
+		Order("wishlist_detail.id").
+		Limit(1).
+		Select()
+
+	// fmt.Print(wishlist)
+	var wishlistMain *model.Wishlist
+	if err != nil {
+		_, err = db.Model(&model.Wishlist{}).
+			Set("image = NULL").
+			Where("id = ?", wishlist_id).
+			Update()
+		return
+	}
+	// fmt.Print(wishlist.Product.Image + "\n ")
+	// fmt.Print(wishlist.WishlistId)
+	_, err = db.Model(wishlistMain).
+		Set("image = ?", wishlist.Product.Image).
+		Where("id = ?", wishlist.WishlistId).
+		Update()
+
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error while Updating Wishlist Image"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
+
+func ManageWishlistView(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	user_id, err := strconv.Atoi(r.FormValue("user_id"))
+	if err != nil {
+		return
+	}
+
+	db := connect.Connect()
+	defer db.Close()
+
+	var wishlists []*model.Wishlist
+	err = db.Model(&wishlists).
+		Column("wishlist.*").
+		Where("user_id = ?", user_id).
+		Order("id").
+		Select()
+
+	if err != nil {
+		panic(err)
+	}
+
+	response := struct {
+		Wishlists []*model.Wishlist `json:"wishlists"`
+	}{
+		Wishlists: wishlists,
+	}
+
+	// Set the "Content-Type" header to "application/json"
+	w.Header().Set("Content-Type", "application/json")
+
+	// Encode the response as JSON and write it to the response body
+	json.NewEncoder(w).Encode(response)
+}
+
+func ManageWishlistUpdate(w http.ResponseWriter, r *http.Request) {
+	const updateWishlistQuery = `
+	UPDATE wishlists
+	SET name = ?, privacy = ?
+	WHERE id = ?
+	`
+	fmt.Print("masuk")
+	var req model.UpdateWishlistRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		fmt.Print(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	db := connect.Connect()
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+			return
+		}
+		err = tx.Commit()
+	}()
+
+	for _, wishlist := range req.Wishlists {
+		// fmt.Printf("wishlist ID: %d\n", wishlist.ID)
+		_, err := tx.Exec(updateWishlistQuery, wishlist.Name, wishlist.Privacy, wishlist.ID)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			log.Println(err)
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"message": "Wishlists updated successfully"}`))
 }

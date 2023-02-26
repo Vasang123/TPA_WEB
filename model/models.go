@@ -103,6 +103,7 @@ type Wishlist struct {
 	Name    string `json:"name"`
 	Privacy string `json:"privacy"`
 	Image   string `json:"image"`
+	Note    string `json:"note"`
 }
 type WishlistDetail struct {
 	ID         int64    `json:"id" pg:"id:bigserial pk"`
@@ -118,4 +119,8 @@ type FavoriteList struct {
 	WishlistId int64    `json:"wishlist_id"`
 	Wishlist   Wishlist `json:"wishlist"`
 	UserId     int64    `json:"user_id" pg:"-"`
+}
+
+type UpdateWishlistRequest struct {
+	Wishlists []Wishlist `json:"wishlists"`
 }

@@ -63,6 +63,8 @@ func main() {
 		Queries("wish_id", "{wish_id}", "product_id", "{product_id}")
 	r.HandleFunc("/api/wishlist/detail", controller.WishlistDetail).Methods("GET").
 		Queries("wishlist_id", "{wishlist_id}")
+	r.HandleFunc("/api/wishlist/detail/delete", controller.DeleteWishItem).Methods("GET").
+		Queries("wishlist_id", "{wishlist_id}", "product_id", "{product_id}")
 	// Review
 	r.HandleFunc("/api/review/add", controller.InsertReview).Methods("POST")
 	r.HandleFunc("/api/review/update", controller.UpdateReview).Methods("POST")
@@ -81,6 +83,11 @@ func main() {
 		Queries("user_id", "{user_id}")
 	r.HandleFunc("/api/favorite/delete", controller.DeleteFavourite).Methods("GET").
 		Queries("user_id", "{user_id}", "wishlist_id", "{wishlist_id}")
+	// Manage Wishlist
+	r.HandleFunc("/api/wishlist/manage/view", controller.ManageWishlistView).Methods("GET").
+		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/wishlist/manage/update", controller.ManageWishlistUpdate).Methods("PUT")
+	// Port
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
 }
