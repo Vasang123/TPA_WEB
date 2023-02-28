@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import { add_cart, update_cart } from "../RequestComponent";
 import { Counter } from "./ListCounter";
+import { WishlistTable } from "./WishlistTable";
 function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like = string) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
@@ -28,7 +29,9 @@ export default function CartDisplay({ user_id, is_like }: any) {
     let Total = 0;
     const [carts, setCarts] = useState<Cart[]>([])
     const [cart, setCart] = useState<Cart>()
+    const [cartId, setCartId] = useState<Cart>()
     const [loading, setLoading] = useState(false);
+    const [showTableDialog, setShowTableDialog] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}&is_like=${is_like}`);
@@ -48,7 +51,9 @@ export default function CartDisplay({ user_id, is_like }: any) {
     }
     if (carts.length > 0) {
         carts.forEach((cart) => {
-            Total += cart.product?.price * cart.quantity
+            if (cart.product?.quantity > 0) {
+                Total += cart.product?.price * cart.quantity
+            }
         })
     } else {
         return (
@@ -69,11 +74,16 @@ export default function CartDisplay({ user_id, is_like }: any) {
             setCarts(updatedCarts);
         }
     };
-
+    const openManageDialog = async (e: any, cart_id: number) => {
+        e.preventDefault();
+        setCartId(cart_id)
+        setShowTableDialog(true)
+    }
     return (
         <ProductDivBg className={style.cart_list}>
             {carts.length > 0 &&
                 carts.map((cart) => (
+
                     <div key={cart.id} className={style.cart_container}>
                         <Link href={`/products/detail?id=${encodeURIComponent(cart.product_id)}`}>
                             <img src={cart.product?.image} alt="" />
@@ -84,31 +94,69 @@ export default function CartDisplay({ user_id, is_like }: any) {
                             <div className={style.middle}>
                                 <div className={style.temp}>
                                     <SecondarySpanColor className={style.quantity_container}>
-                                        Quantity:
-                                        <Counter count={cart.quantity}
-                                            setCount={
-                                                (newCount: number) => {
-                                                    const updatedCarts = carts.map((c) => {
-                                                        if (c.id === cart.id) {
-                                                            return { ...c, quantity: newCount };
-                                                        }
-                                                        return c;
-                                                    });
-                                                    setCarts(updatedCarts);
-                                                }}
-                                            limit={cart.product?.quantity}
-                                            setCart={setCart}
-                                            user_id={user_id}
-                                            product_id={cart.product_id}
-                                            is_like={cart.is_like}
-                                            type={1}
-                                        />
+                                        {
+                                            cart.product?.quantity > 0 ? (
+                                                <>
+                                                    Quantity:
+                                                    <Counter count={cart.quantity}
+                                                        setCount={
+                                                            (newCount: number) => {
+                                                                const updatedCarts = carts.map((c) => {
+                                                                    if (c.id === cart.id) {
+                                                                        return { ...c, quantity: newCount };
+                                                                    }
+                                                                    return c;
+                                                                });
+                                                                setCarts(updatedCarts);
+                                                            }}
+                                                        limit={cart.product?.quantity}
+                                                        setCart={setCart}
+                                                        user_id={user_id}
+                                                        product_id={cart.product_id}
+                                                        is_like={cart.is_like}
+                                                        type={1}
+                                                    />
+                                                </>
+                                            ) : (
+                                                <div className="out_of_stock">
+                                                    <h4>Out Of Stock</h4>
+                                                </div>
+                                            )
+                                        }
+
                                     </SecondarySpanColor>
                                 </div>
 
                                 {is_like === "no" ? (
-                                    <div>
-                                    </div>
+                                    <>
+                                        {
+                                            cart.product?.quantity > 0 ? (
+                                                <>
+                                                    <button className={style.wish_button}
+                                                        onClick={(e) => openManageDialog(e, cart.id)}>
+                                                        <i className="uil uil-heart"></i>
+                                                        Add To Wishlist
+                                                    </button>
+                                                    {
+                                                        showTableDialog && (
+                                                            <WishlistTable
+                                                                user_id={user_id}
+                                                                setShowTableDialog={setShowTableDialog}
+                                                                quantity={cart.quantity}
+                                                                product_id={cart.product_id}
+                                                                product_image={cart.product?.image}
+                                                                cart_id={cartId}
+                                                            />
+                                                        )
+                                                    }
+                                                </>
+                                            ) : (
+                                                <div className="out_of_stock">
+
+                                                </div>
+                                            )
+                                        }
+                                    </>
                                 ) : (
                                     <button className={style.add_cart} onClick={(e) => AddItemCart(e, cart)}>
                                         <i className="uil uil-shopping-cart"></i>
@@ -121,30 +169,42 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                 </button>
                             </div>
                             <div className={style.bottom}>
-                                <SecondarySpanColor>
-                                    Subtotal :
-                                    {cart.product?.price * cart.quantity}
-                                </SecondarySpanColor>
+                                {
+                                    cart.product?.quantity > 0 ? (
+                                        <SecondarySpanColor>
+                                            Subtotal :
+                                            {cart.product?.price * cart.quantity}
+                                        </SecondarySpanColor>
+                                    ) : (
+                                        <div>
+
+                                        </div>
+                                    )
+                                }
+
                             </div>
                         </div>
                     </div>
                 ))
             }
-            {is_like === "no" ? (
-                <SecondarySpanColor className={style.total_container}>
-                    Total Price {Total}
-                    <button className={style.order}>
-                        Check Out
-                    </button>
-                </SecondarySpanColor>
-            ) : (
-                <SecondarySpanColor className={style.total_container}>
-                    Total Price {Total}
-                    <button className={style.order}>
-                        Add All Items to Cart
-                    </button>
-                </SecondarySpanColor>
-            )}
-        </ProductDivBg>
+            {
+                is_like === "no" ? (
+                    <SecondarySpanColor className={style.total_container}>
+                        Total Price {Total}
+                        <button className={style.order}>
+                            Check Out
+                        </button>
+                    </SecondarySpanColor>
+                ) : (
+                    <SecondarySpanColor className={style.total_container}>
+                        Total Price {Total}
+                        <button className={style.order}>
+                            Add All Items to Cart
+                        </button>
+                    </SecondarySpanColor>
+                )
+            }
+
+        </ProductDivBg >
     )
 }

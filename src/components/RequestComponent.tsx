@@ -196,8 +196,11 @@ export const login = async (user: any, router: any) => {
       if (response.data.message == 'Invalid Credential') {
         alert("Incorret Email or Password")
 
+      } else if (response.data.message == 'Your Account Is Banned') {
+        alert("Your Account Is Banned")
+
       } else {
-        // console.log(response.data.user.firstName);
+
         localStorage.setItem('token', response.data.token);
         user.id = response.data.user.id
         user.email = response.data.user.email

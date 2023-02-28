@@ -1,5 +1,5 @@
 import Link from "next/link"
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { LogoSecondary, MainLogoEffect } from "../Other/LogoComponent";
 import { MainDivBg, SecondaryBoldColor } from "../Other/GlobalComponent";
 import Search from "./Search";
@@ -8,7 +8,21 @@ import Subnav from './SubNav'
 import Profile from "./Profile";
 import CartNav from "./CartNav";
 import WishListNav from "./WishlistNav";
+import axios from "axios";
+import CurrentLocation from "./Location";
+import { useRouter } from "next/router";
+import { User } from "@/types/models";
 export default function Navbar() {
+    const [userData, setUserData] = useState<User>();
+    const [loading, setLoading] = useState(true);
+    let i = 1;
+    const r = useRouter()
+    useEffect(() => {
+        const userDataString = localStorage.getItem("user");
+        if (userDataString) {
+            setUserData(JSON.parse(userDataString));
+        }
+    }, []);
 
 
     return (
@@ -27,18 +41,7 @@ export default function Navbar() {
                         <img src="https://c1.neweggimages.com/WebResource/Themes/Nest/logos/Newegg_full_color_logo_RGB.SVG" alt="" />
                     </Link>
                 </div>
-                <div className="address-container">
-                    <LogoSecondary className="uil uil-map-marker"></LogoSecondary>
-                    <div className="address-temp">
-                        <div className="address-welcome">
-                            Hello
-                        </div>
-                        <div className="address-select">
-                            <span><SecondaryBoldColor>Select</SecondaryBoldColor></span>
-                            <span><SecondaryBoldColor>Address</SecondaryBoldColor></span>
-                        </div>
-                    </div>
-                </div>
+                <CurrentLocation />
                 <div className="search-container">
                     <Search />
                 </div>
@@ -57,7 +60,12 @@ export default function Navbar() {
                 </div>
                 <Profile />
                 <WishListNav />
-                <CartNav />
+                {
+                    userData && (
+                        <CartNav user_id={userData ? userData.id : null} />
+                    )
+                }
+
             </MainDivBg>
             <Subnav />
 

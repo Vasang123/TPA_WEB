@@ -94,24 +94,24 @@ export interface WishlistDetail {
     note?: string;
   }
   product?: {
-    id: number;
-    name: string;
-    quantity: number;
-    price: number;
-    image: string;
-    rating: number;
-    description: string;
-    category_id: number;
-    user_id: number; // shop
+    id?: number;
+    name?: string;
+    quantity?: number;
+    price?: number;
+    image?: string;
+    rating?: number;
+    description?: string;
+    category_id?: number;
+    user_id?: number; // shop
     user?: {
       id?: number;
       firstName?: string;
     };
-    category: {
+    category?: {
       id: number;
       name: string;
     };
-    brand: {
+    brand?: {
       id: number;
       name: string;
     };
@@ -132,6 +132,7 @@ export interface Product {
   user?: {
     id?: number;
     firstName?: string;
+    isBanned?: string;
   };
   category: {
     id: number;

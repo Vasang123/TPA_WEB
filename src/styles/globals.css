@@ -284,6 +284,7 @@ input:checked + .slider:before {
   
 }
 .cart-temp{
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -291,6 +292,13 @@ input:checked + .slider:before {
   border-radius: 34px;
   width: 55px;
   height: 45px;
+}
+.total_container{
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 18px;
 }
 .cart-temp > i {
   font-size: 30px;
@@ -483,4 +491,25 @@ input:checked + .slider:before {
   display: flex;
   margin-left: 10%;
   /* background-color: red; */
+}
+
+.out_of_stock h1{
+  color: red;
+  font-size: 22px;
+}
+.out_of_stock h4{
+  color: red;
+  
+}
+.location-container{
+  display: inline-block;
+  width: 200px; /* adjust to desired width */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.location-container {
+  white-space: normal;
+  overflow: visible;
 }
