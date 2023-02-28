@@ -136,3 +136,7 @@ type CartWithWishlist struct {
 	Cart       Cart `json:"cart"`
 	WishlistId int  `json:"wishlist_id"`
 }
+type WishlistWithCart struct {
+	WishlistDetail WishlistDetail `json:"wishlist"`
+	CartId         int            `json:"cart_id"`
+}

@@ -53,6 +53,7 @@ func GetProducts(w http.ResponseWriter, r *http.Request) {
 		Relation("User").
 		Relation("Category").
 		Relation("Brand").
+		Order("id").
 		Offset(offset).
 		Limit(pageSize).
 		Select()
@@ -74,7 +75,7 @@ func GetProductDetail(w http.ResponseWriter, r *http.Request) {
 	}
 	var product model.Product
 	err = db.Model(&product).
-		Column("product.*", "User.first_name", "User.id", "Category", "Brand").
+		Column("product.*", "User.first_name", "User.id", "User.is_banned", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
 		Relation("Brand").

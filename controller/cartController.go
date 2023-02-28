@@ -199,5 +199,101 @@ func WishToCart(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	wishlist := &model.WishlistDetail{}
+	err = db.Model(wishlist).
+		Column("wishlist_detail.*", "Product").
+		Relation("Product").
+		Where("wishlist_id = ?", wishlistId).
+		Order("wishlist_detail.id").
+		Limit(1).
+		Select()
+	var wishlistMain *model.Wishlist
+	if err != nil {
+		_, err = db.Model(&model.Wishlist{}).
+			Set("image = NULL").
+			Where("id = ?", wishlistId).
+			Update()
+		json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+		return
+	}
+	_, err = db.Model(wishlistMain).
+		Set("image = ?", wishlist.Product.Image).
+		Where("id = ?", wishlist.WishlistId).
+		Update()
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
+
+func CartToWish(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+	var req model.WishlistWithCart
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	cartId := &req.CartId
+	wishlist1 := &req.WishlistDetail
+
+	fmt.Println("Request body:", r.Body)
+	if err != nil {
+		log.Println("Error decoding wishlist payload:", err)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding wishlist payload"})
+		return
+	}
+	cart := model.Cart{}
+	_, err = db.Model(&cart).
+		Column("cart.*").
+		Where("id = ? ", cartId).
+		Delete()
+	var existingWishlist model.WishlistDetail
+	err = db.Model(&existingWishlist).
+		Column("wishlist_detail.*", "Wishlist", "Product").
+		Relation("Wishlist").
+		Relation("Product").
+		Where("wishlist_id = ? AND product_id = ?", wishlist1.WishlistId, wishlist1.ProductId).
+		Limit(1).
+		Select()
+	if err != nil {
+		err = db.Insert(wishlist1)
+		if err != nil {
+			log.Println("Error inserting wishlist into database:", err)
+			json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Create Wishlist"})
+		}
+		var wishlistMain *model.Wishlist
+		_, err = db.Model(wishlistMain).
+			Set("image = ?", wishlist1.Product.Image).
+			Where("id = ?", wishlist1.WishlistId).
+			Update()
+		if err != nil {
+			log.Println("Error inserting wishlist into database:", err)
+			json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Create Wishlist"})
+			return
+		}
+	} else {
+		newQuantity := wishlist1.Quantity + existingWishlist.Quantity
+		// fmt.Print(wishlist.Quantity, "\n")
+		// fmt.Print(existingWishlist.Quantity, "\n")
+		// fmt.Print(existingWishlist.Product.Quantity, "\n")
+		if newQuantity > existingWishlist.Product.Quantity {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Item Overload"})
+			return
+		}
+		existingWishlist.Quantity = newQuantity
+		_, err = db.Model(&existingWishlist).
+			Set("quantity = ?", newQuantity).
+			Where("wishlist_id = ? AND product_id = ?", wishlist1.WishlistId, wishlist1.ProductId).
+			Update()
+		if err != nil {
+			log.Println("Error updating wishlist item:", err)
+			json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Update Wishlist"})
+			return
+		}
+	}
+
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }

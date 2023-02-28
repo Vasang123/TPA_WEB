@@ -99,6 +99,7 @@ func main() {
 
 	// Handle Wish And Cart Controller
 	r.HandleFunc("/api/wishlist/cart/add", controller.WishToCart).Methods("POST")
+	r.HandleFunc("/api/cart/wish/add", controller.CartToWish).Methods("POST")
 	// Port
 	log.Fatal(http.ListenAndServe(":8000", handler))
 

@@ -274,6 +274,8 @@ func InsertWishlist(w http.ResponseWriter, r *http.Request) {
 
 	wishlist := &model.WishlistDetail{}
 	err := json.NewDecoder(r.Body).Decode(wishlist)
+	fmt.Println("Request body:", r.Body)
+	fmt.Println("Wishlist body:", wishlist)
 	if err != nil {
 		log.Println("Error decoding wishlist payload:", err)
 		w.WriteHeader(http.StatusBadRequest)
@@ -291,8 +293,12 @@ func InsertWishlist(w http.ResponseWriter, r *http.Request) {
 		Select()
 
 	if err != nil {
-		// Item does not exist, insert it
 		err = db.Insert(wishlist)
+		var wishlistMain *model.Wishlist
+		_, err = db.Model(wishlistMain).
+			Set("image = ?", wishlist.Product.Image).
+			Where("id = ?", wishlist.WishlistId).
+			Update()
 		if err != nil {
 			log.Println("Error inserting wishlist into database:", err)
 			json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Create Wishlist"})
