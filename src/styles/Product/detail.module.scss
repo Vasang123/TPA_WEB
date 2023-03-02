@@ -32,6 +32,10 @@
                 display: flex;
                 justify-content: space-between;
             }
+            .bottom {
+                display: flex;
+                flex-direction: column;
+            }
             .description {
                 margin: 0.5em 0;
                 height: 100%;
@@ -106,7 +110,7 @@
                 resize: none;
             }
         }
-        .form_button{
+        .form_button {
             display: flex;
             gap: 20px;
             button {
@@ -118,11 +122,10 @@
                 height: 40px;
                 background-color: #e77221;
             }
-            .cancel{
+            .cancel {
                 background-color: red;
             }
         }
-       
     }
 }
 .review_update {
@@ -130,7 +133,7 @@
     background-color: rgba(157, 145, 129, 0.961);
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
     font-size: 16px;
@@ -138,7 +141,7 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
         width: 90%;
         .rating_container {
             margin-top: 1em;
@@ -164,7 +167,7 @@
                 resize: none;
             }
         }
-        .form_button{
+        .form_button {
             display: flex;
             gap: 20px;
             button {
@@ -176,11 +179,10 @@
                 height: 40px;
                 background-color: #e77221;
             }
-            .cancel{
+            .cancel {
                 background-color: red;
             }
         }
-       
     }
 }
 .review_list {
@@ -197,10 +199,10 @@
             b:hover {
                 text-decoration: underline;
             }
-            .button_container{
+            .button_container {
                 display: flex;
                 gap: 20px;
-                button{
+                button {
                     width: 28px;
                     height: 28px;
                     border: none;
@@ -209,10 +211,10 @@
                     cursor: pointer;
                     border-radius: 5px;
                 }
-                .delete_review{
+                .delete_review {
                     background-color: red;
                 }
-                .update_review{
+                .update_review {
                     background-color: #32e721;
                 }
             }
@@ -223,5 +225,21 @@
             display: flex;
             justify-content: space-between;
         }
+    }
+}
+.helpful_buttons {
+    font-size: 16px;
+    display: flex;
+    width: 100px;
+    justify-content: space-between;
+    .helpful_button_active {
+        background-color: rgb(15, 181, 62);
+    }
+    .helpful_button,
+    .unhelpful_button {
+        background-color: rgb(71, 70, 70);
+    }
+    .unhelpful_button_active {
+        background-color: red;
     }
 }

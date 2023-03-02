@@ -1,10 +1,11 @@
 import style from '@/styles/Wishlist/wishlistcomponent.module.scss'
 import Link from 'next/link'
 import { BaseBackgroundColor, SecondaryDivColor3, SecondaryLinkColor } from '../Other/GlobalComponent'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Wishlist } from '@/types/models'
 import { SecondarySpanColor } from '../Other/GlobalComponent'
 import { useRouter } from 'next/router'
+import { LanguageContext } from '../Language/LanguageContext'
 
 export default function WishlistDisplay({
     user_id,
@@ -12,6 +13,7 @@ export default function WishlistDisplay({
     favorites,
     type }: any) {
     const router = useRouter();
+    const { lang } = useContext(LanguageContext);
     const HandleLike = async (e: any, user_id: any, wishlist_id: any) => {
         e.preventDefault()
         try {
@@ -83,7 +85,7 @@ export default function WishlistDisplay({
                                     ))}
 
                                     <button className={style.wish_button} onClick={(event) => HandleSearch({ event: event, wish: wishlist.id, uid: user_id })}>
-                                        View Detail
+                                        {lang.is_eng == true ? 'View Detail' : 'Lihat Rincian'}
                                     </button>
 
                                 </div>
@@ -118,7 +120,8 @@ export default function WishlistDisplay({
                                 ))}
 
                                 <button className={style.wish_button} onClick={(event) => HandleSearch({ event: event, wish: wishlist.id, uid: user_id })}>
-                                    View Detail
+                                    {lang.is_eng == true ? 'View Detail' : 'Lihat Rincian'}
+
                                 </button>
 
                             </div>

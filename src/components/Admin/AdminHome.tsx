@@ -7,9 +7,9 @@ export default function AdminHome() {
 
     return (
         <MainDivBg className={style.home}>
-            <BackButton target = "/"/>
+            <BackButton target="/" />
             <div className={style.menu_list}>
-            <SecondaryLinkColor4 href="/admin/add_voucher">
+                <SecondaryLinkColor4 href="/admin/add_voucher">
                     <div className={style.menu_item}>
                         <LogoSecondary className="uil uil-ticket"></LogoSecondary>
                         <SecondarySpanColor>
@@ -49,7 +49,7 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
-                <SecondaryLinkColor4 href="/">
+                <SecondaryLinkColor4 href="/admin/add_letter">
                     <div className={style.menu_item}>
                         <LogoSecondary className="uil uil-newspaper"></LogoSecondary>
                         <SecondarySpanColor>

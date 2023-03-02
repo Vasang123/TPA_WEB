@@ -1,15 +1,17 @@
 import style from '@/styles/Wishlist/createwishlist.module.scss'
 import { Wishlist } from '@/types/models'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { MainDivBg, SecondaryH1Color, SecondarySpanColor, Select } from '../../Other/GlobalComponent'
 import { Input, Select2 } from '../../Other/InputComponent'
 import { create_wishlist } from '../../RequestComponent'
+import { LanguageContext } from '@/components/Language/LanguageContext'
 
 export default function CreateWishlist({
     user_id,
     title,
     close }: any) {
     const [privacy, setPrivacy] = useState('')
+    const { lang } = useContext(LanguageContext);
     const [name, setName] = useState('')
     const handleSubmit = async (e: any) => {
         e.preventDefault()
@@ -39,14 +41,15 @@ export default function CreateWishlist({
                 <SecondaryH1Color>{title}</SecondaryH1Color>
                 <label className={style.name_container}>
                     <SecondarySpanColor>
-                        Name:
+                        {lang.is_eng == true ? ' Name: ' : 'Nama: '}
                     </SecondarySpanColor>
                     <Input type="text" onChange={(e: any) => setName(e.target.value)} />
                 </label>
                 <br />
                 <label className={style.privacy_container}>
                     <SecondarySpanColor>
-                        Privacy:
+                        {lang.is_eng == true ? ' Privacy: ' : 'Privasi: '}
+
                     </SecondarySpanColor>
                     <Select2 name="" id="" className={style.privacy_select} onChange={(e: any) => setPrivacy(e.target.value)} >
                         <option value=""></option>

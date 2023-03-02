@@ -12,6 +12,7 @@ import axios from "axios";
 import CurrentLocation from "./Location";
 import { useRouter } from "next/router";
 import { User } from "@/types/models";
+import Language from "./Language";
 export default function Navbar() {
     const [userData, setUserData] = useState<User>();
     const [loading, setLoading] = useState(true);
@@ -50,11 +51,7 @@ export default function Navbar() {
                         <LogoSecondary className="uil uil-bell" ></LogoSecondary>
                     </div>
                 </div>
-                <div className="country-container">
-                    <div className="notification-temp">
-                        <LogoSecondary className="uil uil-bell"></LogoSecondary>
-                    </div>
-                </div>
+                <Language />
                 <div className="theme-container">
                     <ThemeSwitcher />
                 </div>

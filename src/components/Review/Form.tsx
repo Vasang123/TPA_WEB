@@ -1,6 +1,8 @@
 import { SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import style from '@/styles/Product/detail.module.scss'
 import { Input, TextArea } from "../Other/InputComponent";
+import { useContext } from "react";
+import { LanguageContext } from "../Language/LanguageContext";
 
 export default function ReviewForm({
     rating,
@@ -11,6 +13,7 @@ export default function ReviewForm({
     handleCancel,
     css,
     title }: any) {
+    const { lang } = useContext(LanguageContext);
     return (
         <div className={css}>
             <form onSubmit={handleSubmit}>
@@ -24,7 +27,10 @@ export default function ReviewForm({
                 <br />
                 <label className={style.comment_container}>
                     <SecondarySpanColor>
-                        Comment:
+
+                        {lang.is_eng == true ? 'Comment: ' : 'Komen: '}
+
+
                     </SecondarySpanColor>
                     <TextArea value={comment} onChange={(event) => setComment(event.target.value)} />
                 </label>

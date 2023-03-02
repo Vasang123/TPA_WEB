@@ -1,11 +1,12 @@
 import { Cart } from "@/types/models";
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import style from '@/styles/Cart/cartview.module.scss'
 import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import { add_cart, update_cart } from "../RequestComponent";
 import { Counter } from "./ListCounter";
 import { WishlistTable } from "./WishlistTable";
+import { LanguageContext } from "../Language/LanguageContext";
 function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like = string) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
@@ -29,8 +30,12 @@ export default function CartDisplay({ user_id, is_like }: any) {
     let Total = 0;
     const [carts, setCarts] = useState<Cart[]>([])
     const [cart, setCart] = useState<Cart>()
-    const [cartId, setCartId] = useState<Cart>()
+    const [cartId, setCartId] = useState()
+    const [quantity, setQuantity] = useState()
+    const [image, setImage] = useState()
+    const [productId, setProductId] = useState()
     const [loading, setLoading] = useState(false);
+    const { lang } = useContext(LanguageContext);
     const [showTableDialog, setShowTableDialog] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
@@ -74,9 +79,12 @@ export default function CartDisplay({ user_id, is_like }: any) {
             setCarts(updatedCarts);
         }
     };
-    const openManageDialog = async (e: any, cart_id: number) => {
+    const openManageDialog = async (e: any, cart_id: any, product_id: any, image_ref: any, quantity_ref: any) => {
         e.preventDefault();
         setCartId(cart_id)
+        setImage(image_ref)
+        setQuantity(quantity_ref)
+        setProductId(product_id)
         setShowTableDialog(true)
     }
     return (
@@ -90,14 +98,18 @@ export default function CartDisplay({ user_id, is_like }: any) {
                         </Link>
                         <div className={style.right_container}>
                             <SecondaryH1Color>{cart.product?.name}</SecondaryH1Color>
-                            <SecondarySpanColor>Price/item: {cart.product?.price}</SecondarySpanColor>
+                            <SecondarySpanColor>
+                                {lang.is_eng == true ? 'Price/item: ' : 'Harga/Barang: '}
+                                {cart.product?.price}
+                            </SecondarySpanColor>
                             <div className={style.middle}>
                                 <div className={style.temp}>
                                     <SecondarySpanColor className={style.quantity_container}>
                                         {
                                             cart.product?.quantity > 0 ? (
                                                 <>
-                                                    Quantity:
+                                                    {lang.is_eng == true ? 'Quantity: ' : 'Jumlah: '}
+
                                                     <Counter count={cart.quantity}
                                                         setCount={
                                                             (newCount: number) => {
@@ -119,7 +131,9 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                                 </>
                                             ) : (
                                                 <div className="out_of_stock">
-                                                    <h4>Out Of Stock</h4>
+                                                    <h4>
+                                                        {lang.is_eng == true ? 'Out Of Stock' : 'Stok Habis'}
+                                                    </h4>
                                                 </div>
                                             )
                                         }
@@ -133,22 +147,12 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                             cart.product?.quantity > 0 ? (
                                                 <>
                                                     <button className={style.wish_button}
-                                                        onClick={(e) => openManageDialog(e, cart.id)}>
+                                                        onClick={(e) => openManageDialog(e, cart.id, cart.product_id, cart.product?.image, cart.quantity)}>
                                                         <i className="uil uil-heart"></i>
-                                                        Add To Wishlist
+                                                        {lang.is_eng == true ? 'Add To Wishlist' : 'Masukkan Keinginan'}
+
                                                     </button>
-                                                    {
-                                                        showTableDialog && (
-                                                            <WishlistTable
-                                                                user_id={user_id}
-                                                                setShowTableDialog={setShowTableDialog}
-                                                                quantity={cart.quantity}
-                                                                product_id={cart.product_id}
-                                                                product_image={cart.product?.image}
-                                                                cart_id={cartId}
-                                                            />
-                                                        )
-                                                    }
+
                                                 </>
                                             ) : (
                                                 <div className="out_of_stock">
@@ -160,12 +164,13 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                 ) : (
                                     <button className={style.add_cart} onClick={(e) => AddItemCart(e, cart)}>
                                         <i className="uil uil-shopping-cart"></i>
-                                        Add To Cart
+                                        {lang.is_eng == true ? 'Add To Cart' : 'Masukkan Keranjang'}
+
                                     </button>
                                 )}
                                 <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts, is_like)}>
                                     <i className="uil uil-trash-alt"></i>
-                                    Remove
+                                    {lang.is_eng == true ? 'Remove' : 'Hapus'}
                                 </button>
                             </div>
                             <div className={style.bottom}>
@@ -190,21 +195,38 @@ export default function CartDisplay({ user_id, is_like }: any) {
             {
                 is_like === "no" ? (
                     <SecondarySpanColor className={style.total_container}>
-                        Total Price {Total}
+                        {lang.is_eng == true ? 'Total Price ' : 'Total Harga '}
+
+                        {Total}
                         <button className={style.order}>
-                            Check Out
+                            {lang.is_eng == true ? 'Check Out' : 'Beli'}
+
                         </button>
                     </SecondarySpanColor>
                 ) : (
                     <SecondarySpanColor className={style.total_container}>
                         Total Price {Total}
                         <button className={style.order}>
-                            Add All Items to Cart
+                            {lang.is_eng == true ? 'Add All Items to Cart' : 'Masukkan Semua ke Keranjang'}
+
                         </button>
                     </SecondarySpanColor>
                 )
             }
-
+            {
+                showTableDialog && (
+                    <WishlistTable
+                        user_id={user_id}
+                        setShowTableDialog={setShowTableDialog}
+                        quantity={quantity}
+                        product_id={productId}
+                        product_image={image}
+                        cart_id={cartId}
+                        carts={carts}
+                        setCarts={setCarts}
+                    />
+                )
+            }
         </ProductDivBg >
     )
 }

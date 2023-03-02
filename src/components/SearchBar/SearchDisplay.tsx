@@ -3,7 +3,8 @@ import { useContext } from "react";
 import { THEME, ThemeContext } from "../Theme/ThemeContext";
 export default function SearchDisplay({
     HandleSubmit,
-    HandleSearch }: any) {
+    HandleSearch,
+    search }: any) {
     const { theme } = useContext(ThemeContext);
     return (
         <form action=""
@@ -15,6 +16,7 @@ export default function SearchDisplay({
                     color: theme.secondaryColor
                 }}
                 onChange={HandleSearch}
+                placeholder={search}
             />
             <button className="search-button" style={{
                 backgroundColor: theme.thirdColor

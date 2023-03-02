@@ -3,7 +3,7 @@ import style from '@/styles/Cart/cartview.module.scss'
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from '../Other/GlobalComponent';
 import Link from 'next/link';
 import { Counter } from '../Cart/ListCounter';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Cart, Wishlist, WishlistDetail } from '@/types/models';
 import { useRouter } from 'next/router';
 import AddNote from './Private/WishlistNote';
@@ -11,6 +11,7 @@ import InsertComment from '@/components/Wishlist/WishlistReview/Insert';
 import ReviewList from './WishlistReview/Show';
 import axios from 'axios';
 import { add_cart } from '../RequestComponent';
+import { LanguageContext } from '../Language/LanguageContext';
 function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, wishlist_id: number, product_id: number, carts: WishlistDetail[], setCarts: any) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/wishlist/detail/delete?product_id=${product_id}&wishlist_id=${wishlist_id}`, {
@@ -36,6 +37,7 @@ export default function ListDisplay() {
     const [item, setItem] = useState<Cart>()
     const [note, setNote] = useState('')
     const [wishlist, setWishlist] = useState<Wishlist>()
+    const { lang } = useContext(LanguageContext);
     let owner: number;
     let i = 0;
     const router = useRouter();
@@ -238,12 +240,13 @@ export default function ListDisplay() {
                                         owner == parseInt(router.query.user_id) ? (
                                             <button className={style.add_cart} onClick={event => AddToCart(event, cart.wishlist_id, cart.product_id, cart.quantity)}>
                                                 <i className="uil uil-shopping-cart"  ></i>
-                                                Add To Cart
+                                                {lang.is_eng == true ? '  Add To Cart' : 'Masukkan Keranjang'}
+
                                             </button>
                                         ) : (
                                             <button className={style.add_cart} onClick={event => DuplicateItem(event, cart.product_id, cart.quantity)}>
                                                 <i className="uil uil-shopping-cart"  ></i>
-                                                Add To Cart
+                                                {lang.is_eng == true ? '  Add To Cart' : 'Masukkan Keranjang'}
                                             </button>
                                         )
                                     }
@@ -252,7 +255,7 @@ export default function ListDisplay() {
                                         {
                                             cart.wishlist?.user_id == parseInt(router.query.user_id) && (
                                                 <div>
-                                                    Quantity:
+                                                    {lang.is_eng == true ? 'Quantity ' : 'Jumlah: '}
                                                     <Counter count={cart.quantity}
                                                         setCount={
                                                             (newCount: number) => {
@@ -281,7 +284,7 @@ export default function ListDisplay() {
                                     cart.wishlist?.user_id == parseInt(router.query.user_id) && (
                                         <button className={style.delete} onClick={(event) => HandleDelete(event, cart.wishlist_id, cart.product_id, list, setList)} >
                                             <i className="uil uil-trash-alt"></i>
-                                            Remove
+                                            {lang.is_eng == true ? '  Remove' : ' Hapus'}
                                         </button>
                                     )
                                 }
@@ -299,20 +302,24 @@ export default function ListDisplay() {
             {
                 owner == parseInt(router.query.user_id) ? (
                     <SecondarySpanColor className={style.total_container}>
-                        Total Price {Total}
+                        {lang.is_eng == true ? ' Total Price ' : 'Harga Total '}
+                        {Total}
                         <button className={style.order} onClick={handleAddAllToCart}>
-                            Add All Items to Cart
+                            {lang.is_eng == true ? 'Add All Items to Cart' : 'Masukkan Semua ke Keranjang'}
+
                         </button>
                     </SecondarySpanColor>
                 ) : (
                     <div className={style.detail_button}>
                         <SecondarySpanColor className={style.total_container}>
-                            Total Price {Total}
+                            {lang.is_eng == true ? ' Total Price ' : 'Harga Total '}
+                            {Total}
                             <button className={style.order} onClick={AddAllItemToWishlist}>
-                                Duplicate Items into wishlist
+                                {lang.is_eng == true ? ' Duplicate Items into wishlist ' : 'Duplikat barangs ke Keinginan '}
+
                             </button>
                             <button className={style.order} onClick={DuplicateAllItem}>
-                                Duplicate Items into cart
+                                {lang.is_eng == true ? ' Duplicate Items into cart ' : 'Duplikat barangs ke Keranjang '}
                             </button>
                         </SecondarySpanColor>
                     </div>

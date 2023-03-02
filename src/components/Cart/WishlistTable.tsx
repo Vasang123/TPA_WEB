@@ -12,14 +12,15 @@ export function WishlistTable({
     quantity,
     product_id,
     product_image,
-    cart_id
+    cart_id,
+    carts,
+    setCarts
 }: any) {
     const [wishlists, setWishlists] = useState<Wishlist[]>([])
     const handleClose = async (e: any) => {
         e.preventDefault()
 
         setShowTableDialog(false)
-
     }
     const handleSave = async (e: any, wishlist_id: any) => {
         e.preventDefault()
@@ -41,9 +42,12 @@ export function WishlistTable({
                     cart_id: cart_id
                 })
                     .then(response => {
-                        console.log(newWishlist);
-                        console.log(cart_id);
+                        // console.log(newWishlist);
+                        // console.log(cart_id);
                         alert(response.data.message)
+                        const updatedCarts = carts.filter((cart) => cart.product_id !== product_id);
+                        setCarts(updatedCarts);
+                        setShowTableDialog(false)
                     })
                     .catch(response => {
                         console.log(response);

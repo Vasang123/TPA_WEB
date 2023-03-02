@@ -24,7 +24,8 @@ export default function Search() {
         <>
             <SearchDisplay
                 HandleSearch={HandleSearch}
-                HandleSubmit={HandleSubmit} />
+                HandleSubmit={HandleSubmit}
+                search="Search" />
         </>
     );
 }

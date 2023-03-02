@@ -1,10 +1,10 @@
 import { Review } from "@/types/models";
-import style from '@/styles/Product/detail.module.scss'
-import { useEffect, useState } from "react";
-import { SecondaryBoldColor, SecondarySpanColor } from "../Other/GlobalComponent";
-import { Input, TextArea } from "../Other/InputComponent";
+import { useContext, useEffect, useState } from "react";
 import ReviewForm from "./Form";
 import { update_review } from "../RequestComponent";
+import { LanguageContext } from "../Language/LanguageContext";
+import ReviewComment from "./ReviewList";
+import style from '@/styles/Product/detail.module.scss'
 interface Props {
     product_id: number;
     user_id: number;
@@ -16,6 +16,7 @@ export default function ReviewList({ product_id, user_id }: Props) {
     const [showEditDialog, setShowEditDialog] = useState(false);
     const [rating, setRating] = useState('');
     const [comment, setComment] = useState('');
+    const { lang } = useContext(LanguageContext);
     const handleEditDialogClose = () => {
         setShowEditDialog(false);
     };
@@ -93,44 +94,20 @@ export default function ReviewList({ product_id, user_id }: Props) {
                             setComment={setComment}
                             handleCancel={handleEditDialogClose}
                             css={style.review_update}
-                            title="Edit Review" />
+                            title={lang.is_eng == true ? 'Edit Review: ' : 'Ubah Review: '} />
                     </div>
                 </div>
             )}
-            {reviews.length > 0 ? (
-                <div className={style.review_list}>
-                    {reviews.map(review => (
-                        <div key={review.id} className={style.review_container}>
-                            <div className={style.top}>
-                                <SecondaryBoldColor>{review.user?.firstName}</SecondaryBoldColor>
-                                <div className={style.button_container} >
-                                    {review.user?.id === user_id && ( // check if user ids match
-                                        <>
-                                            <button className={style.update_review}
-                                                onClick={() => handleEditDialogOpen(review)}>
-                                                <i className="uil uil-edit"></i>
-                                            </button>
-                                            <button className={style.delete_review}
-                                                onClick={(e) => HandleDelete(e, user_id, product_id, review.id)}>
-                                                <i className="uil uil-trash"></i>
-                                            </button>
-                                        </>
-                                    )}
-                                </div>
+            <ReviewComment
+                user_id={user_id}
+                reviews={reviews}
+                product_id={product_id}
+                handleEditDialogClose={handleEditDialogClose}
+                handleEditDialogOpen={handleEditDialogOpen}
+                HandleDelete={HandleDelete}
+                type={1}
+            />
 
-                            </div>
-                            <div className={style.middle}>
-                                <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
-                                <SecondarySpanColor>Updated at: {review.modified_at.toString()}</SecondarySpanColor>
-                            </div>
-                            <SecondarySpanColor>{review.comment}</SecondarySpanColor>
-                        </div>
-                    ))}
-                </div>
-            ) : (
-                <div>
-                </div>
-            )}
         </>
     );
 

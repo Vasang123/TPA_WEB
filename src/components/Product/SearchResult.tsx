@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import { HomeItem } from './Product';
 import { BaseBackgroundColor, SecondarySpanColor } from '../Other/GlobalComponent';
 import style from '@/styles/Product/search.module.scss'
+import ProductModal from './QuickView';
 export default function SearchResults() {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   useEffect(() => {
     const fetchResults = async () => {
       const res = await fetch(`http://localhost:8000/api/search?name=${router.query.q}&page=${currentPage}`);
@@ -37,13 +39,14 @@ export default function SearchResults() {
   };
   return (
     <div>
-      <HomeItem products={products} />
+      <HomeItem products={products} type={1} />
       <Paginate
         currentPage={currentPage}
         totalPages={totalPages}
         onPrevPage={prev}
         onNextPage={next}
       />
+
     </div>
   );
 }

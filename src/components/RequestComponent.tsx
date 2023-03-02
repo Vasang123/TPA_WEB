@@ -190,6 +190,20 @@ export const add_voucher = async (voucher: any, router: any) => {
       console.log(response);
     });
 };
+export const send_news = async (news: any, router: any) => {
+  axios.post('http://localhost:8000/api/send_news', news)
+    .then(response => {
+      if (response.data.message == 'Success') {
+        alert("Voucher successfully added")
+        router.push("/admin/home");
+      } else {
+        alert("Failed to insert voucher")
+      }
+    })
+    .catch(response => {
+      console.log(response);
+    });
+};
 export const login = async (user: any, router: any) => {
   axios.post('http://localhost:8000/api/login', user)
     .then(response => {
@@ -226,6 +240,20 @@ export const create_wishlist = async (wishlist: any) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(wishlist)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const help_handle = async (help: any) => {
+  const response = await fetch(`http://localhost:8000/api/shop/helplist/insert`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(help)
   });
 
   if (!response.ok) {

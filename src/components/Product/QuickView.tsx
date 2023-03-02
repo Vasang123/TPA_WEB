@@ -1,25 +1,37 @@
-import { Cart, Product } from "@/types/models";
-import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import style from '@/styles/Product/detail.module.scss'
-import { Loading, ProductDivBg } from "../Other/GlobalComponent";
-import { SecondaryH1Color } from "../Other/GlobalComponent";
-import { SecondarySpanColor } from "../Other/GlobalComponent";
-import { Counter } from "./Counter";
-import { add_cart } from "../RequestComponent";
-import ReviewList from "../Review/Show";
-import InsertComment from "../Review/Insert";
-import { WishlistTable } from "./WishlistTable";
+import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
+import style from '@/styles/Product/modal.module.scss'
+import { Cart } from "@/types/models";
+import { useRouter } from "next/router";
 import { LanguageContext } from "../Language/LanguageContext";
-import Link from "next/link";
+import { add_cart } from "../RequestComponent";
+import { Counter } from "../Cart/ListCounter";
+import ReactDOM from 'react-dom';
+import { WishlistTable } from "./WishlistTable";
+import { LogoSecondary } from "../Other/LogoComponent";
 
-function ProductView({ product, user_id }: any) {
+export default function ProductModal({ product, setmodalDialog, user_id }: any) {
+
+    const modalRoot = document.getElementById('modal-root');
     const [loading, setLoading] = useState(false);
-    const [showTableDialog, setShowTableDialog] = useState(false);
     const [cart, setCart] = useState<Cart>();
+    const [showTableDialog, setShowTableDialog] = useState(false);
     const { lang } = useContext(LanguageContext);
-    const r = useRouter();
-    const [counter, setCounter] = useState(0)
+    let i = 0
+    const r = useRouter()
+    const [counter, setCounter] = useState(1)
+    useEffect(() => {
+        console.log(product?.user?.isBanned);
+
+        if (product?.user?.isBanned == "yes" && i == 0) {
+            setLoading(true)
+            i += 3
+            alert("This Shop Has Been Banned")
+            setmodalDialog(false)
+            setLoading(false)
+            r.back()
+        }
+    }, [product])
     if (loading) {
         return (
             <Loading>
@@ -30,14 +42,23 @@ function ProductView({ product, user_id }: any) {
         )
 
     }
+    const Login = (e: any) => {
+        r.push('/signin')
+    }
+    const openManageDialog = async (e: any) => {
+        e.preventDefault();
+
+        setShowTableDialog(true)
+    }
+    const closeModal = async (e: any) => {
+        e.preventDefault();
+        setmodalDialog(false)
+    }
     const HandleShopPage = (event: any, user_id: number) => {
         event.preventDefault();
         // const query = event.target.elements.search.value;
         r.push(`/shop/home?user_id=${encodeURIComponent(user_id)}`);
     };
-    const Login = (e: any) => {
-        r.push('/signin')
-    }
     const HandleSubmit = async (e: any, is_like: any) => {
         e.preventDefault();
         if (counter == 0) {
@@ -62,18 +83,17 @@ function ProductView({ product, user_id }: any) {
             setLoading(false);
         }
     };
-    const openManageDialog = async (e: any) => {
-        e.preventDefault();
-        setShowTableDialog(true)
-    }
-    return (
-        product && (
-            <div className={style.product_page}>
-                <div className={style.product_detail}>
-                    <div className={style.left_detail}>
+    if (modalRoot) {
+        return (
+            <div className={style.bg}>
+                <ProductDivBg className={style.container}>
+                    <div className={style.close_sym} onClick={closeModal}>
+                        <i className="uil uil-times-circle"></i>
+                    </div>
+                    <div className={style.left}>
                         <img src={product.image} alt="" />
                     </div>
-                    <div className={style.right_detail}>
+                    <ProductDivBg className={style.right_detail}>
                         <SecondaryH1Color>{product.name}</SecondaryH1Color>
                         <SecondarySpanColor>Rp. {product.price}</SecondarySpanColor>
                         <div className={style.detail}>
@@ -89,7 +109,6 @@ function ProductView({ product, user_id }: any) {
                             <div className={style.mid}>
                                 <SecondarySpanColor>
                                     {lang.is_eng == true ? 'Category: ' : 'Kategori: '}
-                                    {product.category.name}
                                 </SecondarySpanColor>
                                 <SecondarySpanColor>
                                     {lang.is_eng == true ? 'Stock: ' : 'Stok: '}
@@ -103,9 +122,9 @@ function ProductView({ product, user_id }: any) {
 
                                     {product.description}</SecondarySpanColor>
                             </div>
-                            {user_id === null ? (
+                            {user_id == null ? (
                                 <div className={style.button_container}>
-                                    <button className={style.wish_button} onClick={Login}>
+                                    <button className={style.wish_button} onClick={Login} type="button">
                                         <i className="uil uil-signin"></i>
                                         {lang.is_eng == true ? 'Login To Buy Item' : 'Masuk Untuk Membeli Barang'}
 
@@ -117,7 +136,7 @@ function ProductView({ product, user_id }: any) {
                                         product.quantity > 0 ? (
                                             <div className={style.button_container}>
                                                 <div className={style.cart_container}>
-                                                    <button
+                                                    <button type="button"
                                                         className={style.cart_button}
                                                         onClick={(e) => HandleSubmit(e, "no")}
                                                     >
@@ -128,7 +147,7 @@ function ProductView({ product, user_id }: any) {
                                                     </button>
                                                     <Counter count={counter} setCount={setCounter} limit={product.quantity} />
                                                 </div>
-                                                <button className={style.wish_button}
+                                                <button className={style.wish_button} type="button"
                                                     onClick={openManageDialog}>
                                                     <i className="uil uil-heart"></i>
                                                     {lang.is_eng == true ? 'Add To Wishlist' : 'Masukkan Keinginan'}
@@ -148,71 +167,20 @@ function ProductView({ product, user_id }: any) {
                             }
 
                         </div>
-                    </div>
-                    {
-                        showTableDialog && (
-                            <WishlistTable
-                                user_id={user_id}
-                                setShowTableDialog={setShowTableDialog}
-                                quantity={counter}
-                                product_id={product.id}
-                                product_image={product.image}
-                            />
-                        )
-                    }
-
-
-                </div>
-                <InsertComment user_id={user_id} product_id={product.id} />
-                <ReviewList product_id={product.id} user_id={user_id} />
+                    </ProductDivBg>
+                </ProductDivBg>
+                {
+                    showTableDialog && (
+                        <WishlistTable
+                            user_id={user_id}
+                            setShowTableDialog={setShowTableDialog}
+                            quantity={counter}
+                            product_id={product.id}
+                            product_image={product.image}
+                        />
+                    )
+                }
             </div>
         )
-
-    );
-}
-
-export default function DetailPage({ user_id }: any) {
-    const router = useRouter();
-    const id = router.query.id;
-    const [product, setProduct] = useState<Product>();
-    const [loading, setLoading] = useState(false);
-    let i = 0
-    useEffect(() => {
-        const fetchResults = async () => {
-            const res = await fetch(`http://localhost:8000/api/product/detail?id=${id}`);
-            const data = await res.json();
-            console.log(data);
-
-            setProduct(data)
-        };
-
-        if (id) {
-            fetchResults();
-        }
-    }, [id]);
-
-    useEffect(() => {
-        if (product?.user?.isBanned == "yes") {
-            setLoading(true)
-            i += 3
-            alert("This Shop Has Been Banned")
-            router.push("/")
-        }
-    }, [product])
-
-    if (loading) {
-        return (<Loading>
-            <div className="loading_content">
-                Loading...
-            </div>
-        </Loading>)
     }
-    return (
-        <ProductDivBg className={style.detail_container}>
-            <ProductView product={product} user_id={user_id} />
-            <div className={style.review_container}>
-
-            </div>
-        </ProductDivBg>
-    )
 }

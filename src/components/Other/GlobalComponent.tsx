@@ -78,6 +78,13 @@ export function ButtonInputBg({ children, ...attr }: any) {
         backgroundColor: theme.inputColor
     }} {...attr}>{children}</button>
 }
+export function ButtonLangBg({ children, ...attr }: any) {
+    const { theme } = useContext(ThemeContext);
+    return <button style={{
+        backgroundColor: theme.productBg,
+        // border: `1px solid ${theme.secondaryColor}`,
+    }} {...attr}>{children}</button>
+}
 export function SecondaryLinkColor2({ children, ...attr }: any) {
     const { theme } = useContext(ThemeContext);
     return <Link style={{

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {Product} from '@/types/models'
+import { Product } from '@/types/models'
 import Image from "next/image";
 import style from '@/styles/Home/homedisplay.module.scss'
-import { BaseBackgroundColor, MainDivBg,  SecondaryLinkColor3 } from "../Other/GlobalComponent";
+import { BaseBackgroundColor, MainDivBg, SecondaryLinkColor3 } from "../Other/GlobalComponent";
 import { HomeItem } from "../Product/Product";
 
 export default function HomeData() {
@@ -35,7 +35,7 @@ export default function HomeData() {
 
   return (
     <>
-      <HomeItem products={products} />
+      <HomeItem products={products} type={2} />
     </>
   );
 }

@@ -31,6 +31,10 @@ export interface Review {
     firstName?: string;
   };
 }
+export interface Category {
+  id: number;
+  name: string;
+}
 export interface Cart {
   id: number;
   user_id: number;
@@ -129,6 +133,7 @@ export interface Product {
   description: string;
   category_id: number;
   user_id: number;
+  sold?: number;
   user?: {
     id?: number;
     firstName?: string;
@@ -189,4 +194,41 @@ export interface WishlistReview {
   user?: {
 
   }
+}
+export interface HelpList {
+  id: number;
+  user_id: number;
+  review_id: number;
+  status: string;
+}
+export interface Newsletter {
+  title: string;
+  content: string;
+}
+
+export type LangType = {
+  [key: string]: {
+    is_eng: boolean;
+  };
+};
+
+export interface Shop {
+  id: number;
+  image: string;
+  about: string;
+  user_id: number;
+  user?: {
+    id?: number;
+    firstName?: string;
+    isBanned?: string;
+  };
+}
+
+export interface SearchFilter {
+  price: boolean;
+  sold: boolean;
+  search1: string;
+  search2: string;
+  asc: boolean;
+  desc: boolean;
 }
