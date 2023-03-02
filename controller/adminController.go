@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/smtp"
 	"strconv"
 
 	"github.com/Vasang123/new_egg/connect"
@@ -330,4 +331,60 @@ func UpdatePromoStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+}
+
+func SendEmail(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+	decoder := json.NewDecoder(r.Body)
+	var newsletter model.NewsLetter
+	err := decoder.Decode(&newsletter)
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error Decoding Payload"})
+	}
+
+	users := []*model.User{}
+	err = db.Model(&users).
+		Column("user.*").
+		Where("is_subscribed = 'yes'").
+		Order("id").
+		Select()
+	if err != nil {
+		panic(err)
+	}
+	allEmails := []string{}
+	for _, u := range users {
+		email := u.Email
+		allEmails = append(allEmails, email)
+	}
+
+	//email dapet di body
+	auth := smtp.PlainAuth(
+		"",
+		"valentinosetiawan32@gmail.com",
+		"ezyoxrdjeocyaubm",
+		"smtp.gmail.com",
+	)
+
+	msg := "Subject: " + newsletter.Title + "\n" + newsletter.Content
+	err = smtp.SendMail(
+		"smtp.gmail.com:587",
+		auth,
+		"ezyoxrdjeocyaubm",
+		allEmails,
+		[]byte(msg),
+	)
+	fmt.Println(err)
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error Sending Newsletter"})
+		return
+	}
+	// Set the "Content-Type" header to "application/json"
+	w.Header().Set("Content-Type", "application/json")
+
+	// Encode the response as JSON and write it to the response body
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+	return
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/smtp"
 	"time"
 
 	"github.com/Vasang123/new_egg/connect"
@@ -86,7 +87,34 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Register User"})
 		return
 	}
+	if user.RoleID == 2 {
+		auth := smtp.PlainAuth(
+			"",
+			"valentinosetiawan32@gmail.com",
+			"ezyoxrdjeocyaubm",
+			"smtp.gmail.com",
+		)
 
+		msg := "Subject: Your Shop Account has been verified" + "\n" + "You've been verified the shop account congrats"
+		err := smtp.SendMail(
+			"smtp.gmail.com:587",
+			auth,
+			"valentinosetiawan32@gmail.com",
+			[]string{user.Email},
+			[]byte(msg),
+		)
+		if err != nil {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Failed to Send Email"})
+			return
+		}
+		userShop := &model.Shop{}
+		userShop.UserId = user.ID
+		err = db.Insert(userShop)
+		if err != nil {
+			json.NewEncoder(w).Encode(map[string]string{"message": "Error Creating Shop"})
+			return
+		}
+	}
 	log.Println("User payload after insertion:", user)
 
 	// Generate Token

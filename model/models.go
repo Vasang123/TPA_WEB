@@ -53,6 +53,7 @@ type Product struct {
 	Category    Category `json:"category"`
 	BrandId     int64    `json:"brand_id"`
 	Brand       Brand    `json:"brand"`
+	Sold        int64    `json:"sold"`
 }
 type Brand struct {
 	ID   int64  `json:"id"`
@@ -122,6 +123,14 @@ type FavoriteList struct {
 	Wishlist   Wishlist `json:"wishlist"`
 	UserId     int64    `json:"user_id" pg:"-"`
 }
+type HelpList struct {
+	ID       int64  `json:"id" pg:"id:bigserial pk"`
+	ReviewId int64  `json:"review_id"`
+	Review   Review `json:"review"`
+	UserId   int64  `json:"user_id" pg:"-"`
+	Status   string `json:"status"`
+	User     User   `json:"user"`
+}
 
 type UpdateWishlistRequest struct {
 	Wishlists []Wishlist `json:"wishlists"`
@@ -139,4 +148,25 @@ type CartWithWishlist struct {
 type WishlistWithCart struct {
 	WishlistDetail WishlistDetail `json:"wishlist"`
 	CartId         int            `json:"cart_id"`
+}
+type NewsLetter struct {
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+type Shop struct {
+	ID     int64  `json:"id" pg:"id:bigserial pk"`
+	Image  string `json:"image"`
+	About  string `json:"about"`
+	UserId int64  `json:"user_id" pg:"-"`
+	User   User   `json:"user"`
+}
+
+type SearchFilter struct {
+	Price   bool  `json:"price"`
+	Sold    bool  `json:"sold"`
+	Search1 bool  `json:"search1"`
+	Search2 bool  `json:"search2"`
+	Asc     bool  `json:"asc"`
+	Desc    bool  `json:"desc"`
+	Page    int64 `json:"page"`
 }

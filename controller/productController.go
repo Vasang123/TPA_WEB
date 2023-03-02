@@ -100,7 +100,7 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	pattern := "%" + name + "%"
 	var products []*model.Product
 	err := db.Model(&products).
-		Column("product.*", "User.first_name", "User.id", "Category", "Brand").
+		Column("product.*", "User.first_name", "User.id", "User.is_banned", "Category", "Brand").
 		Relation("User").
 		Relation("Category").
 		Relation("Brand").
@@ -148,3 +148,79 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	// Return the products as JSON
 	json.NewEncoder(w).Encode(response)
 }
+
+// func SortProduct(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "application/json")
+// 	db := connect.Connect()
+// 	defer db.Close()
+
+// 	req := &model.SearchFilter{}
+// 	err := json.NewDecoder(r.Body).Decode(req)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	query := db.Model(&model.Product{}).
+// 		Column("product.*", "Brand", "Category").
+// 		Relation("Brand").
+// 		Relation("Category").
+// 		Where("1=1")
+
+// 	if req.Price {
+// 		if req.Asc {
+// 			query.OrderExpr("product.price ASC")
+// 		} else if req.Desc {
+// 			query.OrderExpr("product.price DESC")
+// 		} else {
+// 			query.OrderExpr("product.price")
+// 		}
+// 	} else if req.Sold {
+// 		if req.Asc {
+// 			query.OrderExpr("product.sold ASC")
+// 		} else if req.Desc {
+// 			query.OrderExpr("product.sold DESC")
+// 		} else {
+// 			query.OrderExpr("product.sold")
+// 		}
+// 	}
+
+// 	itemsPerPage := 12
+
+// 	if req.Page < 1 {
+// 		req.Page = 1
+// 	}
+
+// 	startIndex := (req.Page - 1) * itemsPerPage
+// 	endIndex := startIndex + itemsPerPage
+
+// 	// Execute the query and retrieve the results
+// 	var products []model.Product
+// 	err = query.Select(&products)
+// 	if err != nil {
+// 		http.Error(w, err.Error(), http.StatusInternalServerError)
+// 		return
+// 	}
+
+// 	totalPages := (len(products) + itemsPerPage - 1) / itemsPerPage
+// 	if req.Page > totalPages {
+// 		req.Page = totalPages
+// 	}
+// 	startIndex = (req.Page - 1) * itemsPerPage
+// 	endIndex = startIndex + itemsPerPage
+// 	if endIndex > len(products) {
+// 		endIndex = len(products)
+// 	}
+// 	productsOnPage := products[startIndex:endIndex]
+
+// 	response := struct {
+// 		Products   []model.Product `json:"products"`
+// 		TotalPages int             `json:"totalPages"`
+// 	}{
+// 		Products:   productsOnPage,
+// 		TotalPages: totalPages,
+// 	}
+
+// 	// Write the slice of products as JSON to the response
+// 	json.NewEncoder(w).Encode(response)
+// }

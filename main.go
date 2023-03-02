@@ -30,6 +30,7 @@ func main() {
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
 	// Admin
 	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
+	r.HandleFunc("/api/send_news", controller.SendEmail).Methods("POST")
 	r.HandleFunc("/api/create_promo", controller.AddPromo).Methods("POST")
 	r.HandleFunc("/api/paginate_users", controller.PaginateUsers).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/paginate_shops", controller.PaginateShops).Methods("GET").
@@ -100,6 +101,19 @@ func main() {
 	// Handle Wish And Cart Controller
 	r.HandleFunc("/api/wishlist/cart/add", controller.WishToCart).Methods("POST")
 	r.HandleFunc("/api/cart/wish/add", controller.CartToWish).Methods("POST")
+
+	// Shop
+	r.HandleFunc("/api/shop/home", controller.ShopHome).Methods("GET").
+		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/shop/products", controller.ShopProducts).Methods("GET").
+		Queries("name", "{name}", "page", "{page}", "category_id", "{category_id}", "user_id", "{user_id}")
+	r.HandleFunc("/api/shop/reviews", controller.ShopReviews).Methods("GET").
+		Queries("name", "{name}", "filter", "{filter}", "shop_id", "{shop_id}")
+	r.HandleFunc("/api/shop/helplist/insert", controller.HelplistInsert).Methods("POST")
+	r.HandleFunc("/api/shop/helplist/read", controller.HelplistRead).Methods("GET").
+		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/shop/about", controller.ShopAbout).Methods("GET").
+		Queries("shop_id", "{shop_id}")
 	// Port
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
