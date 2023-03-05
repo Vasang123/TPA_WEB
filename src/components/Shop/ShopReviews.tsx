@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReviewComment from "../Review/ReviewList";
 import { HelpList, Review, User } from "@/types/models";
 import { BaseBackgroundColor, Loading, MainDivBg, SecondaryH1Color, SecondarySpanColor, Select } from "../Other/GlobalComponent";
@@ -53,6 +53,21 @@ export default function ShopReview({ user_id }: any) {
         fetchData()
 
     }, [shop_id, name, filter])
+    const shownAlertRef = useRef(false);
+    useEffect(() => {
+        const checkBan = async () => {
+            const res = await fetch(`http://localhost:8000/api/shop/ban?user_id=${r.query.user_id}`)
+            const data = await res.json();
+            console.log(data.message);
+
+            if (data.message == "This Shop is Banned") {
+                alert("This Shop is Banned");
+                r.push("/");
+                shownAlertRef.current = true;
+            }
+        }
+        checkBan()
+    }, [r.query.user_id, r]);
     const HandleSearch = (event: any) => {
         event.preventDefault();
         setName(event.target.value);

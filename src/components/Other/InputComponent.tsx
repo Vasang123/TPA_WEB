@@ -30,5 +30,12 @@ const LogoutButton = () => {
 
   return <button className="logoutButton" onClick={handleClick}>Log Out</button>;
 };
+export const LogoutButton2 = () => {
+  const handleClick = () => {
+    localStorage.removeItem('user');
+    window.location.assign("http://localhost:3000/");
+  };
 
+  return <button className="userLogout" onClick={handleClick}>Log Out</button>;
+};
 export default LogoutButton;

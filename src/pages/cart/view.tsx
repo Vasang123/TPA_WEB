@@ -1,7 +1,7 @@
 import CartDisplay from "@/components/Cart/CartView";
 import Footer from "@/components/Home/Footer";
 import Navbar from "@/components/Navbar/Navbar";
-import { Loading, SecondaryH1Color } from "@/components/Other/GlobalComponent";
+import { Loading, ProductDivBg, SecondaryH1Color } from "@/components/Other/GlobalComponent";
 import { User } from "@/types/models";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -35,10 +35,10 @@ export default function Cart() {
     <>
       <Navbar />
       <CartDisplay user_id={userData ? userData.id : null} is_like="no" />
-      <div className="buy_later">
+      <ProductDivBg className="buy_later">
         <SecondaryH1Color>Buy Later</SecondaryH1Color>
-      </div>
-      <CartDisplay user_id={userData ? userData.id : null} is_like="yes" />
+      </ProductDivBg>
+      <CartDisplay user_id={userData ? userData.id : null} is_like="yes" later={1} />
       <Footer />
     </>
   )

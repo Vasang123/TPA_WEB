@@ -76,7 +76,7 @@ export default function ReviewList({ wishlist_id, user_id }: Props) {
         };
 
         fetchData();
-    }, [reviews]);
+    }, [reviews, comment]);
     return (
         <>
             {/* {showEditDialog && selectedReview && (

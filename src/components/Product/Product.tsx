@@ -7,15 +7,24 @@ import { LanguageContext } from "../Language/LanguageContext";
 import Link from "next/link";
 import ProductModal from "./QuickView";
 import { useRouter } from "next/router";
+import UpdateProductModal from "../Shop/Seller/UpdateProduct";
 
 interface Props {
   products: Product[];
   type: number
 }
 
-export const HomeItem = ({ products, type }: Props) => {
+export const HomeItem = (
+  { products,
+    type,
+    currUser,
+    shop_id,
+    setUpdateDialog,
+    updateDialog
+  }: any) => {
   const { lang } = useContext(LanguageContext);
   const [modalDialog, setmodalDialog] = useState(false);
+
   const [product, setProduct] = useState<Product>();
   const [userData, setUserData] = useState<User>();
   const [loading, setLoading] = useState(true);
@@ -26,7 +35,13 @@ export const HomeItem = ({ products, type }: Props) => {
       setUserData(JSON.parse(userDataString));
     }
     setLoading(false);
+
   }, []);
+  const openUpdateDialog = async (event: any, product: Product) => {
+    event.preventDefault()
+    setProduct(product)
+    setUpdateDialog(true)
+  }
   if (!Array.isArray(products)) {
 
     return (
@@ -51,13 +66,26 @@ export const HomeItem = ({ products, type }: Props) => {
         <div key={product.id} className={style.product_container}>
           <SecondaryLinkColor3 href={`/products/detail?id=${encodeURIComponent(product.id)}`}>
             <div className={style.image_container}>
-              <img src={product.image} />
+              <Image src={product.image} alt={product.name} width={1000}
+                height={1000} />
               {
                 type == 1 && (
-                  <div className={style.quick_container} >
-                    <button onClick={(event) => handleOpenDialog(event, product)}>
-                      Quick View
-                    </button>
+                  <div>
+                    {
+                      currUser && shop_id && currUser.id == shop_id ? (
+                        <div className={style.quick_container} >
+                          <button onClick={(event) => openUpdateDialog(event, product)}>
+                            Update
+                          </button>
+                        </div>
+                      ) : (
+                        <div className={style.quick_container} >
+                          <button onClick={(event) => handleOpenDialog(event, product)}>
+                            Quick View
+                          </button>
+                        </div>
+                      )
+                    }
                   </div>
                 )
               }
@@ -88,6 +116,17 @@ export const HomeItem = ({ products, type }: Props) => {
               product={product}
               setmodalDialog={setmodalDialog}
               user_id={userData ? userData.id : null} s />
+          </>
+        )
+      }
+      {
+        updateDialog && (
+          <>
+            <UpdateProductModal
+              closeModal={setUpdateDialog}
+              shop_id={shop_id}
+              productInfo={product}
+            />
           </>
         )
       }

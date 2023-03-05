@@ -6,7 +6,7 @@ import { LogoSecondary } from "../Other/LogoComponent";
 
 export default function ShopNav() {
     const router = useRouter()
-    console.log("Router", router.query.user_id);
+    // console.log("Router", router.query.user_id);
 
     const changeToHome = async (e: any) => {
         e.preventDefault()

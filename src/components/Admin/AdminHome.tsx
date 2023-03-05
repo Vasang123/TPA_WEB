@@ -73,6 +73,14 @@ export default function AdminHome() {
                         </SecondarySpanColor>
                     </div>
                 </SecondaryLinkColor4>
+                <SecondaryLinkColor4 href="/admin/data">
+                    <div className={style.menu_item}>
+                        <LogoSecondary className="uil uil uil-analytics"></LogoSecondary>
+                        <SecondarySpanColor>
+                            Data Summary
+                        </SecondarySpanColor>
+                    </div>
+                </SecondaryLinkColor4>
             </div>
             <LogoutButton />
         </MainDivBg>

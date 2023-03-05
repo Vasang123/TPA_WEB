@@ -12,6 +12,7 @@ export interface User {
     id?: number;
     name?: string;
   }
+  money?: number;
 }
 
 export interface Brand {
@@ -38,7 +39,7 @@ export interface Category {
 export interface Cart {
   id: number;
   user_id: number;
-  quantity: number; // requested item
+  quantity?: number; // requested item
   product_id: number;
   is_like: string;
   user?: {
@@ -124,26 +125,27 @@ export interface WishlistDetail {
 
 }
 export interface Product {
-  id: number;
+  id?: number;
   name: string;
   quantity: number;
   price: number;
-  image: string;
-  rating: number;
+  image?: string;
+  rating?: number;
   description: string;
   category_id: number;
   user_id: number;
+  brand_id: number;
   sold?: number;
   user?: {
     id?: number;
     firstName?: string;
     isBanned?: string;
   };
-  category: {
+  category?: {
     id: number;
     name: string;
   };
-  brand: {
+  brand?: {
     id: number;
     name: string;
   };
@@ -231,4 +233,20 @@ export interface SearchFilter {
   search2: string;
   asc: boolean;
   desc: boolean;
+}
+
+export interface UpdatePhone {
+  user_id: number;
+  new_phone_number: string;
+}
+export interface UpdatePassword {
+  email: string;
+  old_password: string;
+  new_password: string;
+}
+export interface UpdateStoreReq {
+  shop_id: number;
+  role_id: number;
+  user_id: number;
+  new_name: string;
 }

@@ -3,11 +3,17 @@ import { useContext, useEffect, useState } from "react"
 import style from '@/styles/Cart/cartview.module.scss'
 import Link from "next/link";
 import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
-import { add_cart, update_cart } from "../RequestComponent";
+import { add_cart, handle_cart_later, update_cart } from "../RequestComponent";
 import { Counter } from "./ListCounter";
 import { WishlistTable } from "./WishlistTable";
 import { LanguageContext } from "../Language/LanguageContext";
-function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: number, product_id: number, carts: Cart[], setCarts: any, is_like = string) {
+function HandleDelete(
+    event: React.MouseEvent<HTMLButtonElement>,
+    user_id: number,
+    product_id: number,
+    carts: Cart[],
+    setCarts: any,
+    is_like: string,) {
     event.preventDefault();
     fetch(`http://localhost:8000/api/cart/delete?user_id=${user_id}&product_id=${product_id}&is_like=${is_like}`, {
         method: 'GET',
@@ -25,7 +31,7 @@ function HandleDelete(event: React.MouseEvent<HTMLButtonElement>, user_id: numbe
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-export default function CartDisplay({ user_id, is_like }: any) {
+export default function CartDisplay({ user_id, is_like, later }: any) {
 
     let Total = 0;
     const [carts, setCarts] = useState<Cart[]>([])
@@ -37,6 +43,7 @@ export default function CartDisplay({ user_id, is_like }: any) {
     const [loading, setLoading] = useState(false);
     const { lang } = useContext(LanguageContext);
     const [showTableDialog, setShowTableDialog] = useState(false);
+    const [addToBuyLater, setAddToBuyLater] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}&is_like=${is_like}`);
@@ -45,8 +52,19 @@ export default function CartDisplay({ user_id, is_like }: any) {
         };
 
         fetchData();
-    }, [user_id]);
-
+    }, [user_id, Total, showTableDialog, quantity, is_like, addToBuyLater, carts]);
+    const HandleBuyLater = async (e: Event, product_id: number, is_like: string) => {
+        e.preventDefault()
+        setAddToBuyLater(true)
+        const newCart: Cart = {
+            id: 0,
+            product_id: product_id,
+            is_like: is_like,
+            user_id: user_id,
+        }
+        await handle_cart_later(newCart)
+        setAddToBuyLater(false)
+    }
     if (loading) {
         return <Loading>
             <div className="loading_content">
@@ -149,7 +167,13 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                                     <button className={style.wish_button}
                                                         onClick={(e) => openManageDialog(e, cart.id, cart.product_id, cart.product?.image, cart.quantity)}>
                                                         <i className="uil uil-heart"></i>
-                                                        {lang.is_eng == true ? 'Add To Wishlist' : 'Masukkan Keinginan'}
+                                                        {lang.is_eng == true ? ' Add To Wishlist' : ' Masukkan Keinginan'}
+
+                                                    </button>
+                                                    <button className={style.wish_button}
+                                                        onClick={(e) => HandleBuyLater(e, cart.product_id, "yes")}>
+                                                        <i className="uil uil-layer-group"></i>
+                                                        {lang.is_eng == true ? ' Add To Buy Later' : ' Masukkan Ke Belanja Nanti'}
 
                                                     </button>
 
@@ -162,11 +186,20 @@ export default function CartDisplay({ user_id, is_like }: any) {
                                         }
                                     </>
                                 ) : (
-                                    <button className={style.add_cart} onClick={(e) => AddItemCart(e, cart)}>
-                                        <i className="uil uil-shopping-cart"></i>
-                                        {lang.is_eng == true ? 'Add To Cart' : 'Masukkan Keranjang'}
-
-                                    </button>
+                                    <>
+                                        {later == 1 ? (
+                                            <button className={style.add_cart} onClick={(e) => HandleBuyLater(e, cart.product_id, "no")}>
+                                                <i className="uil uil-shopping-cart"></i>
+                                                {lang.is_eng == true ? 'Add To My Cart' : 'Masukkan ke Keranjang Saya'}
+                                            </button>
+                                        ) : (
+                                            <button className={style.add_cart} onClick={(e) => AddItemCart(e, cart)}>
+                                                <i className="uil uil-shopping-cart"></i>
+                                                {lang.is_eng == true ? 'Add To Cart' : 'Masukkan Keranjang'}
+                                            </button>
+                                        )
+                                        }
+                                    </>
                                 )}
                                 <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts, is_like)}>
                                     <i className="uil uil-trash-alt"></i>
@@ -204,13 +237,15 @@ export default function CartDisplay({ user_id, is_like }: any) {
                         </button>
                     </SecondarySpanColor>
                 ) : (
-                    <SecondarySpanColor className={style.total_container}>
-                        Total Price {Total}
-                        <button className={style.order}>
-                            {lang.is_eng == true ? 'Add All Items to Cart' : 'Masukkan Semua ke Keranjang'}
+                    <>
+                    </>
+                    // <SecondarySpanColor className={style.total_container}>
+                    //     Total Price {Total}
+                    //     <button className={style.order}>
+                    //         {lang.is_eng == true ? 'Add All Items to Cart' : 'Masukkan Semua ke Keranjang'}
 
-                        </button>
-                    </SecondarySpanColor>
+                    //     </button>
+                    // </SecondarySpanColor>
                 )
             }
             {

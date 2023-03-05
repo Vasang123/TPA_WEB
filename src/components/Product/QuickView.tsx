@@ -9,6 +9,7 @@ import { Counter } from "../Cart/ListCounter";
 import ReactDOM from 'react-dom';
 import { WishlistTable } from "./WishlistTable";
 import { LogoSecondary } from "../Other/LogoComponent";
+import Image from "next/image";
 
 export default function ProductModal({ product, setmodalDialog, user_id }: any) {
 
@@ -91,7 +92,8 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                         <i className="uil uil-times-circle"></i>
                     </div>
                     <div className={style.left}>
-                        <img src={product.image} alt="" />
+                        <Image src={product.image} alt={product.name} width={1000}
+                            height={1000} />
                     </div>
                     <ProductDivBg className={style.right_detail}>
                         <SecondaryH1Color>{product.name}</SecondaryH1Color>
@@ -109,6 +111,7 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                             <div className={style.mid}>
                                 <SecondarySpanColor>
                                     {lang.is_eng == true ? 'Category: ' : 'Kategori: '}
+                                    {product.category.name}
                                 </SecondarySpanColor>
                                 <SecondarySpanColor>
                                     {lang.is_eng == true ? 'Stock: ' : 'Stok: '}
@@ -116,9 +119,9 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                                 </SecondarySpanColor>
                             </div>
                             <div className={style.bottom}>
-                                <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor>
+                                {/* <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor> */}
                                 <SecondarySpanColor className={style.description}>
-                                    {lang.is_eng == true ? 'Description:' : 'Deskripsi: '}
+                                    {lang.is_eng == true ? 'Description: ' : 'Deskripsi: '}
 
                                     {product.description}</SecondarySpanColor>
                             </div>

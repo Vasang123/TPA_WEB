@@ -1,0 +1,39 @@
+.template {
+    width: 100%;
+    min-height: 100vh;
+
+    .data_container {
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // flex-direction: column;
+        .temp {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em 5em;
+            gap: 1em;
+            background-color: rgb(246, 246, 246);
+            border: 1px solid wheat;
+            border-radius: 10px;
+            .top {
+                margin: 1em 0;
+                margin-bottom: 5em;
+            }
+            .graph {
+                display: flex;
+                .pie,
+                .middle {
+                    display: flex;
+                    flex-direction: column;
+                    h3 {
+                        text-align: center;
+                        font-size: 23px;
+                    }
+                }
+            }
+        }
+    }
+}

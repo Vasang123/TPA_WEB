@@ -11,10 +11,29 @@
         justify-content: center;
         h1 {
             text-align: center;
+            display: flex;
+            gap: 0.5em;
+            .edit_container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                button {
+                    background-color: #0dab1f;
+                    // background-color: #ffa33a00;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 20px;
+                    padding: 0.2em;
+                    color: white;
+                    height: auto;
+                    border: none;
+                }
+            }
         }
     }
     .shop_banner {
         display: flex;
+        position: relative;
         justify-content: center;
         width: 100%;
         margin: 1em 0;
@@ -23,6 +42,37 @@
             width: 90%;
             height: 400px;
             object-fit: cover;
+        }
+        .button_container {
+            position: absolute;
+            opacity: 0;
+            width: 90%;
+            border-radius: 15px;
+            height: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(30, 28, 25, 0.644);
+            transition: opacity 0.5s ease;
+        }
+        button {
+            display: none;
+            padding: 0.5em;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            background-color: #0dab1f;
+            font-size: 18px;
+        }
+        .button_container:hover {
+            opacity: 1;
+        }
+        .button_container:hover button {
+            display: block;
         }
     }
     .content {

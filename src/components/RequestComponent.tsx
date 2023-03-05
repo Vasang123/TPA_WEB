@@ -2,6 +2,7 @@ import axios from 'axios';
 import { storage } from '@/firebase'
 import { ref, uploadBytes } from "firebase/storage";
 import { getStorage, getDownloadURL } from "firebase/storage";
+import { Product, UpdateStoreReq, User } from '@/types/models';
 const register = async (user: any, router: any) => {
   axios.post('http://localhost:8000/api/register', user)
     .then(response => {
@@ -223,6 +224,10 @@ export const login = async (user: any, router: any) => {
         user.password = response.data.user.password
         user.role = response.data.user.role
         user.role_id = response.data.user.role_id
+        user.isBanned = response.data.user.isBanned
+        user.isSubscribed = response.data.user.isSubscribed
+        user.phoneNumber = response.data.user.phoneNumber
+        user.money = response.data.user.money
         localStorage.setItem('user', JSON.stringify(user));
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token;
         router.push("/");
@@ -263,4 +268,161 @@ export const help_handle = async (help: any) => {
     alert(JSON.stringify(data.message));
   }
 };
+
+export const handle_cart_later = async (cart: any) => {
+  const response = await fetch(`http://localhost:8000/api/cart/change/status`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cart)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const update_phone = async (data: any) => {
+  const response = await fetch(`http://localhost:8000/api/profile/phone/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const update_password = async (data: any) => {
+  const response = await fetch(`http://localhost:8000/api/profile/password/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const update_shop_name = async (data1: UpdateStoreReq, user: User) => {
+  const response = await fetch(`http://localhost:8000/api/shop/name/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+      console.log(user.firstName);
+      console.log(data1.new_name);
+
+      user.firstName = data1.new_name
+      localStorage.removeItem('user');
+      localStorage.setItem('user', JSON.stringify(user));
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
+export const update_shop_about = async (data1: UpdateStoreReq, user: User) => {
+  const response = await fetch(`http://localhost:8000/api/shop/about/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
+export const update_shop_banner = async (data1: UpdateStoreReq, imageFile: any) => {
+  const storageRef = ref(storage, `images/${imageFile.name}`);
+  await uploadBytes(storageRef, imageFile)
+  let starsRef = ref(storage, `images/${imageFile.name}`);
+  let loading = true;
+  const downloadURL = await getDownloadURL(starsRef);
+
+  data1.new_name = downloadURL;
+
+  const response = await fetch(`http://localhost:8000/api/shop/banner/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+    loading = false;
+  }
+  return loading;
+}
+export const insert_product = async (data1: any, imageFile: any) => {
+  const storageRef = ref(storage, `images/${imageFile.name}`);
+  await uploadBytes(storageRef, imageFile)
+  let starsRef = ref(storage, `images/${imageFile.name}`);
+  const downloadURL = await getDownloadURL(starsRef);
+
+  data1.image = downloadURL;
+  const response = await fetch(`http://localhost:8000/api/shop/insert`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+  console.log(JSON.stringify(data1));
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    console.log(JSON.stringify(data1));
+
+    alert(JSON.stringify(data.message));
+  }
+
+}
+export const update_product = async (data1: any, imageFile: any) => {
+  if (imageFile != null) {
+    const storageRef = ref(storage, `images/${imageFile.name}`);
+    await uploadBytes(storageRef, imageFile)
+    let starsRef = ref(storage, `images/${imageFile.name}`);
+    const downloadURL = await getDownloadURL(starsRef);
+
+    data1.image = downloadURL;
+  }
+  const response = await fetch(`http://localhost:8000/api/shop/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+  console.log(JSON.stringify(data1));
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    console.log(JSON.stringify(data1));
+
+    alert(JSON.stringify(data.message));
+  }
+
+}
 export default register;
+

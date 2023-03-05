@@ -24,8 +24,7 @@
                     margin-bottom: 12px;
                     border-radius: 6px;
                     width: 100%;
-                    // background-size: cover;
-                    height: 100%;
+                    height: auto;
                 }
                 img:hover {
                     background-color: rgba(193, 174, 174, 0.671);
@@ -77,6 +76,7 @@
 .quick_container:hover {
     display: block;
     background-color: rgba(110, 110, 110, 0.505);
+    width: 100%;
     button {
         display: block;
     }

@@ -139,7 +139,7 @@ export function Td({ children, ...attr }: any) {
 }
 export function BackButton({ target }: any) {
     return (
-        <Link href={target} className="back_container">
+        <Link href={target} className="back_container" >
             <div className="back">
                 Back
             </div>

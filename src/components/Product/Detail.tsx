@@ -12,6 +12,7 @@ import InsertComment from "../Review/Insert";
 import { WishlistTable } from "./WishlistTable";
 import { LanguageContext } from "../Language/LanguageContext";
 import Link from "next/link";
+import Image from "next/image";
 
 function ProductView({ product, user_id }: any) {
     const [loading, setLoading] = useState(false);
@@ -71,7 +72,8 @@ function ProductView({ product, user_id }: any) {
             <div className={style.product_page}>
                 <div className={style.product_detail}>
                     <div className={style.left_detail}>
-                        <img src={product.image} alt="" />
+                        <Image src={product.image} alt={product.name} width={1000}
+                            height={1000} />
                     </div>
                     <div className={style.right_detail}>
                         <SecondaryH1Color>{product.name}</SecondaryH1Color>
@@ -97,9 +99,9 @@ function ProductView({ product, user_id }: any) {
                                 </SecondarySpanColor>
                             </div>
                             <div className={style.bottom}>
-                                <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor>
+                                {/* <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor> */}
                                 <SecondarySpanColor className={style.description}>
-                                    {lang.is_eng == true ? 'Description:' : 'Deskripsi: '}
+                                    {lang.is_eng == true ? 'Description: ' : 'Deskripsi: '}
 
                                     {product.description}</SecondarySpanColor>
                             </div>
