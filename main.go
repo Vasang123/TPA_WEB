@@ -30,6 +30,7 @@ func main() {
 	r.HandleFunc("/api/login", controller.Login).Methods("POST")
 	// Admin
 	r.HandleFunc("/api/create_voucher", controller.AddVoucher).Methods("POST")
+	r.HandleFunc("/api/data/list", controller.DataSummary).Methods("GET")
 	r.HandleFunc("/api/send_news", controller.SendEmail).Methods("POST")
 	r.HandleFunc("/api/create_promo", controller.AddPromo).Methods("POST")
 	r.HandleFunc("/api/paginate_users", controller.PaginateUsers).Methods("GET").Queries("page", "{page}")
@@ -45,6 +46,7 @@ func main() {
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
+	r.HandleFunc("/api/cart/change/status", controller.ChangeCartStatus).Methods("POST")
 
 	r.HandleFunc("/api/cart/quantity", controller.UpdateQuantity).Methods("POST")
 	r.HandleFunc("/api/cart/view", controller.GetProductCart).Methods("GET").
@@ -114,6 +116,22 @@ func main() {
 		Queries("user_id", "{user_id}")
 	r.HandleFunc("/api/shop/about", controller.ShopAbout).Methods("GET").
 		Queries("shop_id", "{shop_id}")
+	r.HandleFunc("/api/shop/name/update", controller.UpdateShopName).Methods("POST")
+	r.HandleFunc("/api/shop/banner/update", controller.UpdateShopBanner).Methods("POST")
+	r.HandleFunc("/api/shop/about/update", controller.UpdateShopAbout).Methods("POST")
+	r.HandleFunc("/api/shop/brand_category", controller.GetBrandAndCategory).Methods("GET")
+	r.HandleFunc("/api/shop/insert", controller.InsertProduct).Methods("POST")
+	r.HandleFunc("/api/shop/update", controller.UpdateProduct).Methods("POST")
+	r.HandleFunc("/api/shop/ban", controller.CheckBan).Methods("GET").
+		Queries("user_id", "{user_id}")
+
+	// User Profile
+	r.HandleFunc("/api/profile/phone/update", controller.UpdatePhone).Methods("POST")
+	r.HandleFunc("/api/profile/password/update", controller.UpdatePassword).Methods("POST")
+
+	// Checkout
+	r.HandleFunc("/api/checkout/user_money", controller.UserMoney).Methods("GET").
+		Queries("user_id", "{user_id}")
 	// Port
 	log.Fatal(http.ListenAndServe(":8000", handler))
 

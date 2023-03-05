@@ -92,10 +92,10 @@ func ShopHome(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// handle the error, e.g. return an error response
 	}
-	if len(products) == 0 {
-		json.NewEncoder(w).Encode(map[string]string{"message": "No products found"})
-		return
-	}
+	// if len(products) == 0 {
+	// 	json.NewEncoder(w).Encode(map[string]string{"message": "No products found"})
+	// 	return
+	// }
 
 	shop := &model.Shop{}
 	err = db.Model(shop).
@@ -135,7 +135,7 @@ func ShopProducts(w http.ResponseWriter, r *http.Request) {
 	db := connect.Connect()
 	defer db.Close()
 
-	itemsPerPage := 12
+	itemsPerPage := 50
 	name := r.URL.Query().Get("name")
 	user_id, err := strconv.Atoi(r.URL.Query().Get("user_id"))
 	category_id, err := strconv.Atoi(r.URL.Query().Get("category_id"))
@@ -402,4 +402,36 @@ func HelplistInsert(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
+func CheckBan(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+	user_id, err := strconv.Atoi(r.URL.Query().Get("user_id"))
+	if err != nil {
+
+	}
+
+	user := &model.User{}
+	err = db.Model(user).
+		Column("user.*").
+		Order("id").
+		Where("id = ? AND role_id = 2", user_id).
+		Limit(1).
+		Select()
+	if err != nil {
+
+	}
+	if user == nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "No Data found"})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	if user.IsBanned == "yes" {
+		json.NewEncoder(w).Encode(map[string]string{"message": "This Shop is Banned"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Clear"})
 }

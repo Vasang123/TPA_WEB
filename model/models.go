@@ -82,6 +82,7 @@ type User struct {
 	IsBanned     string `json:"isBanned"`
 	IsSubscribed string `json:"isSubscribed"`
 	Role         Role   `json:"role"`
+	Money        int64  `json:"money"`
 }
 type Role struct {
 	ID          int64  `json:"id" pg:"id:bigserial pk"`
@@ -169,4 +170,21 @@ type SearchFilter struct {
 	Asc     bool  `json:"asc"`
 	Desc    bool  `json:"desc"`
 	Page    int64 `json:"page"`
+}
+
+type UpdatePhoneRequest struct {
+	UserID         int64  `json:"user_id"`
+	NewPhoneNumber string `json:"new_phone_number"`
+}
+type UpdateShopRequest struct {
+	ShopId  int64  `json:"shop_id"`
+	RoleId  int64  `json:"role_id"`
+	UserId  int64  `json:"user_id"`
+	NewData string `json:"new_name"`
+}
+
+type UpdatePasswordRequest struct {
+	Email       string `json:"email"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
 }

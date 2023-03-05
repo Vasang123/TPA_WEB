@@ -79,7 +79,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user.Password = string(HashPassword([]byte(user.Password)))
-
+	user.Money = 0
 	err = db.Insert(user)
 	if err != nil {
 		log.Println("Error inserting user into database:", err)
@@ -109,11 +109,15 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		}
 		userShop := &model.Shop{}
 		userShop.UserId = user.ID
+		userShop.Image = ""
+		userShop.About = ""
 		err = db.Insert(userShop)
 		if err != nil {
+			log.Println("Error inserting shop into database:", err)
 			json.NewEncoder(w).Encode(map[string]string{"message": "Error Creating Shop"})
 			return
 		}
+
 	}
 	log.Println("User payload after insertion:", user)
 
@@ -156,8 +160,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	email := data.Email
 	password := data.Password
 
-	// fmt.Println("Email:", email)
-	// fmt.Println("Password:", password)
+	db := connect.Connect()
+	defer db.Close()
 
 	// Get the password hash from the database for the email provided
 	passwordHash, err := getPasswordHashFromDB(email)
@@ -174,31 +178,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Get the user data from the database
-	user, err := getUserDataFromDB(email)
-	if err != nil {
-		log.Println(err)
-		json.NewEncoder(w).Encode(map[string]string{"message": "Invalid Credential"})
-		return
-	}
+	userData := &model.User{}
+	err = db.Model(userData).
+		Column("user.*").
+		Where("email = ?", email).
+		Order("id").
+		Limit(1).
+		Select()
 
-	userData := &model.User{
-		ID:           user.ID,
-		FirstName:    user.FirstName,
-		LastName:     user.LastName,
-		Email:        user.Email,
-		Password:     user.Password,
-		PhoneNumber:  user.PhoneNumber,
-		RoleID:       user.RoleID,
-		IsBanned:     user.IsBanned,
-		IsSubscribed: user.IsSubscribed,
-	}
 	if userData.IsBanned == "yes" {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Your Account Is Banned"})
 		return
 	}
 
-	tokenString, err := GenerateToken(user.FirstName)
+	tokenString, err := GenerateToken(userData.FirstName)
 	if err != nil {
 		log.Println("Error generating JWT token:", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -217,16 +210,71 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(&response)
 }
 
-func getUserDataFromDB(email string) (*model.User, error) {
+func UpdatePhone(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	db := connect.Connect()
 	defer db.Close()
-	user := &model.User{}
 
-	_, err := db.Query(pg.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.PhoneNumber, &user.RoleID, &user.IsBanned, &user.IsSubscribed),
-		"SELECT id, first_name, last_name, email, password, phone_number, role_id, is_banned,is_subscribed FROM users WHERE email=? ", email)
+	user := &model.UpdatePhoneRequest{}
+
+	err := json.NewDecoder(r.Body).Decode(user)
 	if err != nil {
-		return nil, err
+		log.Println("Error decoding request payload:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding request payload"})
+		return
 	}
-	return user, nil
+	_, err = db.Model(&model.User{}).
+		Set("phone_number = ?", user.NewPhoneNumber).
+		Where("id = ?", user.UserID).
+		Update()
+	if err != nil {
+		log.Println("Error updating user phone number:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error updating user phone number"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
 
+func UpdatePassword(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	user := &model.UpdatePasswordRequest{}
+
+	err := json.NewDecoder(r.Body).Decode(user)
+	if err != nil {
+		log.Println("Error decoding request payload:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding request payload"})
+		return
+	}
+	// fmt.Print("1. ", user.Email, "\n")
+	// fmt.Print("2. ", user.Email, "\n")
+	// fmt.Print("3. ", user.Email, "\n")
+	passwordHash, err := getPasswordHashFromDB(user.Email)
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	// // Compare the password hash with the plain text password
+	isPasswordCorrect := ComparePasswords(passwordHash, []byte(user.OldPassword))
+	if !isPasswordCorrect {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Invalid Credential"})
+		return
+	}
+	newPassword := string(HashPassword([]byte(user.NewPassword)))
+	_, err = db.Model(&model.User{}).
+		Set("password = ?", newPassword).
+		Where("email = ?", user.Email).
+		Update()
+	if err != nil {
+		log.Println("Error updating user phone number:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error updating user password"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }

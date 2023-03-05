@@ -386,5 +386,96 @@ func SendEmail(w http.ResponseWriter, r *http.Request) {
 
 	// Encode the response as JSON and write it to the response body
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
-	return
+}
+
+func DataSummary(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+	var reviews []*model.Review
+	err := db.Model(&reviews).
+		Column("review.*", "User", "Product").
+		Relation("User").
+		Relation("Product").
+		Order("id").
+		Select()
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Invalid query parameters"})
+		return
+	}
+
+	if len(reviews) == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "No reviews found"})
+		return
+	}
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error retrieving reviews"})
+		return
+	}
+	var products []*model.Product
+	err = db.Model(&products).
+		Column("product.*", "User.first_name", "User.id", "User.is_banned", "Category", "Brand").
+		Relation("User").
+		Relation("Category").
+		Relation("Brand").
+		Order("id").
+		Select()
+	if err != nil {
+		return
+	}
+	var totalSolds int
+	var totalRating float64
+	var fiveRating int64
+	var fourRating int64
+	var threeRating int64
+	var twoRating int64
+	var oneRating int64
+	for _, review := range reviews {
+		totalRating += review.Rating
+		if review.Rating == 5 {
+			fiveRating += 1
+		}
+		if review.Rating == 4 {
+			fourRating += 1
+		}
+		if review.Rating == 3 {
+			threeRating += 1
+		}
+		if review.Rating == 2 {
+			twoRating += 1
+		}
+		if review.Rating == 1 {
+			oneRating += 1
+		}
+	}
+	for _, pr := range products {
+		totalSolds += int(pr.Sold)
+	}
+
+	averageRating := float64(totalRating) / float64(len(reviews))
+
+	response := struct {
+		TotalSold      int    `json:"totalSolds"`
+		TotalProduct   int    `json:"totalProducts"`
+		TotalReviews   int    `json:"totalReviews"`
+		AverageRatings string `json:"averageRatings"`
+		FiveRating     int    `json:"fiveRating"`
+		FourRating     int64  `json:"fourRating"`
+		ThreeRating    int64  `json:"threeRating"`
+		TwoRating      int64  `json:"twoRating"`
+		OneRating      int64  `json:"oneRating"`
+	}{
+		TotalSold:      totalSolds,
+		TotalReviews:   len(reviews),
+		TotalProduct:   len(products),
+		AverageRatings: fmt.Sprintf("%.2f", averageRating),
+		FiveRating:     int(float64(fiveRating) / float64(len(reviews)) * 100),
+		FourRating:     int64(float64(fourRating) / float64(len(reviews)) * 100),
+		ThreeRating:    int64(float64(threeRating) / float64(len(reviews)) * 100),
+		TwoRating:      int64(float64(twoRating) / float64(len(reviews)) * 100),
+		OneRating:      int64(float64(oneRating) / float64(len(reviews)) * 100),
+	}
+
+	json.NewEncoder(w).Encode(response)
 }
