@@ -73,9 +73,10 @@ func main() {
 	r.HandleFunc("/api/review/update", controller.UpdateReview).Methods("POST")
 	r.HandleFunc("/api/review/view", controller.GetProductReview).Methods("GET").
 		Queries("product_id", "{product_id}")
+	r.HandleFunc("/api/review/user", controller.GetUserReview).Methods("GET").
+		Queries("user_id", "{user_id}")
 	r.HandleFunc("/api/review/delete", controller.DeleteReview).Methods("GET").
 		Queries("user_id", "{user_id}", "product_id", "{product_id}", "id", "{id}")
-	handler := cors.New(corsOpts).Handler(r)
 
 	// Favorite List
 	r.HandleFunc("/api/favorite/add", controller.AddFavourite).Methods("GET").
@@ -128,11 +129,27 @@ func main() {
 	// User Profile
 	r.HandleFunc("/api/profile/phone/update", controller.UpdatePhone).Methods("POST")
 	r.HandleFunc("/api/profile/password/update", controller.UpdatePassword).Methods("POST")
+	r.HandleFunc("/api/profile/order_to_cart", controller.OrderToCart).Methods("GET").
+		Queries("order_id", "{order_id}")
 
 	// Checkout
 	r.HandleFunc("/api/checkout/user_money", controller.UserMoney).Methods("GET").
 		Queries("user_id", "{user_id}")
+	r.HandleFunc("/api/checkout/insert/address", controller.InsertAddress).Methods("POST")
+	r.HandleFunc("/api/checkout/delete/address", controller.RemoveAddress).Methods("GET").
+		Queries("id", "{id}")
+	r.HandleFunc("/api/checkout/table/address", controller.UserAddress).Methods("GET").
+		Queries("user_id", "{user_id}")
+	// Make Order
+	r.HandleFunc("/api/order/create", controller.CreateOrder).Methods("POST")
+	r.HandleFunc("/api/order/view/user", controller.GetUserOrder).Methods("GET").
+		Queries("user_id", "{user_id}", "name", "{name}", "filter", "{filter}")
+	r.HandleFunc("/api/order/view/seller", controller.GetSellerOrder).Methods("GET").
+		Queries("shop_id", "{shop_id}", "name", "{name}", "filter", "{filter}")
+	r.HandleFunc("/api/order/seller/update", controller.UpdateOrderStatus).Methods("GET").
+		Queries("order_id", "{order_id}", "data", "{data}")
 	// Port
+	handler := cors.New(corsOpts).Handler(r)
 	log.Fatal(http.ListenAndServe(":8000", handler))
 
 }

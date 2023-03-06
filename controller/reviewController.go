@@ -118,3 +118,30 @@ func UpdateReview(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
 }
+
+func GetUserReview(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	user_id := r.URL.Query().Get("user_id")
+	var reviews []*model.Review
+	err := db.Model(&reviews).
+		Column("review.*", "User", "Product").
+		Relation("User").
+		Relation("Product").
+		Where("review.user_id = ? ", user_id).
+		Order("id").
+		Select()
+	if len(reviews) == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+
+	json.NewEncoder(w).Encode(reviews)
+}

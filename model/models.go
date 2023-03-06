@@ -38,6 +38,8 @@ type Cart struct {
 	ProductId int64   `json:"product_id"`
 	Quantity  int     `json:"quantity"`
 	IsLike    string  `json:"is_like"`
+	OrderId   int     `json:"order_id"`
+	Order     Order1  `json:"order"`
 }
 type Product struct {
 	ID          int64    `json:"id" pg:"id:bigserial pk"`
@@ -58,6 +60,11 @@ type Product struct {
 type Brand struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name"`
+}
+type Address struct {
+	ID     int64  `json:"id"`
+	Name   string `json:"name"`
+	UserId int64  `json:"user_id"`
 }
 
 type Category struct {
@@ -146,6 +153,7 @@ type CartWithWishlist struct {
 	Cart       Cart `json:"cart"`
 	WishlistId int  `json:"wishlist_id"`
 }
+
 type WishlistWithCart struct {
 	WishlistDetail WishlistDetail `json:"wishlist"`
 	CartId         int            `json:"cart_id"`
@@ -187,4 +195,19 @@ type UpdatePasswordRequest struct {
 	Email       string `json:"email"`
 	OldPassword string `json:"old_password"`
 	NewPassword string `json:"new_password"`
+}
+type Order1 struct {
+	ID         int64      `json:"id" pg:"id:bigserial pk"`
+	Invoice    string     `json:"invoice"`
+	CreatedAt  *time.Time `json:"created_at"`
+	ModifiedAt time.Time  `json:"modified_at"`
+	Payment    string     `json:"payment"`
+	Delivery   string     `json:"delivery"`
+	Total      int64      `json:"total"`
+	AddressId  int64      `json:"address_id"`
+	Address    Address    `json:"address"`
+	UserId     int64      `json:"user_id"`
+	ShopId     int64      `json:"shop_id"`
+	Status     string     `json:"status"`
+	BuyAgain   string     `json:"buy_again"`
 }

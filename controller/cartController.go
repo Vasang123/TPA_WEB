@@ -33,7 +33,7 @@ func InsertCart(w http.ResponseWriter, r *http.Request) {
 		Column("cart.*", "User", "Product").
 		Relation("User").
 		Relation("Product").
-		Where("cart.product_id  = ? AND cart.user_id = ?", cart.ProductId, cart.UserId).
+		Where("cart.product_id  = ? AND cart.user_id = ? AND cart.is_like = 'no'", cart.ProductId, cart.UserId).
 		Limit(1).
 		Select()
 	// If item is the first 1

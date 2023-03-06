@@ -253,6 +253,7 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 	// fmt.Print("1. ", user.Email, "\n")
 	// fmt.Print("2. ", user.Email, "\n")
 	// fmt.Print("3. ", user.Email, "\n")
+
 	passwordHash, err := getPasswordHashFromDB(user.Email)
 	if err != nil {
 		log.Println(err)
