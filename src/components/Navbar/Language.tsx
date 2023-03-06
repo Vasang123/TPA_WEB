@@ -19,7 +19,7 @@ export default function Language() {
             <ProductDivBg className="lang_drop">
                 <ButtonLangBg onClick={() => handleSelect("eng")} disabled={lang.is_eng}>
                     <SecondarySpanColor>
-                        English
+                        English 
                     </SecondarySpanColor>
                 </ButtonLangBg>
                 <ButtonLangBg onClick={() => handleSelect("ind")} disabled={!lang.is_eng}>

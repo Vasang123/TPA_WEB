@@ -19,6 +19,28 @@ export interface Brand {
   id: number;
   name: string;
 }
+export interface AddressData {
+  id?: number;
+  name: string;
+  user_id: number;
+}
+export interface Order {
+  id?: number;
+  invoice?: string;
+  created_at?: Date;
+  modified_at: Date;
+  payment: string;
+  delivery: string;
+  total: number;
+  address_id: number;
+  user_id: number;
+  address?: {
+    id?: number;
+    name: string;
+  }
+  status?: string;
+  buy_again?: string;
+}
 export interface Review {
   id: number;
   user_id: number;
@@ -69,6 +91,7 @@ export interface Cart {
       name: string;
     };
   }
+  order_id?: number;
 }
 export interface Wishlist {
   id: number;

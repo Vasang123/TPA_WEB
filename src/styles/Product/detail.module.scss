@@ -225,6 +225,16 @@
         .middle {
             display: flex;
             justify-content: space-between;
+            span {
+                display: flex;
+                gap: 0.5em;
+                h1 {
+                    font-size: 16px;
+                }
+                h1:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }

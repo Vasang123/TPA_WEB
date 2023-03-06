@@ -34,11 +34,20 @@ export default function Cart() {
   return (
     <>
       <Navbar />
-      <CartDisplay user_id={userData ? userData.id : null} is_like="no" />
+      <ProductDivBg className="buy_later">
+        <SecondaryH1Color>Cart</SecondaryH1Color>
+      </ProductDivBg>
+      <CartDisplay
+        user_id={userData ? userData.id : null}
+        currUser={userData ? userData : null}
+        is_like="no" />
       <ProductDivBg className="buy_later">
         <SecondaryH1Color>Buy Later</SecondaryH1Color>
       </ProductDivBg>
-      <CartDisplay user_id={userData ? userData.id : null} is_like="yes" later={1} />
+      <CartDisplay
+        user_id={userData ? userData.id : null}
+        currUser={userData ? userData : null}
+        is_like="yes" later={1} />
       <Footer />
     </>
   )

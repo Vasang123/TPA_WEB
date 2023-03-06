@@ -100,7 +100,7 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                         <SecondarySpanColor>Rp. {product.price}</SecondarySpanColor>
                         <div className={style.detail}>
                             <div className={style.top}>
-                                <SecondarySpanColor onClick={(event) => HandleShopPage(event, product.user_id)} className="shop_entrance" >
+                                <SecondarySpanColor onClick={(event: any) => HandleShopPage(event, product.user_id)} className="shop_entrance" >
                                     {lang.is_eng == true ? 'Shop: ' : 'Toko: '}
                                     {product.user?.firstName}
                                 </SecondarySpanColor>
@@ -119,7 +119,7 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                                 </SecondarySpanColor>
                             </div>
                             <div className={style.bottom}>
-                                {/* <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor> */}
+                                <SecondarySpanColor> {lang.is_eng == true ? 'Sold: ' : 'Terjual: '} {product.sold}</SecondarySpanColor>
                                 <SecondarySpanColor className={style.description}>
                                     {lang.is_eng == true ? 'Description: ' : 'Deskripsi: '}
 

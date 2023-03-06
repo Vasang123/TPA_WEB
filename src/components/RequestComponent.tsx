@@ -2,7 +2,7 @@ import axios from 'axios';
 import { storage } from '@/firebase'
 import { ref, uploadBytes } from "firebase/storage";
 import { getStorage, getDownloadURL } from "firebase/storage";
-import { Product, UpdateStoreReq, User } from '@/types/models';
+import { AddressData, Order, Product, UpdateStoreReq, User } from '@/types/models';
 const register = async (user: any, router: any) => {
   axios.post('http://localhost:8000/api/register', user)
     .then(response => {
@@ -424,5 +424,85 @@ export const update_product = async (data1: any, imageFile: any) => {
   }
 
 }
+
+export const insert_address = async (data1: AddressData) => {
+  const response = await fetch(`http://localhost:8000/api/checkout/insert/address`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
+export const create_order = async (data1: Order) => {
+  const response = await fetch(`http://localhost:8000/api/order/create`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data1)
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    alert(JSON.stringify(data.message));
+  }
+};
+export const delete_address = async (id: any) => {
+  const response = await fetch(`http://localhost:8000/api/checkout/delete/address?id=${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
+export const buy_again = async (order_id: any) => {
+  const response = await fetch(`http://localhost:8000/api/profile/order_to_cart?order_id=${order_id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
+export const handle_seller = async (order_id: any, data: any) => {
+  const response = await fetch(`http://localhost:8000/api/order/seller/update?order_id=${order_id}&data=${data}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
 export default register;
 

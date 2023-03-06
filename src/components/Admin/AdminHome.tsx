@@ -1,13 +1,14 @@
 import Link from "next/link";
 import LogoutButton from "../Other/InputComponent";
 import style from '@/styles/Admin/adminhome.module.scss'
-import { BackButton, BaseBackgroundColor, MainDivBg, SecondaryLinkColor, SecondaryLinkColor2, SecondaryLinkColor3, SecondaryLinkColor4, SecondarySpanColor } from "../Other/GlobalComponent";
+import { BackButton, BaseBackgroundColor, MainDivBg, ProfileButton, SecondaryLinkColor, SecondaryLinkColor2, SecondaryLinkColor3, SecondaryLinkColor4, SecondarySpanColor } from "../Other/GlobalComponent";
 import { LogoSecondary } from "../Other/LogoComponent";
 export default function AdminHome() {
 
     return (
         <MainDivBg className={style.home}>
             <BackButton target="/" />
+            <ProfileButton target="/profile" />
             <div className={style.menu_list}>
                 <SecondaryLinkColor4 href="/admin/add_voucher">
                     <div className={style.menu_item}>

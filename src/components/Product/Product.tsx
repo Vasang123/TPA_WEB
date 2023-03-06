@@ -91,6 +91,7 @@ export const HomeItem = (
               }
             </div>
             <h2>{product.name}</h2>
+
             <div className={style.product_desc}>
               <p>
                 {lang.is_eng == true ? ' Price: ' : 'Harga: '}
@@ -111,12 +112,12 @@ export const HomeItem = (
       ))}
       {
         modalDialog && (
-          <>
+          <div>
             <ProductModal
               product={product}
               setmodalDialog={setmodalDialog}
               user_id={userData ? userData.id : null} s />
-          </>
+          </div>
         )
       }
       {

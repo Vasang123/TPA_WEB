@@ -56,7 +56,8 @@ export default function WishlistFav({ user_id }: any) {
                 likeCount={likeCount}
                 setLikeCount={setLikeCount}
                 dislikeCount={dislikeCount}
-                setDislikeCount={dislikeCount} />
+                setDislikeCount={dislikeCount}
+                temp={1} />
             <Paginate
                 currentPage={currentPage}
                 totalPages={totalPages}

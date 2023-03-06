@@ -29,7 +29,39 @@ export default function WishlistHome({ user_id }: any) {
     const next = () => {
         setCurrentPage(currentPage + 1);
     };
+    const HandleLike = async (e: any, user_id: any, wishlist_id: any, path: any) => {
+        e.preventDefault()
+        try {
+            const response = await fetch(`http://localhost:8000/api/favorite/add?user_id=${user_id}&wishlist_id=${wishlist_id}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            r.push(path)
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
 
+    }
+    const HandleDislikeHome = async (e: any, user_id: any, wishlist_id: any, path: any) => {
+        e.preventDefault()
+        try {
+            const response = await fetch(`http://localhost:8000/api/favorite/delete?user_id=${user_id}&wishlist_id=${wishlist_id}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            r.push(path)
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
+    }
     useEffect(() => {
         const fetchData = async () => {
             fetch(`http://localhost:8000/api/wishlist/public/view?page=${currentPage}&itemsPerPage=${itemsPerPage}&user_id=${user_id}`)
@@ -50,6 +82,7 @@ export default function WishlistHome({ user_id }: any) {
 
                     if (data.favorites) {
                         setFavorites(data.favorites)
+
                         // console.log(favorites);
                     } else {
 
@@ -59,7 +92,7 @@ export default function WishlistHome({ user_id }: any) {
         }
         fetchData()
         fetchFav()
-    }, [currentPage, favorites])
+    }, [user_id, page, r])
     return (
         <div>
             <WishlistDisplay
@@ -67,6 +100,9 @@ export default function WishlistHome({ user_id }: any) {
                 favorites={favorites}
                 user_id={user_id}
                 setFavorites={setFavorites}
+                HandleLike={HandleLike}
+                HandleDislikeHome={HandleDislikeHome}
+                type={2}
             />
             <Paginate
                 currentPage={currentPage}

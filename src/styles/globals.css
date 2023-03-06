@@ -636,6 +636,8 @@ input:checked + .slider:before {
   display: flex;
   gap: 2em;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
   width: 70%;
 }
 .left_about{
@@ -757,4 +759,34 @@ input:checked + .slider:before {
 .primo{
   display: flex;  
   align-items: center;
+}
+
+.empty_cart{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  width: 100%;
+  font-size: 22px;
+}
+
+.prof_button_container{
+  position: absolute;
+  top: 2%;
+  left: 10%;
+  border-radius: 5px;
+  background-color: #1946B8;
+  padding: .5em .2em;
+  color: white;
+  /* transform: translate(-50%,-50%); */
+}
+.my_review{
+  padding: 1em;
+}
+
+.center_title{
+  padding-top: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -119,6 +119,13 @@ export function Loading({ children, ...attr }: any) {
         // color : theme.secondaryColor
     }} {...attr}>{children}</div>
 }
+export function Loading2({ children, ...attr }: any) {
+    const { theme } = useContext(ThemeContext);
+    return <div className="loading" style={{
+        backgroundColor: theme.productBg,
+        // color : theme.secondaryColor
+    }} {...attr}>{children}</div>
+}
 export function Table({ children, ...attr }: any) {
     const { theme } = useContext(ThemeContext);
     return <table style={{
@@ -142,6 +149,15 @@ export function BackButton({ target }: any) {
         <Link href={target} className="back_container" >
             <div className="back">
                 Back
+            </div>
+        </Link>
+    )
+}
+export function ProfileButton({ target }: any) {
+    return (
+        <Link href={target} className="prof_button_container" >
+            <div className="back">
+                My Profile
             </div>
         </Link>
     )

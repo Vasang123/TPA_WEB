@@ -2,11 +2,14 @@ import { Cart } from "@/types/models";
 import { useContext, useEffect, useState } from "react"
 import style from '@/styles/Cart/cartview.module.scss'
 import Link from "next/link";
-import { Loading, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
+import { Loading, MainDivBg, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import { add_cart, handle_cart_later, update_cart } from "../RequestComponent";
 import { Counter } from "./ListCounter";
 import { WishlistTable } from "./WishlistTable";
 import { LanguageContext } from "../Language/LanguageContext";
+import Checkout from "./Checkout/Checkout";
+import Image from "next/image";
+import { useRouter } from "next/router";
 function HandleDelete(
     event: React.MouseEvent<HTMLButtonElement>,
     user_id: number,
@@ -31,9 +34,10 @@ function HandleDelete(
         console.error('There was a problem with the fetch operation:', error);
     });
 }
-export default function CartDisplay({ user_id, is_like, later }: any) {
+export default function CartDisplay({ user_id, is_like, later, currUser }: any) {
 
     let Total = 0;
+    const r = useRouter()
     const [carts, setCarts] = useState<Cart[]>([])
     const [cart, setCart] = useState<Cart>()
     const [cartId, setCartId] = useState()
@@ -44,6 +48,7 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
     const { lang } = useContext(LanguageContext);
     const [showTableDialog, setShowTableDialog] = useState(false);
     const [addToBuyLater, setAddToBuyLater] = useState(false);
+    const [checkOut, setCheckOut] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/cart/view?user_id=${user_id}&is_like=${is_like}`);
@@ -52,7 +57,7 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
         };
 
         fetchData();
-    }, [user_id, Total, showTableDialog, quantity, is_like, addToBuyLater, carts]);
+    }, [user_id, Total, showTableDialog, quantity, is_like, addToBuyLater, r]);
     const HandleBuyLater = async (e: Event, product_id: number, is_like: string) => {
         e.preventDefault()
         setAddToBuyLater(true)
@@ -63,7 +68,12 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
             user_id: user_id,
         }
         await handle_cart_later(newCart)
+        r.push("/cart/view")
         setAddToBuyLater(false)
+    }
+    const openCheckOut = async (e: Event) => {
+        e.preventDefault()
+        setCheckOut(true)
     }
     if (loading) {
         return <Loading>
@@ -74,15 +84,16 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
     }
     if (carts.length > 0) {
         carts.forEach((cart) => {
-            if (cart.product?.quantity > 0) {
+            if (cart.product?.quantity > 0 && cart.is_like == "no") {
                 Total += cart.product?.price * cart.quantity
             }
         })
     } else {
         return (
-            <Loading>
-                <div className="loading_content">You Don&apos;t Have any Item</div>
-            </Loading>
+            <ProductDivBg className="empty_cart">
+                <SecondarySpanColor >You Don&apos;t Have any Item</SecondarySpanColor>
+            </ProductDivBg>
+
         )
     }
     const AddItemCart = async (e: any, cart: Cart) => {
@@ -112,7 +123,7 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
 
                     <div key={cart.id} className={style.cart_container}>
                         <Link href={`/products/detail?id=${encodeURIComponent(cart.product_id)}`}>
-                            <img src={cart.product?.image} alt="" />
+                            <Image src={cart.product?.image} alt="" width={500} height={500} className={style.p_image} />
                         </Link>
                         <div className={style.right_container}>
                             <SecondaryH1Color>{cart.product?.name}</SecondaryH1Color>
@@ -231,7 +242,7 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
                         {lang.is_eng == true ? 'Total Price ' : 'Total Harga '}
 
                         {Total}
-                        <button className={style.order}>
+                        <button className={style.order} onClick={openCheckOut}>
                             {lang.is_eng == true ? 'Check Out' : 'Beli'}
 
                         </button>
@@ -259,6 +270,17 @@ export default function CartDisplay({ user_id, is_like, later }: any) {
                         cart_id={cartId}
                         carts={carts}
                         setCarts={setCarts}
+                    />
+                )
+            }
+            {
+                checkOut && (
+                    <Checkout
+                        currUser={currUser}
+                        Total={Total}
+                        closeModal={setCheckOut}
+                        carts={carts}
+
                     />
                 )
             }

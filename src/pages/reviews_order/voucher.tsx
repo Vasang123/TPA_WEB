@@ -51,7 +51,7 @@ export default function Profile() {
         <>
             <Navbar />
             <ProfileNav user={userData} />
-            <ProfileDisplay user={userData} />
+
             <Footer />
         </>
     )

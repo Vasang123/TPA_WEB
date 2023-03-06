@@ -2,13 +2,23 @@ import Link from "next/link";
 import LogoutButton, { Input, LogoutButton2 } from "../Other/InputComponent";
 import { BackButton, BaseBackgroundColor, MainDivBg, ProductDivBg, SecondaryH1Color, SecondarySpanColor } from "../Other/GlobalComponent";
 import { UpdatePassword, UpdatePhone, User } from "@/types/models";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { update_password, update_phone } from "../RequestComponent";
 import Image from "next/image";
 
 
 export default function ProfileDisplay({ user }: any) {
     const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber)
+    const [money, setmoney] = useState()
+    useEffect(() => {
+        const fetchMoney = async () => {
+            const res = await fetch(`http://localhost:8000/api/checkout/user_money?user_id=${user.id}`)
+            const data = await res.json()
+            setmoney(data)
+        }
+        fetchMoney()
+    }, [money, user.id])
+
     const [currPass, setCurrPass] = useState('')
     const [newPass, setNewPass] = useState('')
     const updatePhone = async (e: any) => {
@@ -46,7 +56,6 @@ export default function ProfileDisplay({ user }: any) {
                         <>
                             <SecondarySpanColor>First Name : {user.firstName}</SecondarySpanColor>
                             <SecondarySpanColor>Last Name : {user.lastName}</SecondarySpanColor>
-                            <SecondarySpanColor>Primogems    : {user.money}</SecondarySpanColor>
                         </>
 
                     )
@@ -58,7 +67,7 @@ export default function ProfileDisplay({ user }: any) {
                         alt=""
                         width={30}
                         height={30} />
-                    {user.money}
+                    {money}
                 </SecondarySpanColor>
                 <div className="update_profile_container">
                     <SecondarySpanColor>Phone Number :

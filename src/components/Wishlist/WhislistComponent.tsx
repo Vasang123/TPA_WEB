@@ -11,27 +11,13 @@ export default function WishlistDisplay({
     user_id,
     wishlists,
     favorites,
-    type }: any) {
+    type,
+    HandleLike,
+    temp,
+    HandleDislikeHome }: any) {
     const router = useRouter();
     const { lang } = useContext(LanguageContext);
-    const HandleLike = async (e: any, user_id: any, wishlist_id: any) => {
-        e.preventDefault()
-        try {
-            const response = await fetch(`http://localhost:8000/api/favorite/add?user_id=${user_id}&wishlist_id=${wishlist_id}`, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            const data = await response.json();
-            // setLikeCount(likeCount + 1);
-            // alert(JSON.stringify(data.message));
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        }
 
-    }
     const HandleDislike = async (e: any, user_id: any, wishlist_id: any) => {
         e.preventDefault()
         try {
@@ -59,7 +45,7 @@ export default function WishlistDisplay({
                 {wishlists.map(wishlist => (
                     (type != 1 ? (
                         (wishlist.image && (
-                            <SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 key={wishlist.id} className={style.card} >
+                            <SecondaryDivColor3 key={wishlist.id} className={style.card} >
 
                                 <div className={style.left}>
                                     <div className={style.image_list}>
@@ -75,11 +61,22 @@ export default function WishlistDisplay({
                                 <div className={style.right}>
                                     <h1>{wishlist.name}</h1>
                                     {favorites && (favorites.some(fav => fav.wishlist_id === wishlist.id) ? (
-                                        <button className={style.like_button} onClick={(e) => HandleDislike(e, user_id, wishlist.id)}>
-                                            ❤️
-                                        </button>
+                                        <>
+                                            {
+                                                temp ? (
+                                                    <button className={style.like_button} onClick={(e) => HandleDislike(e, user_id, wishlist.id)}>
+                                                        ❤️
+                                                    </button>
+                                                ) : (
+                                                    <button className={style.like_button} onClick={(e) => HandleDislikeHome(e, user_id, wishlist.id, "/wishlist/home")}>
+                                                        ❤️
+                                                    </button>
+                                                )
+                                            }
+                                        </>
+
                                     ) : (
-                                        <button className={style.like_button} onClick={(e) => HandleLike(e, user_id, wishlist.id)}>
+                                        <button className={style.like_button} onClick={(e) => HandleLike(e, user_id, wishlist.id, "/wishlist/home")}>
                                             🤍
                                         </button>
                                     ))}
@@ -94,7 +91,7 @@ export default function WishlistDisplay({
 
                         )
                     ) : (
-                        <SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 SecondaryDivColor3 key={wishlist.id} className={style.card} >
+                        <SecondaryDivColor3 key={wishlist.id} className={style.card} >
 
                             <div className={style.left}>
                                 <div className={style.image_list}>
@@ -114,7 +111,7 @@ export default function WishlistDisplay({
                                         ❤️
                                     </button>
                                 ) : (
-                                    <button className={style.like_button} onClick={(e) => HandleLike(e, user_id, wishlist.id)}>
+                                    <button className={style.like_button} onClick={(e) => HandleLike(e, user_id, wishlist.id, "/wishlist/home")}>
                                         🤍
                                     </button>
                                 ))}

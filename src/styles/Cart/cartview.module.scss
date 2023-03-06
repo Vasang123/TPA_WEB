@@ -8,11 +8,14 @@
         display: flex;
         width: 80%;
         font-size: 16px;
+        border-radius: 10px;
         gap: 1em;
         a {
             width: 100%;
+
             img {
-                height: 250px;
+                height: auto;
+                width: 80%;
                 object-fit: contain;
                 border-radius: 10px;
             }

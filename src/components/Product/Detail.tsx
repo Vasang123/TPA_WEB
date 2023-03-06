@@ -99,7 +99,7 @@ function ProductView({ product, user_id }: any) {
                                 </SecondarySpanColor>
                             </div>
                             <div className={style.bottom}>
-                                {/* <SecondarySpanColor>Rating: {product.rating}/5.0</SecondarySpanColor> */}
+                                <SecondarySpanColor> {lang.is_eng == true ? 'Sold: ' : 'Terjual: '} {product.sold}</SecondarySpanColor>
                                 <SecondarySpanColor className={style.description}>
                                     {lang.is_eng == true ? 'Description: ' : 'Deskripsi: '}
 

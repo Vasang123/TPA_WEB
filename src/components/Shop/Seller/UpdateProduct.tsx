@@ -52,7 +52,7 @@ export default function UpdateProductModal({ productInfo, closeModal, shop_id }:
     };
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (!newProduct.name || !newProduct.price || !newProduct.quantity || !newProduct.category_id || !newProduct.brand_id || !newProduct.description) {
+        if (!newProduct.name || !newProduct.category_id || !newProduct.brand_id || !newProduct.description) {
             alert('Please fill in all fields');
             console.log(newProduct);
             console.log(price);

@@ -1,5 +1,5 @@
 import { HelpList } from "@/types/models";
-import { Loading, SecondaryBoldColor, SecondarySpanColor } from "../Other/GlobalComponent";
+import { Loading, SecondaryBoldColor, SecondaryH1Color, SecondaryLinkColor3, SecondarySpanColor } from "../Other/GlobalComponent";
 import style from '@/styles/Product/detail.module.scss'
 import { help_handle } from "../RequestComponent";
 
@@ -60,6 +60,18 @@ export default function ReviewComment({
                                                     </button>
                                                 </>
                                             )}
+                                            {review.user?.id === user_id && type == 3 && (
+                                                <>
+                                                    <button className={style.update_review}
+                                                        onClick={() => handleEditDialogOpen(review, review.product.id)}>
+                                                        <i className="uil uil-edit"></i>
+                                                    </button>
+                                                    <button className={style.delete_review}
+                                                        onClick={(e) => HandleDelete(e, user_id, review.product.id, review.id)}>
+                                                        <i className="uil uil-trash"></i>
+                                                    </button>
+                                                </>
+                                            )}
                                             {helpList && (
                                                 <div className={style.helpful_buttons}>
                                                     {helpListItem && helpListItem.status == "like" ? (
@@ -88,6 +100,22 @@ export default function ReviewComment({
                                         <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
                                         <SecondarySpanColor>Created at: {review.created_at.toString()}</SecondarySpanColor>
                                     </div>
+                                    {
+                                        type == 3 && (
+                                            <div className={style.middle}>
+                                                <SecondarySpanColor>
+                                                    Product: <SecondaryLinkColor3 href={`/products/detail?id=${encodeURIComponent(review.product.id)}`}>
+                                                        <SecondaryH1Color>
+                                                            {review.product.name}
+                                                        </SecondaryH1Color>
+                                                    </SecondaryLinkColor3>
+                                                </SecondarySpanColor>
+                                                <SecondarySpanColor>Modified at: {review.modified_at.toString()}</SecondarySpanColor>
+                                            </div>
+                                        )
+                                    }
+                                    <SecondarySpanColor>Review : </SecondarySpanColor>
+                                    <br />
                                     <SecondarySpanColor>{review.comment}</SecondarySpanColor>
                                 </div>
                             );
