@@ -4,6 +4,7 @@ import next from "next/types";
 import { FavoriteList, Wishlist } from "@/types/models";
 import { setFips } from "crypto";
 import { useRouter } from "next/router";
+import ChangeTotalItems from "./ChangeTotalPage";
 
 
 export default function WishlistHome({ user_id }: any) {
@@ -92,9 +93,16 @@ export default function WishlistHome({ user_id }: any) {
         }
         fetchData()
         fetchFav()
-    }, [user_id, page, r])
+    }, [user_id, page, r, itemsPerPage, currentPage])
+    const changeItemsPerPage = async (e: Event, total: number) => {
+        // e.preventDefault()
+        setItemsPerPage(total)
+    }
     return (
         <div>
+            <ChangeTotalItems
+                changeItemsPerPage={changeItemsPerPage}
+            />
             <WishlistDisplay
                 wishlists={wishlists}
                 favorites={favorites}

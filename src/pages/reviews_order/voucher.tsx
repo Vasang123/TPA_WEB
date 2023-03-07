@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar/Navbar';
 import Footer from '@/components/Home/Footer';
 import { User } from '@/types/models';
 import ProfileNav from '@/components/Profile/ProfileNav';
+import RedeemVoucher from '@/components/Profile/Voucher';
 
 export default function Profile() {
     const r = useRouter();
@@ -51,7 +52,7 @@ export default function Profile() {
         <>
             <Navbar />
             <ProfileNav user={userData} />
-
+            <RedeemVoucher user={userData} />
             <Footer />
         </>
     )

@@ -1,21 +1,20 @@
-
-.background{
+.background {
     width: 100%;
-    // min-height: 100vh;
+    // min-height: 100vh;   
     position: absolute;
 }
-.container{
-    :root{
-        font-family: 'Poppins';
-        --primaryColor : #ffffff;
-        --secondaryColor : #000000;
-        --thirdColor : #1946B8;
+.container {
+    :root {
+        font-family: "Poppins";
+        --primaryColor: #ffffff;
+        --secondaryColor: #000000;
+        --thirdColor: #1946b8;
     }
-    
+
     [data-theme="dark"] {
-    --primaryColor : #050c2e;
-    --secondaryColor : #ffffff;
-    --thirdColor : #0f295c;
+        --primaryColor: #050c2e;
+        --secondaryColor: #ffffff;
+        --thirdColor: #0f295c;
     }
     position: absolute;
     top: 3%;
@@ -23,17 +22,17 @@
     width: 320px;
     min-height: 100vh;
     transform: translate(-50%);
-    .form_container{
+    .form_container {
         width: 100%;
-        img{
+        img {
             width: 130px;
         }
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        form{
-            h1{
+        form {
+            h1 {
                 margin: 1em 0;
                 font-size: 16px;
             }
@@ -42,7 +41,7 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            input{
+            input {
                 border-radius: 3px;
                 box-sizing: border-box;
                 font-size: 15px;
@@ -53,7 +52,7 @@
                 border: 1px solid #d9d9d9;
             }
 
-            .sign_in{
+            .sign_in {
                 width: 100%;
                 background: #ffa33a;
                 border-color: #d60;
@@ -63,14 +62,13 @@
                 box-sizing: border-box;
                 font-size: 14px;
                 padding: 8px 1em;
-                width:100%;
+                width: 100%;
                 height: 44px;
                 border: 1px solid #d9d9d9;
                 border-radius: 3px;
                 margin: 16px;
             }
-            .sign_in_code{
-
+            .sign_in_code {
                 height: 44px;
                 box-sizing: border-box;
                 font-size: 14px;
@@ -83,39 +81,38 @@
                 border-radius: 3px;
                 margin: 4px;
             }
-            .sign_in_code:hover{
+            .sign_in_code:hover {
                 border: 1px #0055ff solid;
-                color: #0055ff; 
+                color: #0055ff;
             }
-            
         }
-        a{
+        a {
             margin: 16px;
             text-align: center;
             color: #606060;
             font-size: 13px;
         }
-        span{
+        span {
             display: flex;
             align-items: center;
             // gap:.5em;
             font-size: 15px;
-            a{
+            a {
                 font-size: 15px;
                 margin: 3px;
                 font-weight: bold;
                 color: black;
             }
-            a:hover{
-                color: #0055ff; 
+            a:hover {
+                color: #0055ff;
             }
         }
-        .or{
+        .or {
             margin: 16px;
         }
-        .sign_in_acc{
-            .google_icon{
-                background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png');
+        .sign_in_acc {
+            .google_icon {
+                background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/2048px-Google_%22G%22_Logo.svg.png");
                 background-repeat: no-repeat;
                 background-size: 100% auto;
                 height: 20px;
@@ -125,8 +122,8 @@
                 transform: translateY(-50%);
                 width: 20px;
             }
-            .apple_icon{
-                background-image: url('https://www.freepnglogos.com/uploads/apple-logo-png/apple-logo-png-dallas-shootings-don-add-are-speech-zones-used-4.png');
+            .apple_icon {
+                background-image: url("https://www.freepnglogos.com/uploads/apple-logo-png/apple-logo-png-dallas-shootings-don-add-are-speech-zones-used-4.png");
                 background-repeat: no-repeat;
                 background-size: 100% auto;
                 height: 20px;
@@ -151,54 +148,48 @@
             outline: none;
             padding: 8px 1em;
             position: relative;
-            a{
+            a {
                 color: #222;
-                text-decoration: none!important;
+                text-decoration: none !important;
             }
-            
+
             width: 100%;
-           
         }
-        .sign_in_acc:hover{
+        .sign_in_acc:hover {
             border: 1px #0055ff solid;
-            a{
+            a {
                 color: #0055ff;
-            }     
+            }
         }
-
     }
-
 }
 
-
-
-.footer_container{
+.footer_container {
     bottom: 0;
     width: 100%;
     margin-top: 100vh;
-    
-    footer{
-        
+
+    footer {
         display: flex;
         justify-content: center;
         align-items: center;
-        .footer_content{
+        .footer_content {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            .terms_condition{
+            .terms_condition {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: .5em;
-                
+                gap: 0.5em;
+
                 font-size: 12px;
-                a{
+                a {
                     color: #606060;
                 }
             }
-            p{
+            p {
                 color: #606060;
                 font-size: 12px;
             }

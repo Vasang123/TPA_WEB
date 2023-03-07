@@ -1,5 +1,5 @@
 .review_list {
-    width: 80%;
+    width: 100%;
     margin-top: 1em;
     display: flex;
     flex-direction: column;
@@ -38,6 +38,48 @@
         .middle {
             display: flex;
             justify-content: space-between;
+        }
+    }
+}
+.temp {
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center;
+    width: 90%;
+    align-items: center;
+}
+.statistic {
+    width: 90%;
+    padding: 1em 2em;
+    // display: flex;
+    // justify-content: space-between;
+    .left_statistic {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        span {
+            font-size: 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: flex;
+            justify-content: center;
+            gap: 1em;
+            align-items: center;
+            width: 100%;
+            progress {
+                appearance: none;
+                width: 80%;
+                height: 8px;
+                border-radius: 10px !important;
+                border: none;
+                // background-color: #fab319;
+            }
+
+            progress::-webkit-progress-value {
+                background-color: #fab319;
+                // border-radius: 10px;
+            }
         }
     }
 }

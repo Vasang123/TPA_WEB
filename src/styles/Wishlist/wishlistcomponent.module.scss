@@ -77,3 +77,18 @@
         top: 100%;
     }
 }
+@media only screen and (max-width: 1080px) {
+    .list {
+        grid-template-columns: auto auto auto !important;
+    }
+}
+@media only screen and (max-width: 780px) {
+    .list {
+        grid-template-columns: auto auto !important;
+    }
+}
+@media only screen and (max-width: 520px) {
+    .list {
+        grid-template-columns: auto !important;
+    }
+}

@@ -33,7 +33,7 @@ export default function ReviewComment({
     return (
         <>
             {
-                reviews.length > 0 ? (
+                reviews && reviews.length > 0 ? (
                     <div className={style.review_list}>
                         {reviews.map(review => {
                             // console.log(helpList);
@@ -98,7 +98,7 @@ export default function ReviewComment({
                                     </div>
                                     <div className={style.middle}>
                                         <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
-                                        <SecondarySpanColor>Created at: {review.created_at.toString()}</SecondarySpanColor>
+                                        <SecondarySpanColor className={style.created_at}>Created at: {review.created_at.toString()}</SecondarySpanColor>
                                     </div>
                                     {
                                         type == 3 && (
@@ -110,7 +110,7 @@ export default function ReviewComment({
                                                         </SecondaryH1Color>
                                                     </SecondaryLinkColor3>
                                                 </SecondarySpanColor>
-                                                <SecondarySpanColor>Modified at: {review.modified_at.toString()}</SecondarySpanColor>
+                                                <SecondarySpanColor className={style.created_at}>Modified at: {review.modified_at.toString()}</SecondarySpanColor>
                                             </div>
                                         )
                                     }

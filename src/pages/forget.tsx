@@ -53,10 +53,8 @@ export default function SignIn() {
         e.preventDefault();
         if (user.email == '') {
             alert("Email can't be empty")
-        } else if (user.password == '') {
-            alert("Password can't be empty")
         } else {
-            login(user, router);
+            // login(user, router); 
         }
     };
     return (
@@ -72,38 +70,13 @@ export default function SignIn() {
                         </Link>
                     </div>
                     <form action="" onSubmit={handleSubmit}>
-                        <SecondaryH1Color htmlFor={style.sign_in_label} >Sign In</SecondaryH1Color>
-                        <Input name="email" onChange={handleChange} className={style.temp_1} type="email" placeholder="Email Address" />
-                        <Input name="password" onChange={handleChange} type="password" placeholder="Password" />
-                        <button type='submit' name='sign_in' className={style.sign_in}>
-                            <b>SIGN IN</b></button>
-                        <Link href="/forget" className="forgot_link">
-                            Forgot Password ?
+                        <SecondaryH1Color htmlFor={style.sign_in_label} >Forgot Password</SecondaryH1Color>
+                        <Input name="email" onChange={handleChange} className={style.temp_1} type="email" placeholder="Email Address" />                        <button type='submit' name='sign_in' className={style.sign_in}>
+                            <b>Send Email</b></button>
+                        <Link href="/signin" className="forgot_link">
+                            Sign In
                         </Link>
-                        <ButtonInputBg type='button' name='sign_in_code' className={style.sign_in_code}>
-                            <SecondaryBoldColor >
-                                GET ONE-TIME SIGN IN CODE
-                            </SecondaryBoldColor>
-                        </ButtonInputBg>
                     </form>
-                    <SecondaryLinkColor href="" >What&apos;s the One-Time Code?</SecondaryLinkColor>
-                    <SecondarySpanColor>New to Newegg?
-                        <SecondaryLinkColor href="/signup">
-                            Sign Up
-                        </SecondaryLinkColor>
-                    </SecondarySpanColor>
-                    <div className={style.or}>
-                        <SecondarySpanColor>OR</SecondarySpanColor>
-                    </div>
-
-                    <ButtonInputBg className={style.sign_in_acc} >
-                        <div className={style.google_icon} ></div>
-                        <SecondaryLinkColor href="">SIGN IN WITH GOOGLE</SecondaryLinkColor>
-                    </ButtonInputBg>
-                    <ButtonInputBg className={style.sign_in_acc}>
-                        <div className={style.apple_icon}></div>
-                        <SecondaryLinkColor href=""> SIGN IN WITH APPLE</SecondaryLinkColor>
-                    </ButtonInputBg>
                 </div>
 
             </div>

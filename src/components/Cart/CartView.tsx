@@ -171,10 +171,10 @@ export default function CartDisplay({ user_id, is_like, later, currUser }: any) 
                                 </div>
 
                                 {is_like === "no" ? (
-                                    <>
+                                    <div className="cart">
                                         {
                                             cart.product?.quantity > 0 ? (
-                                                <>
+                                                <div className="temp3">
                                                     <button className={style.wish_button}
                                                         onClick={(e) => openManageDialog(e, cart.id, cart.product_id, cart.product?.image, cart.quantity)}>
                                                         <i className="uil uil-heart"></i>
@@ -188,16 +188,16 @@ export default function CartDisplay({ user_id, is_like, later, currUser }: any) 
 
                                                     </button>
 
-                                                </>
+                                                </div>
                                             ) : (
                                                 <div className="out_of_stock">
 
                                                 </div>
                                             )
                                         }
-                                    </>
+                                    </div>
                                 ) : (
-                                    <>
+                                    <div className="cart">
                                         {later == 1 ? (
                                             <button className={style.add_cart} onClick={(e) => HandleBuyLater(e, cart.product_id, "no")}>
                                                 <i className="uil uil-shopping-cart"></i>
@@ -210,7 +210,7 @@ export default function CartDisplay({ user_id, is_like, later, currUser }: any) 
                                             </button>
                                         )
                                         }
-                                    </>
+                                    </div>
                                 )}
                                 <button className={style.delete} onClick={(event) => HandleDelete(event, user_id, cart.product_id, carts, setCarts, is_like)}>
                                     <i className="uil uil-trash-alt"></i>

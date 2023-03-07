@@ -101,7 +101,7 @@ body{
   color: #212121;
 }
 
-.address-container, .account-container,.return-order-container, .country-container{
+.address-container, .address-container-2, .account-container,.return-order-container, .country-container{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,7 +118,7 @@ body{
 a{
   text-decoration: none;
 }
-.address-container:hover, .account-container:hover,.country-container:hover, .return-order-container:hover{
+.address-container:hover, .address-container-2:hover, .account-container:hover,.country-container:hover, .return-order-container:hover{
   background-color: #8b8b8b7b;
 }
 .account-container{
@@ -133,7 +133,7 @@ a{
 .address-temp, .lang_drop, .country-container{
   font-size: 16px;
 }
-.address-container > i, .account-container i{
+.address-container > i, .address-container-2 i, .account-container i{
   font-size: 30px;
 }
 .address-select{
@@ -422,7 +422,7 @@ input:checked + .slider:before {
 }
 
 @media only screen and (max-width: 926px) {
-  .return-order-container {
+  .return-order-container span{
     display: none;
   }
 }
@@ -589,6 +589,7 @@ input:checked + .slider:before {
   display: flex;
   justify-content: center;
   padding: .5em 0;
+
 }
 
 .products_nav{
@@ -644,6 +645,11 @@ input:checked + .slider:before {
   width: 35%;
   white-space: nowrap;
 }
+@media only screen and (max-width: 412px) {
+  .left_about {
+      width: 100% !important;
+  }
+}
 .left_about span{
   font-size: 20px;
 }
@@ -659,6 +665,13 @@ input:checked + .slider:before {
   justify-content: center;
   align-items: center;
 }
+.voucher_page{
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
 .profile_container{
   font-size: 16px;
   display: flex;
@@ -666,6 +679,18 @@ input:checked + .slider:before {
   gap: 1em;
   padding: 1em 2em;
   border-radius: 10px;
+}
+.voucher_container{
+  font-size: 20px;
+  display: flex;
+  flex-direction: column; 
+  width: 80%;
+  gap: 1em;
+  padding: 1em 2em;
+  border-radius: 10px;
+}
+.voucher_container .update_password_container form input{
+  width: 98.5%;
 }
 .update_profile_container{
   display: flex;
@@ -789,4 +814,45 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.forgot_link{
+  color: blue !important;
+  font-style: italic;
+  
+}
+
+@media only screen and (max-width: 801px) {
+  .country-container,.hidden {
+    display: none;
+  }
+}
+@media only screen and (max-width: 660px) {
+  .notification-container {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 646px) {
+  .address-container {
+    display: none;
+  }
+}
+@media only screen and (max-width: 646px) {
+  .right-sub-nav, .menu-container, .search-container  {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 636px) {
+  .sub-nav {
+    display: none;
+  }
+}
+
+
+
+.temp3{
+  display: flex;
+  gap: 10px;
 }

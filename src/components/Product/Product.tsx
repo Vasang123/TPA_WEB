@@ -93,8 +93,12 @@ export const HomeItem = (
             <h2>{product.name}</h2>
 
             <div className={style.product_desc}>
-              <p>
+              <p className="primo">
                 {lang.is_eng == true ? ' Price: ' : 'Harga: '}
+                <Image src="https://firebasestorage.googleapis.com/v0/b/tpa-web-4d910.appspot.com/o/images%2FItem_Genesis_Crystal.webp?alt=media&token=040f3bc6-c3de-4e29-baee-5b8e9275d732"
+                  alt=""
+                  width={30}
+                  height={30} />
                 {product.price}</p>
               <p>
                 {lang.is_eng == true ? ' Store: ' : 'Toko: '}

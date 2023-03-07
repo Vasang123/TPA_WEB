@@ -13,6 +13,8 @@ import { WishlistTable } from "./WishlistTable";
 import { LanguageContext } from "../Language/LanguageContext";
 import Link from "next/link";
 import Image from "next/image";
+import { Paginate } from "../Wishlist/WhislistComponent";
+import { HomeItem } from "./Product";
 
 function ProductView({ product, user_id }: any) {
     const [loading, setLoading] = useState(false);
@@ -21,6 +23,32 @@ function ProductView({ product, user_id }: any) {
     const { lang } = useContext(LanguageContext);
     const r = useRouter();
     const [counter, setCounter] = useState(0)
+    const router = useRouter();
+    const [products, setProducts] = useState<Product[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    // const [category_id, setcategory_id] = useState(product.category.id)
+    useEffect(() => {
+        const fetchResults = async () => {
+            const res = await fetch(`http://localhost:8000/api/related?category_id=${product.category_id}&page=${currentPage}`);
+            const data = await res.json();
+            console.log(res);
+
+            setProducts(data.products);
+            setTotalPages(data.totalPages);
+            if (currentPage > data.totalPages) {
+                setCurrentPage(data.totalPages);
+            }
+
+        };
+
+        if (product) {
+            console.log(product.category_id);
+
+            fetchResults();
+        }
+
+    }, [product, currentPage]);
     if (loading) {
         return (
             <Loading>
@@ -67,6 +95,13 @@ function ProductView({ product, user_id }: any) {
         e.preventDefault();
         setShowTableDialog(true)
     }
+    const prev = () => {
+        setCurrentPage(currentPage - 1);
+    };
+
+    const next = () => {
+        setCurrentPage(currentPage + 1);
+    };
     return (
         product && (
             <div className={style.product_page}>
@@ -77,11 +112,19 @@ function ProductView({ product, user_id }: any) {
                     </div>
                     <div className={style.right_detail}>
                         <SecondaryH1Color>{product.name}</SecondaryH1Color>
-                        <SecondarySpanColor>Rp. {product.price}</SecondarySpanColor>
+                        <SecondarySpanColor className="primo">
+                            {lang.is_eng == true ? ' Price: ' : 'Harga: '}
+                            <Image src="https://firebasestorage.googleapis.com/v0/b/tpa-web-4d910.appspot.com/o/images%2FItem_Genesis_Crystal.webp?alt=media&token=040f3bc6-c3de-4e29-baee-5b8e9275d732"
+                                alt=""
+                                width={30}
+                                height={30} />
+                            {product.price}
+                        </SecondarySpanColor>
                         <div className={style.detail}>
                             <div className={style.top}>
-                                <SecondarySpanColor onClick={(event) => HandleShopPage(event, product.user_id)} className="shop_entrance" >
+                                <SecondarySpanColor onClick={(event) => HandleShopPage(event, product.user_id)} className="shop_entrance " >
                                     {lang.is_eng == true ? 'Shop: ' : 'Toko: '}
+
                                     {product.user?.firstName}
                                 </SecondarySpanColor>
                                 <SecondarySpanColor>
@@ -130,12 +173,15 @@ function ProductView({ product, user_id }: any) {
                                                     </button>
                                                     <Counter count={counter} setCount={setCounter} limit={product.quantity} />
                                                 </div>
-                                                <button className={style.wish_button}
-                                                    onClick={openManageDialog}>
-                                                    <i className="uil uil-heart"></i>
-                                                    {lang.is_eng == true ? 'Add To Wishlist' : 'Masukkan Keinginan'}
+                                                <div className={style.temp1}>
 
-                                                </button>
+                                                    <button className={style.wish_button}
+                                                        onClick={openManageDialog}>
+                                                        <i className="uil uil-heart"></i>
+                                                        {lang.is_eng == true ? 'Add To Wishlist' : 'Masukkan Keinginan'}
+
+                                                    </button>
+                                                </div>
                                             </div>
                                         ) : (
                                             <div className="out_of_stock">
@@ -163,6 +209,16 @@ function ProductView({ product, user_id }: any) {
                         )
                     }
 
+
+                </div>
+                <div>
+                    <HomeItem products={products} type={1} />
+                    <Paginate
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPrevPage={prev}
+                        onNextPage={next}
+                    />
 
                 </div>
                 <InsertComment user_id={user_id} product_id={product.id} />
@@ -212,6 +268,7 @@ export default function DetailPage({ user_id }: any) {
     return (
         <ProductDivBg className={style.detail_container}>
             <ProductView product={product} user_id={user_id} />
+
             <div className={style.review_container}>
 
             </div>

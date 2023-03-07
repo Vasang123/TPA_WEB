@@ -177,6 +177,7 @@ export interface Product {
 export interface Voucher {
   id: number;
   name: string;
+  bonus: number;
   quantity: number;
   description: string;
 }

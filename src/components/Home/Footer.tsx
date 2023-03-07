@@ -67,14 +67,17 @@ export default function Footer() {
                         <li><Link href="">Mobile Apps </Link></li>
                     </ul>
                 </div>
-                <div className={style.grid_col}>
-                    <h1>Shop Our Brands</h1>
-                    <ul>
-                        <li><Link href="">Newegg Business </Link></li>
-                        <li><Link href="">Newegg Global </Link></li>
-                        <li><Link href="">ABS </Link></li>
-                        <li><Link href="">Rosewill </Link></li>
-                    </ul>
+                <div className="hidden">
+
+                    <div className={style.grid_col}>
+                        <h1>Shop Our Brands</h1>
+                        <ul>
+                            <li><Link href="">Newegg Business </Link></li>
+                            <li><Link href="">Newegg Global </Link></li>
+                            <li><Link href="">ABS </Link></li>
+                            <li><Link href="">Rosewill </Link></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div className={style.bottom} >

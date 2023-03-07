@@ -97,7 +97,14 @@ export default function ProductModal({ product, setmodalDialog, user_id }: any) 
                     </div>
                     <ProductDivBg className={style.right_detail}>
                         <SecondaryH1Color>{product.name}</SecondaryH1Color>
-                        <SecondarySpanColor>Rp. {product.price}</SecondarySpanColor>
+                        <SecondarySpanColor className="primo">
+                            {lang.is_eng == true ? ' Price: ' : 'Harga: '}
+                            <Image src="https://firebasestorage.googleapis.com/v0/b/tpa-web-4d910.appspot.com/o/images%2FItem_Genesis_Crystal.webp?alt=media&token=040f3bc6-c3de-4e29-baee-5b8e9275d732"
+                                alt=""
+                                width={30}
+                                height={30} />
+                            {product.price}
+                        </SecondarySpanColor>
                         <div className={style.detail}>
                             <div className={style.top}>
                                 <SecondarySpanColor onClick={(event: any) => HandleShopPage(event, product.user_id)} className="shop_entrance" >

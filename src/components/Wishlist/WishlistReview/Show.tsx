@@ -2,7 +2,7 @@ import { Review, WishlistReview } from "@/types/models";
 import style from '@/styles/Wishlist/review/list.module.scss'
 import { useEffect, useState } from "react";
 import ReviewForm from "./Form";
-import { SecondaryBoldColor, SecondarySpanColor } from "@/components/Other/GlobalComponent";
+import { SecondaryBoldColor, SecondaryH1Color, SecondarySpanColor } from "@/components/Other/GlobalComponent";
 interface Props {
     wishlist_id: number;
     user_id: number;
@@ -66,13 +66,25 @@ export default function ReviewList({ wishlist_id, user_id }: Props) {
     //     });
     // }
 
-
+    const [totalReviews, setTotalReviews] = useState(0)
+    const [averageRating, setAverageRating] = useState(0)
+    const [fiveRating, setFiveRating] = useState(0)
+    const [fourRating, setFourRating] = useState(0)
+    const [threeRating, setThreeRating] = useState(0)
+    const [twoRating, setTwoRating] = useState(0)
+    const [oneRating, setOneRating] = useState(0)
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`http://localhost:8000/api/wishlist/review/view?wishlist_id=${wishlist_id}`);
             const data = await response.json();
-            setReviews(data);
-
+            setReviews(data.reviews);
+            setTotalReviews(data.totalItems)
+            setAverageRating(data.averageRatings)
+            setFiveRating(data.fiveRating)
+            setFourRating(data.fourRating)
+            setThreeRating(data.threeRating)
+            setTwoRating(data.twoRating)
+            setOneRating(data.oneRating)
         };
 
         fetchData();
@@ -95,25 +107,77 @@ export default function ReviewList({ wishlist_id, user_id }: Props) {
                     </div>
                 </div>
             )} */}
-            {reviews.length > 0 ? (
-                <div className={style.review_list}>
-                    {reviews.map(review => (
-                        <div key={review.id} className={style.review_container}>
-                            <div className={style.top}>
+            {
+                reviews && reviews.length > 0 ? (
+                    <div className={style.temp}>
+                        <div className={style.statistic}>
+                            <div className={style.left_statistic}>
+                                <SecondaryH1Color className={style.total_container}>
+                                    Total Reviews : {totalReviews}
+                                </SecondaryH1Color>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        Average Rating :
+                                    </div>
+                                    <progress value={averageRating} max="5"></progress> {averageRating} / 5
+                                </SecondarySpanColor>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        Five Star Rating :
+                                    </div>
+                                    <progress value={fiveRating} max="100"></progress> {fiveRating} %
+                                </SecondarySpanColor>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        Four Star Rating :
+                                    </div>
+                                    <progress value={fourRating} max="100"></progress> {fourRating} %
+                                </SecondarySpanColor>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        Three Star Rating :
+                                    </div>
+                                    <progress value={threeRating} max="100"></progress> {threeRating} %
+                                </SecondarySpanColor>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        Two Star Rating :
+                                    </div>
+                                    <progress value={twoRating} max="100"></progress> {twoRating} %
+                                </SecondarySpanColor>
+                                <br />
+                                <SecondarySpanColor className={style.total_container}>
+                                    <div className={style.left_temp}>
+                                        One Star Rating :
+                                    </div>
+                                    <progress value={oneRating} max="100"></progress> {oneRating} %
+                                </SecondarySpanColor>
+                                <br />
 
-                                {
-                                    review.name == '' ? (
-                                        <SecondaryBoldColor>
-                                            Anonymous
-                                        </SecondaryBoldColor>
-                                    ) : (
-                                        <SecondaryBoldColor>
-                                            {review.name}
-                                        </SecondaryBoldColor>
-                                    )
-                                }
+                            </div>
+                            <div className={style.review_list}>
+                                {reviews.map(review => (
+                                    <div key={review.id} className={style.review_container}>
+                                        <div className={style.top}>
 
-                                {/* <div className={style.button_container} >
+                                            {
+                                                review.name == '' ? (
+                                                    <SecondaryBoldColor>
+                                                        Anonymous
+                                                    </SecondaryBoldColor>
+                                                ) : (
+                                                    <SecondaryBoldColor>
+                                                        {review.name}
+                                                    </SecondaryBoldColor>
+                                                )
+                                            }
+
+                                            {/* <div className={style.button_container} >
                                     {review.user?.id === user_id && ( // check if user ids match
                                         <>
                                             <button className={style.update_review}
@@ -128,20 +192,23 @@ export default function ReviewList({ wishlist_id, user_id }: Props) {
                                     )}
                                 </div> */}
 
+                                        </div>
+                                        <div className={style.middle}>
+                                            <SecondarySpanColor>Title: {review.title}</SecondarySpanColor>
+                                            <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
+                                            <SecondarySpanColor>Created at: {review.created_at?.toString()}</SecondarySpanColor>
+                                        </div>
+                                        <SecondarySpanColor>{review.comment}</SecondarySpanColor>
+                                    </div>
+                                ))}
                             </div>
-                            <div className={style.middle}>
-                                <SecondarySpanColor>Title: {review.title}</SecondarySpanColor>
-                                <SecondarySpanColor>Rating: {review.rating}</SecondarySpanColor>
-                                <SecondarySpanColor>Created at: {review.created_at?.toString()}</SecondarySpanColor>
-                            </div>
-                            <SecondarySpanColor>{review.comment}</SecondarySpanColor>
                         </div>
-                    ))}
-                </div>
-            ) : (
-                <div>
-                </div>
-            )}
+                    </div>
+
+                ) : (
+                    <div>
+                    </div>
+                )}
         </>
     );
 

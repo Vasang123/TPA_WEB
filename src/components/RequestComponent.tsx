@@ -504,5 +504,21 @@ export const handle_seller = async (order_id: any, data: any) => {
     alert(JSON.stringify(data.message));
   }
 };
+export const redeem_voucher = async (voucher: any, user_id: any) => {
+  const response = await fetch(`http://localhost:8000/api/redeem?voucher=${voucher}&user_id=${user_id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  } else {
+    const data = await response.json();
+    if (data.message == "Success") {
+
+    }
+    alert(JSON.stringify(data.message));
+  }
+};
 export default register;
 

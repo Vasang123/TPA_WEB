@@ -23,7 +23,7 @@ export default function PrivateNav({ user_id }: any) {
     return (
         <div>
             <MainDivBg className="private-nav">
-                <div className="address-container">
+                <div className="address-container-2">
                     <LogoSecondary className="uil uil-plus-circle" onClick={openCreateDialog}></LogoSecondary>
                     <div className="address-temp" onClick={openCreateDialog}>
                         <div className="address-welcome">
@@ -32,7 +32,7 @@ export default function PrivateNav({ user_id }: any) {
                         </div>
                     </div>
                 </div>
-                <div className="address-container">
+                <div className="address-container-2">
                     <LogoSecondary className="uil uil-folder" onClick={openManageDialog} ></LogoSecondary>
                     <div className="address-temp" onClick={openManageDialog}>
                         <div className="address-welcome">

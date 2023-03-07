@@ -8,8 +8,8 @@
         .three {
             width: 100%;
             margin-bottom: 1em;
-            display: flex;
-            gap: 80px;
+            display: grid;
+            grid-template-columns: auto auto auto;
             .rating_container {
                 margin-top: 1em;
                 display: flex;
@@ -53,5 +53,15 @@
                 background-color: red;
             }
         }
+    }
+}
+@media only screen and (max-width: 1030px) {
+    .three {
+        grid-template-columns: auto auto !important;
+    }
+}
+@media only screen and (max-width: 670px) {
+    .three {
+        grid-template-columns: auto !important;
     }
 }

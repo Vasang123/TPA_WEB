@@ -46,7 +46,7 @@ export default function OrderList({ orders, type, r }: any) {
                                                 </div>
                                             ) : (
                                                 <div className={style.success}>
-                                                    Success Order
+                                                    Success
                                                 </div>
 
                                             )

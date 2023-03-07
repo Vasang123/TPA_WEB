@@ -254,3 +254,35 @@
         background-color: red;
     }
 }
+@media only screen and (max-width: 700px) {
+    .product_detail {
+        width: 100%;
+        flex-direction: column;
+    }
+    .right_detail {
+        width: 100% !important;
+    }
+}
+@media only screen and (max-width: 454px) {
+    .button_container {
+        display: flex;
+        flex-direction: column;
+    }
+    .cart_container {
+        width: 100% !important;
+    }
+    .temp1 {
+        margin: 1em 0;
+        // display: flex;
+        // justify-content: center;
+    }
+}
+
+@media only screen and (max-width: 530px) {
+    .middle {
+        .created_at {
+            background-color: red;
+            display: none !important;
+        }
+    }
+}

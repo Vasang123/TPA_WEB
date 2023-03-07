@@ -88,3 +88,21 @@
         }
     }
 }
+@media only screen and (max-width: 901px) {
+    .container {
+        display: flex;
+        flex-direction: column !important;
+    }
+    .right_detail {
+        width: 100% !important ;
+    }
+}
+@media only screen and (max-width: 450px) {
+    .button_container {
+        flex-direction: column !important;
+        .wish_button {
+            margin: 1em 0;
+            width: 150px;
+        }
+    }
+}

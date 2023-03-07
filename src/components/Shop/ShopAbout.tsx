@@ -60,7 +60,7 @@ export default function ShopAbout({ currUser }: any) {
 
                         <SecondaryH1Color>About Us </SecondaryH1Color>
                         {
-                            shop?.user_id == router.query.user_id ? (
+                            currUser.id == router.query.user_id ? (
                                 <div className="edit_container">
 
                                     <button onClick={() => openAboutDialog(3)}>
