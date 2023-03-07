@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"net/smtp"
+	"strconv"
 	"time"
 
 	"github.com/Vasang123/new_egg/connect"
@@ -274,6 +275,31 @@ func UpdatePassword(w http.ResponseWriter, r *http.Request) {
 		Update()
 	if err != nil {
 		log.Println("Error updating user phone number:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error updating user password"})
+		return
+	}
+	json.NewEncoder(w).Encode(map[string]string{"message": "Success"})
+}
+func UpdateSubscribe(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+	userId, err := strconv.Atoi(r.URL.Query().Get("user_id"))
+
+	if err != nil {
+		log.Println("Error decoding request payload:", err)
+		json.NewEncoder(w).Encode(map[string]string{"message": "Error decoding request payload"})
+		return
+	}
+	var user model.User
+	_, err = db.Model(&user).
+		Column("user.*").
+		Set("is_subscribed = 'yes'").
+		Where("id = ?", userId).
+		Update()
+	if err != nil {
+		log.Println("Error updating user subscribe number:", err)
 		json.NewEncoder(w).Encode(map[string]string{"message": "Error updating user password"})
 		return
 	}

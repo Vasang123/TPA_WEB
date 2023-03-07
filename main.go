@@ -43,6 +43,8 @@ func main() {
 	r.HandleFunc("/api/products", controller.GetProducts).Methods("GET").Queries("page", "{page}")
 	r.HandleFunc("/api/search", controller.GetProduct).Methods("GET").
 		Queries("name", "{name}", "page", "{page}")
+	r.HandleFunc("/api/related", controller.GetRelatedProduct).Methods("GET").
+		Queries("category_id", "{category_id}", "page", "{page}")
 	r.HandleFunc("/api/product/detail", controller.GetProductDetail).Methods("GET").Queries("id", "{id}")
 	// Cart
 	r.HandleFunc("/api/cart", controller.InsertCart).Methods("POST")
@@ -148,6 +150,13 @@ func main() {
 		Queries("shop_id", "{shop_id}", "name", "{name}", "filter", "{filter}")
 	r.HandleFunc("/api/order/seller/update", controller.UpdateOrderStatus).Methods("GET").
 		Queries("order_id", "{order_id}", "data", "{data}")
+
+	// Voucher
+	r.HandleFunc("/api/redeem", controller.RedeemVoucher).Methods("GET").
+		Queries("voucher", "{voucher}", "user_id", "{user_id}")
+	r.HandleFunc("/api/subscribe", controller.UpdateSubscribe).Methods("GET").
+		Queries("user_id", "{user_id}")
+
 	// Port
 	handler := cors.New(corsOpts).Handler(r)
 	log.Fatal(http.ListenAndServe(":8000", handler))

@@ -17,6 +17,15 @@ type Review struct {
 	Product    Product   `json:"product"`
 	User       User      `json:"user"`
 }
+type Message struct {
+	ID           int64     `json:"id" pg:"id:bigserial pk"`
+	Comment      string    `json:"comment"`
+	SenderId     int64     `json:"sender_id"`
+	ReceiverId   int64     `json:"receiver_id"`
+	CreatedAt    time.Time `json:"created_at" pg:"default:now()"`
+	SenderName   string    `json:"sender_name"`
+	ReceiverName string    `json:"sender"`
+}
 type WishlistReview struct {
 	ID         int64     `json:"id" pg:"id:bigserial pk"`
 	Name       string    `json:"name"`
@@ -76,6 +85,7 @@ type Voucher struct {
 	ID          int64  `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
+	Bonus       int64  `json:"bonus"`
 	Quantity    int64  `json:"quantity"`
 }
 type User struct {
@@ -183,6 +193,10 @@ type SearchFilter struct {
 type UpdatePhoneRequest struct {
 	UserID         int64  `json:"user_id"`
 	NewPhoneNumber string `json:"new_phone_number"`
+}
+type UpdateSubRequest struct {
+	UserID    int64  `json:"user_id"`
+	Subscribe string `json:"subscribe"`
 }
 type UpdateShopRequest struct {
 	ShopId  int64  `json:"shop_id"`

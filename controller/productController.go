@@ -148,6 +148,63 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 	// Return the products as JSON
 	json.NewEncoder(w).Encode(response)
 }
+func GetRelatedProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	db := connect.Connect()
+	defer db.Close()
+
+	itemsPerPage := 4
+	category_id, err := strconv.Atoi(r.URL.Query().Get("category_id"))
+
+	var products []*model.Product
+	err = db.Model(&products).
+		Column("product.*", "User.first_name", "User.id", "User.is_banned", "Category", "Brand").
+		Relation("User").
+		Relation("Category").
+		Relation("Brand").
+		Where("category_id = ? ", category_id).
+		Order("id").
+		Select()
+	if len(products) == 0 {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	if err != nil {
+		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
+		return
+	}
+	totalPages := (len(products) + itemsPerPage - 1) / itemsPerPage
+	pageNumber := 1
+
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
+		if p, err := strconv.Atoi(pageStr); err == nil {
+			pageNumber = p
+		}
+	}
+	if pageNumber < 1 {
+		pageNumber = 1
+	}
+
+	if pageNumber > totalPages {
+		pageNumber = totalPages
+	}
+	startIndex := (pageNumber - 1) * itemsPerPage
+	endIndex := startIndex + itemsPerPage
+	if endIndex > len(products) {
+		endIndex = len(products)
+	}
+	productsOnPage := products[startIndex:endIndex]
+	response := struct {
+		Products   []*model.Product `json:"products"`
+		TotalPages int              `json:"totalPages"`
+	}{
+		Products:   productsOnPage,
+		TotalPages: totalPages,
+	}
+
+	json.NewEncoder(w).Encode(response)
+}
 
 // func SortProduct(w http.ResponseWriter, r *http.Request) {
 // 	w.Header().Set("Content-Type", "application/json")
@@ -221,6 +278,5 @@ func GetProduct(w http.ResponseWriter, r *http.Request) {
 // 		TotalPages: totalPages,
 // 	}
 
-// 	// Write the slice of products as JSON to the response
 // 	json.NewEncoder(w).Encode(response)
 // }

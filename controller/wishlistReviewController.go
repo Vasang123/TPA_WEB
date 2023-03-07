@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -56,6 +57,50 @@ func GetWishlistReview(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"message": "Nothing"})
 		return
 	}
+	var totalRating float64
+	var fiveRating float64
+	var fourRating float64
+	var threeRating float64
+	var twoRating float64
+	var oneRating float64
+	for _, review := range wishlist_reviews {
+		totalRating += review.Rating
+		if review.Rating == 5 {
+			fiveRating += 1
+		}
+		if review.Rating == 4 {
+			fourRating += 1
+		}
+		if review.Rating == 3 {
+			threeRating += 1
+		}
+		if review.Rating == 2 {
+			twoRating += 1
+		}
+		if review.Rating == 1 {
+			oneRating += 1
+		}
+	}
 
-	json.NewEncoder(w).Encode(wishlist_reviews)
+	averageRating := float64(totalRating) / float64(len(wishlist_reviews))
+	response := struct {
+		Reviews        []*model.WishlistReview `json:"reviews"`
+		TotalItems     int                     `json:"totalItems"`
+		AverageRatings string                  `json:"averageRatings"`
+		FiveRating     string                  `json:"fiveRating"`
+		FourRating     string                  `json:"fourRating"`
+		ThreeRating    string                  `json:"threeRating"`
+		TwoRating      string                  `json:"twoRating"`
+		OneRating      string                  `json:"oneRating"`
+	}{
+		Reviews:        wishlist_reviews,
+		TotalItems:     len(wishlist_reviews),
+		AverageRatings: fmt.Sprintf("%.2f", averageRating),
+		FiveRating:     fmt.Sprintf("%.2f", (fiveRating/float64(len(wishlist_reviews)))*100),
+		FourRating:     fmt.Sprintf("%.2f", (fourRating/float64(len(wishlist_reviews)))*100),
+		ThreeRating:    fmt.Sprintf("%.2f", (threeRating/float64(len(wishlist_reviews)))*100),
+		TwoRating:      fmt.Sprintf("%.2f", (twoRating/float64(len(wishlist_reviews)))*100),
+		OneRating:      fmt.Sprintf("%.2f", (oneRating/float64(len(wishlist_reviews)))*100),
+	}
+	json.NewEncoder(w).Encode(response)
 }
